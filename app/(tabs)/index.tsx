@@ -1,33 +1,37 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "@/components/Themed";
+import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
+import { SB_COLOR_SCHEME } from "@/constants";
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to the home page</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
+      <View style={styles.dFlex}>
+        <Text style={styles.title}>Home</Text>
+        <NotificationBadge />
+      </View>
+      <View>
+        
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    padding: 32,
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
+    color: SB_COLOR_SCHEME.SB_PRIMARY,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  dFlex: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: 'center'
   },
 });
