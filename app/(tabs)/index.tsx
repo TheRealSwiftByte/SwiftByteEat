@@ -4,11 +4,21 @@ import { Text, View } from "@/components/Themed";
 import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 import LocationIcon from "../../assets/icons/icon-location.svg";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
+import SearchIcon from "../../assets/icons/icon-search.svg";
+import FilterIcon from "../../assets/icons/icon-filter.svg";
 
 import { SB_COLOR_SCHEME } from "@/constants";
 import { categories, restaurants } from "@/mock_data";
+import { TextInput } from "@swift-byte/switftbytecomponents";
+import { useEffect, useState } from "react";
 
 export default function HomeScreen() {
+  const [search, setSearch] = useState<string>("");
+
+  useEffect(() => {
+    console.log("search: ", search);
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -20,7 +30,12 @@ export default function HomeScreen() {
           <View
             style={[
               styles.dFlex,
-              { justifyContent: "flex-start", gap: 8, marginTop: 20 },
+              {
+                justifyContent: "flex-start",
+                gap: 8,
+                marginTop: 20,
+                marginBottom: 20,
+              },
             ]}
           >
             <LocationIcon />
@@ -30,19 +45,49 @@ export default function HomeScreen() {
                 { flexDirection: "column", alignItems: "flex-start" },
               ]}
             >
-              <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+              <Text
+                style={{ color: SB_COLOR_SCHEME.SB_PRIMARY, marginBottom: 4 }}
+              >
                 Current location
               </Text>
 
               <Text style={styles.subtitle}>3 Crown Street, Wollongong</Text>
             </View>
           </View>
-          <View>{/* SEARCH BAR */}</View>
+          <View>
+            {/* SEARCH BAR */}
+            <View
+              style={[
+                styles.dFlex,
+                {
+                  borderRadius: 40,
+                  borderWidth: 2,
+                  borderColor: "#BBC5C1",
+                  justifyContent: "space-between",
+                },
+              ]}
+            >
+              <View style={[styles.dFlex, {backgroundColor: 'transparent'}]}>
+                <SearchIcon style={{ marginLeft: 20 }} />
+                <TextInput
+                  value={search}
+                  onChangeText={setSearch}
+                  style={styles.textInput}
+                  placeholder="Search menu or restaurant"
+                ></TextInput>
+              </View>
+
+              <FilterIcon style={{ marginRight: 20 }}/>
+            </View>
+          </View>
           <View style={styles.banner}>
             {/* BANNER */}
-            <Image source={require("../../assets/images/banner.png")} />
+            <Image
+              source={require("../../assets/images/banner.png")}
+              style={{ width: "100%" }}
+            />
           </View>
-          <View style={{ marginBottom: 20 }}>
+          <View style={{ marginBottom: 10 }}>
             {/* CATEGORY */}
             <View style={styles.dFlex}>
               <Text style={[styles.title, { fontSize: 18 }]}>
@@ -105,60 +150,66 @@ export default function HomeScreen() {
                 See all
               </Text>
             </View>
-            <View style={[styles.dFlex, { marginTop: 16 }]}>
-              {restaurants.map((item) => {
-                return (
-                  <View
-                    key={item.id}
-                    style={[
-                      styles.card,
-                      styles.shadow,
-                      { width: 178, marginRight: 20, borderRadius: 10 },
-                    ]}
-                  >
-                    <Image
-                      source={{ uri: item.imageUrl }}
-                      width={178}
-                      height={120}
-                      style={[
-                        styles.restaurantImage,
-                        {
-                          borderTopRightRadius: 10,
-                          borderTopLeftRadius: 10,
-                        },
-                      ]}
-                    />
+            <ScrollView horizontal={true} style={styles.scrollContainer}>
+              <View style={[styles.dFlex, { marginTop: 16 }]}>
+                {restaurants.map((item) => {
+                  return (
                     <View
-                      style={{
-                        padding: 10,
-                        borderBottomRightRadius: 10,
-                        borderBottomLeftRadius: 10,
-                      }}
+                      key={item.id}
+                      style={[
+                        styles.card,
+                        styles.shadow,
+                        { width: 200, marginRight: 20, borderRadius: 10 },
+                      ]}
                     >
-                      <View style={styles.dFlex}>
-                        <Text style={styles.subtitle}>{item.name}</Text>
-                        <View
-                          style={[styles.dFlex, { justifyContent: "flex-end" }]}
-                        >
-                          <StarYellowIcon
-                            width={16}
-                            height={16}
-                            style={{ marginRight: 4 }}
-                          />
-                          <Text>4.5</Text>
+                      <Image
+                        source={{ uri: item.imageUrl }}
+                        width={200}
+                        height={120}
+                        style={[
+                          {
+                            borderTopRightRadius: 10,
+                            borderTopLeftRadius: 10,
+                          },
+                        ]}
+                      />
+                      <View
+                        style={{
+                          padding: 10,
+                          borderBottomRightRadius: 10,
+                          borderBottomLeftRadius: 10,
+                        }}
+                      >
+                        <View style={styles.dFlex}>
+                          <Text style={styles.subtitle} numberOfLines={1}>
+                            {item.name}
+                          </Text>
+                          <View
+                            style={[
+                              styles.dFlex,
+                              { justifyContent: "flex-end" },
+                            ]}
+                          >
+                            <StarYellowIcon
+                              width={16}
+                              height={16}
+                              style={{ marginRight: 4 }}
+                            />
+                            <Text>4.5</Text>
+                          </View>
+                        </View>
+
+                        <View style={{ marginTop: 4 }}>
+                          <Text style={{ lineHeight: 20 }} numberOfLines={2}>
+                            {"1.0km"} | {item.description}
+                          </Text>
                         </View>
                       </View>
-
-                      <View style={{ marginTop: 4 }}>
-                        <Text style={{ lineHeight: 20 }} numberOfLines={2}>
-                          {"1.0km"} | {item.description}
-                        </Text>
-                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -175,8 +226,9 @@ const styles = StyleSheet.create({
     height: 142,
     backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY_LIGHT,
     borderRadius: 10,
-    marginTop: 16,
-    marginBottom: 16,
+    marginTop: 20,
+    marginBottom: 20,
+    width: "100%",
   },
   title: {
     fontSize: 20,
@@ -197,7 +249,6 @@ const styles = StyleSheet.create({
   categoryImage: {
     borderRadius: 60,
   },
-  restaurantImage: {},
   scrollView: {
     backgroundColor: "white",
   },
@@ -210,5 +261,20 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 8,
+  },
+  scrollContainer: {
+    paddingHorizontal: 2,
+    paddingVertical: 2,
+    overflow: "visible",
+    paddingBottom: 20,
+  },
+  textInput: {
+    borderRadius: 40,
+    borderWidth: 2,
+    marginHorizontal: 0,
+    borderColor: "transparent",
+    paddingLeft: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 });

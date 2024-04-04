@@ -108,5 +108,21 @@ export const restaurants: Restaurant[] = [
           zipCode: '90001'
       }
   },
-  // Add more restaurants here...
+  {
+    id: 3,
+    name: 'Hong Kong Chef',
+    description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
+    imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/14/29/52/54/hong-teh-chinese-restaurant.jpg',
+    menu: [
+        { id: 1, name: 'California Roll', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
+        { id: 2, name: 'Spicy Tuna Roll', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
+        // More menu items...
+    ],
+    address: {
+        street: '789 Elm St',
+        city: 'Los Angeles',
+        state: 'CA',
+        zipCode: '90001'
+    }
+},
 ];
