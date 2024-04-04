@@ -54,7 +54,7 @@ export default function HomeScreen() {
           </View>
           <View style={styles.banner}>
             {/* BANNER */}
-            <Image source={require("../../assets/images/banner.png")} />
+            <Image source={require("../../assets/images/banner.png")} style={{width: '100%'}} />
           </View>
           <View style={{ marginBottom: 20 }}>
             {/* CATEGORY */}
@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 16,
     marginBottom: 16,
+    width: '100%'
   },
   title: {
     fontSize: 20,
