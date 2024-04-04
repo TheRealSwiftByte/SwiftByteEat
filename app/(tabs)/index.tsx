@@ -38,7 +38,10 @@ export default function HomeScreen() {
             </View>
           </View>
           <View>{/* SEARCH BAR */}</View>
-          <View style={styles.banner}>{/* BANNER */}</View>
+          <View style={styles.banner}>
+            {/* BANNER */}
+            <Image source={require("../../assets/images/banner.png")} />
+          </View>
           <View style={{ marginBottom: 20 }}>
             {/* CATEGORY */}
             <View style={styles.dFlex}>
@@ -102,12 +105,16 @@ export default function HomeScreen() {
                 See all
               </Text>
             </View>
-            <View style={[styles.dFlex, { marginTop: 16, }]}>
+            <View style={[styles.dFlex, { marginTop: 16 }]}>
               {restaurants.map((item) => {
                 return (
                   <View
                     key={item.id}
-                    style={[styles.card, styles.shadow,{ width: 178, marginRight: 20, borderRadius: 10 }]}
+                    style={[
+                      styles.card,
+                      styles.shadow,
+                      { width: 178, marginRight: 20, borderRadius: 10 },
+                    ]}
                   >
                     <Image
                       source={{ uri: item.imageUrl }}
@@ -195,13 +202,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   shadow: {
-    shadowColor: '#171717',
-    shadowOffset: {width: -2, height: 4},
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 8,
   },
 });
