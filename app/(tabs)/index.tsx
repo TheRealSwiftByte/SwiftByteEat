@@ -4,6 +4,8 @@ import { Text, View } from "@/components/Themed";
 import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 import LocationIcon from "../../assets/icons/icon-location.svg";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
+import SearchIcon from "../../assets/icons/icon-search.svg";
+import FilterIcon from "../../assets/icons/icon-filter.svg";
 
 import { SB_COLOR_SCHEME } from "@/constants";
 import { categories, restaurants } from "@/mock_data";
@@ -11,11 +13,11 @@ import { TextInput } from "@swift-byte/switftbytecomponents";
 import { useEffect, useState } from "react";
 
 export default function HomeScreen() {
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    console.log('search: ', search)
-  })
+    console.log("search: ", search);
+  });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,7 +30,12 @@ export default function HomeScreen() {
           <View
             style={[
               styles.dFlex,
-              { justifyContent: "flex-start", gap: 8, marginTop: 20 },
+              {
+                justifyContent: "flex-start",
+                gap: 8,
+                marginTop: 20,
+                marginBottom: 20,
+              },
             ]}
           >
             <LocationIcon />
@@ -38,7 +45,9 @@ export default function HomeScreen() {
                 { flexDirection: "column", alignItems: "flex-start" },
               ]}
             >
-              <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+              <Text
+                style={{ color: SB_COLOR_SCHEME.SB_PRIMARY, marginBottom: 4 }}
+              >
                 Current location
               </Text>
 
@@ -47,14 +56,36 @@ export default function HomeScreen() {
           </View>
           <View>
             {/* SEARCH BAR */}
-            <TextInput
-              value={search}
-              onChangeText={setSearch}
-            ></TextInput>
+            <View
+              style={[
+                styles.dFlex,
+                {
+                  borderRadius: 40,
+                  borderWidth: 2,
+                  borderColor: "#BBC5C1",
+                  justifyContent: "space-between",
+                },
+              ]}
+            >
+              <View style={[styles.dFlex, {backgroundColor: 'transparent'}]}>
+                <SearchIcon style={{ marginLeft: 20 }} />
+                <TextInput
+                  value={search}
+                  onChangeText={setSearch}
+                  style={styles.textInput}
+                  placeholder="Search menu or restaurant"
+                ></TextInput>
+              </View>
+
+              <FilterIcon style={{ marginRight: 20 }}/>
+            </View>
           </View>
           <View style={styles.banner}>
             {/* BANNER */}
-            <Image source={require("../../assets/images/banner.png")} style={{width: '100%'}} />
+            <Image
+              source={require("../../assets/images/banner.png")}
+              style={{ width: "100%" }}
+            />
           </View>
           <View style={{ marginBottom: 20 }}>
             {/* CATEGORY */}
@@ -136,7 +167,6 @@ export default function HomeScreen() {
                         width={200}
                         height={120}
                         style={[
-                          styles.restaurantImage,
                           {
                             borderTopRightRadius: 10,
                             borderTopLeftRadius: 10,
@@ -151,7 +181,9 @@ export default function HomeScreen() {
                         }}
                       >
                         <View style={styles.dFlex}>
-                          <Text style={styles.subtitle} numberOfLines={1}>{item.name}</Text>
+                          <Text style={styles.subtitle} numberOfLines={1}>
+                            {item.name}
+                          </Text>
                           <View
                             style={[
                               styles.dFlex,
@@ -196,7 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 16,
     marginBottom: 16,
-    width: '100%'
+    width: "100%",
   },
   title: {
     fontSize: 20,
@@ -217,7 +249,6 @@ const styles = StyleSheet.create({
   categoryImage: {
     borderRadius: 60,
   },
-  restaurantImage: {},
   scrollView: {
     backgroundColor: "white",
   },
@@ -236,5 +267,14 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     overflow: "visible",
     paddingBottom: 20,
+  },
+  textInput: {
+    borderRadius: 40,
+    borderWidth: 2,
+    marginHorizontal: 0,
+    borderColor: "transparent",
+    paddingLeft: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
 });
