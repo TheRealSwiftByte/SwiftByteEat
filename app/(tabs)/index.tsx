@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY_LIGHT,
     borderRadius: 10,
     marginTop: 16,
-    marginBottom: 16,
+    marginBottom: 30,
     width: "100%",
   },
   title: {
