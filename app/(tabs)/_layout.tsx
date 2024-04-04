@@ -12,7 +12,7 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   color: string;
 }) {
-  return <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <Ionicons size={22} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -32,6 +32,7 @@ export default function TabLayout() {
           height: 90,
           paddingBottom: 32,
           paddingTop: 8,
+          backgroundColor: '#FFFEFC'
         },
       }}
     >
