@@ -87,7 +87,7 @@ export default function HomeScreen() {
               style={{ width: "100%" }}
             />
           </View>
-          <View style={{ marginBottom: 20 }}>
+          <View style={{ marginBottom: 10 }}>
             {/* CATEGORY */}
             <View style={styles.dFlex}>
               <Text style={[styles.title, { fontSize: 18 }]}>
@@ -226,8 +226,8 @@ const styles = StyleSheet.create({
     height: 142,
     backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY_LIGHT,
     borderRadius: 10,
-    marginTop: 16,
-    marginBottom: 30,
+    marginTop: 20,
+    marginBottom: 20,
     width: "100%",
   },
   title: {
