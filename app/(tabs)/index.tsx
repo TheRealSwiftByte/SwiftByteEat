@@ -8,8 +8,15 @@ import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { categories, restaurants } from "@/mock_data";
 import { TextInput } from "@swift-byte/switftbytecomponents";
+import { useEffect, useState } from "react";
 
 export default function HomeScreen() {
+  const [search, setSearch] = useState<string>('');
+
+  useEffect(() => {
+    console.log('search: ', search)
+  })
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -40,12 +47,10 @@ export default function HomeScreen() {
           </View>
           <View>
             {/* SEARCH BAR */}
-            {/* <TextInput
-              value={""}
-              onChangeText={function (text: string): void {
-                throw new Error("Function not implemented.");
-              }}
-            ></TextInput> */}
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+            ></TextInput>
           </View>
           <View style={styles.banner}>
             {/* BANNER */}
@@ -123,12 +128,12 @@ export default function HomeScreen() {
                       style={[
                         styles.card,
                         styles.shadow,
-                        { width: 178, marginRight: 20, borderRadius: 10 },
+                        { width: 200, marginRight: 20, borderRadius: 10 },
                       ]}
                     >
                       <Image
                         source={{ uri: item.imageUrl }}
-                        width={178}
+                        width={200}
                         height={120}
                         style={[
                           styles.restaurantImage,
@@ -146,7 +151,7 @@ export default function HomeScreen() {
                         }}
                       >
                         <View style={styles.dFlex}>
-                          <Text style={styles.subtitle}>{item.name}</Text>
+                          <Text style={styles.subtitle} numberOfLines={1}>{item.name}</Text>
                           <View
                             style={[
                               styles.dFlex,
