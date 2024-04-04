@@ -7,6 +7,7 @@ import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 
 import { SB_COLOR_SCHEME } from "@/constants";
 import { categories, restaurants } from "@/mock_data";
+import { TextInput } from "@swift-byte/switftbytecomponents";
 
 export default function HomeScreen() {
   return (
@@ -37,7 +38,15 @@ export default function HomeScreen() {
               <Text style={styles.subtitle}>3 Crown Street, Wollongong</Text>
             </View>
           </View>
-          <View>{/* SEARCH BAR */}</View>
+          <View>
+            {/* SEARCH BAR */}
+            {/* <TextInput
+              value={""}
+              onChangeText={function (text: string): void {
+                throw new Error("Function not implemented.");
+              }}
+            ></TextInput> */}
+          </View>
           <View style={styles.banner}>
             {/* BANNER */}
             <Image source={require("../../assets/images/banner.png")} />
@@ -105,60 +114,65 @@ export default function HomeScreen() {
                 See all
               </Text>
             </View>
-            <View style={[styles.dFlex, { marginTop: 16 }]}>
-              {restaurants.map((item) => {
-                return (
-                  <View
-                    key={item.id}
-                    style={[
-                      styles.card,
-                      styles.shadow,
-                      { width: 178, marginRight: 20, borderRadius: 10 },
-                    ]}
-                  >
-                    <Image
-                      source={{ uri: item.imageUrl }}
-                      width={178}
-                      height={120}
-                      style={[
-                        styles.restaurantImage,
-                        {
-                          borderTopRightRadius: 10,
-                          borderTopLeftRadius: 10,
-                        },
-                      ]}
-                    />
+            <ScrollView horizontal={true} style={styles.scrollContainer}>
+              <View style={[styles.dFlex, { marginTop: 16 }]}>
+                {restaurants.map((item) => {
+                  return (
                     <View
-                      style={{
-                        padding: 10,
-                        borderBottomRightRadius: 10,
-                        borderBottomLeftRadius: 10,
-                      }}
+                      key={item.id}
+                      style={[
+                        styles.card,
+                        styles.shadow,
+                        { width: 178, marginRight: 20, borderRadius: 10 },
+                      ]}
                     >
-                      <View style={styles.dFlex}>
-                        <Text style={styles.subtitle}>{item.name}</Text>
-                        <View
-                          style={[styles.dFlex, { justifyContent: "flex-end" }]}
-                        >
-                          <StarYellowIcon
-                            width={16}
-                            height={16}
-                            style={{ marginRight: 4 }}
-                          />
-                          <Text>4.5</Text>
+                      <Image
+                        source={{ uri: item.imageUrl }}
+                        width={178}
+                        height={120}
+                        style={[
+                          styles.restaurantImage,
+                          {
+                            borderTopRightRadius: 10,
+                            borderTopLeftRadius: 10,
+                          },
+                        ]}
+                      />
+                      <View
+                        style={{
+                          padding: 10,
+                          borderBottomRightRadius: 10,
+                          borderBottomLeftRadius: 10,
+                        }}
+                      >
+                        <View style={styles.dFlex}>
+                          <Text style={styles.subtitle}>{item.name}</Text>
+                          <View
+                            style={[
+                              styles.dFlex,
+                              { justifyContent: "flex-end" },
+                            ]}
+                          >
+                            <StarYellowIcon
+                              width={16}
+                              height={16}
+                              style={{ marginRight: 4 }}
+                            />
+                            <Text>4.5</Text>
+                          </View>
+                        </View>
+
+                        <View style={{ marginTop: 4 }}>
+                          <Text style={{ lineHeight: 20 }} numberOfLines={2}>
+                            {"1.0km"} | {item.description}
+                          </Text>
                         </View>
                       </View>
-
-                      <View style={{ marginTop: 4 }}>
-                        <Text style={{ lineHeight: 20 }} numberOfLines={2}>
-                          {"1.0km"} | {item.description}
-                        </Text>
-                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </View>
+                  );
+                })}
+              </View>
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
@@ -210,5 +224,11 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 8,
+  },
+  scrollContainer: {
+    paddingHorizontal: 2,
+    paddingVertical: 2,
+    overflow: "visible",
+    paddingBottom: 20,
   },
 });
