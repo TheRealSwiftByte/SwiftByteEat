@@ -51,6 +51,13 @@ export interface Cart {
   netTotal: string;
 }
 
+export interface Card {
+  id: number,
+  type: string,
+  last3Digits: number,
+  title: string
+}
+
 export interface Order {
   id: string;
   customer: Customer;
@@ -222,4 +229,25 @@ export const promoCode = [
   {code: 'AUTUMN22', value: 2.5},
   {code: 'JOYFUL2024', value: 5},
   {code: 'NYC234', value: 2}
+]
+
+export const myCards: Card[] = [
+  {
+    id: 1,
+    type: 'visa',
+    last3Digits: 4567,
+    title: ''
+  },
+  {
+    id: 2,
+    type: 'master',
+    last3Digits: 7890,
+    title: 'Credit Card'
+  },
+  {
+    id: 3,
+    type: 'paypal',
+    last3Digits: 2345,
+    title: 'Paypal'
+  }
 ]
