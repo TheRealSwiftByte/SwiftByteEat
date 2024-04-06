@@ -14,8 +14,14 @@ import { SB_COLOR_SCHEME } from "@/constants";
 import { MenuItem, cart } from "@/mock_data";
 import { Button } from "@swift-byte/switftbytecomponents";
 import { Link } from "expo-router";
+import { NavigationProp, ParamListBase, RouteProp } from "@react-navigation/native";
 
-export default function CartScreen({ route, navigation }: any) {
+interface CartProps {
+  route: RouteProp<ParamListBase, string>;
+  navigation: NavigationProp<ParamListBase>;
+}
+
+export default function CartScreen({route, navigation}: CartProps) {
   const itemIdCounts: { [itemId: string]: number } = {};
 
   cart.items.forEach((item) => {
