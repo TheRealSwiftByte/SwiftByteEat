@@ -64,8 +64,8 @@ function RootLayoutNav() {
             headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
             headerBackTitle: "Back",
             contentStyle: {
-              backgroundColor: 'white'
-            }
+              backgroundColor: "white",
+            },
           }}
         />
         <Stack.Screen
@@ -75,11 +75,12 @@ function RootLayoutNav() {
             headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
             headerBackTitle: "Back",
             contentStyle: {
-              backgroundColor: 'white'
-            }
+              backgroundColor: "white",
+            },
           }}
         />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen name="success" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
   );

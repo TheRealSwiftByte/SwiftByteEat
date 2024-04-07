@@ -15,9 +15,19 @@ import RadioFilled from "../assets/icons/icon-radio-filled.svg";
 import AddCard from "../assets/icons/logo-add-card.svg";
 import { Link } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
+import {
+  NavigationProp,
+  ParamListBase,
+  RouteProp,
+} from "@react-navigation/native";
 
-export default function PaymentMethod() {
-  const [selectedCard, setSelectedCard] = useState<Card>();
+interface PaymentProps {
+  route: RouteProp<ParamListBase, string>;
+  navigation: NavigationProp<ParamListBase>;
+}
+
+export default function PaymentMethod({ route, navigation }: PaymentProps) {
+  const [selectedCard, setSelectedCard] = useState<Card>(myCards[0]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,7 +83,7 @@ export default function PaymentMethod() {
             </View>
           </View>
 
-          <Link href="/modal" asChild>
+          <Link href="/success" asChild>
             <Button
               text={"Pay Now"}
               type={"primary"}
