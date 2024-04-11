@@ -22,9 +22,6 @@ export default function Checkout({ route, navigation }: CartProps) {
   const [promo, setPromo] = useState<string>("");
   const [deliveryInstruction, setDeliveryInstruction] = useState<string>("");
   const [validPromo, setValidPromo] = useState<boolean>(false);
-  const [deliveryFee, setDeliveryFee] = useState<number>(0);
-  const [vat, setVAT] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
 
   const itemIdCounts: { [itemId: string]: number } = {};
 
@@ -83,6 +80,12 @@ export default function Checkout({ route, navigation }: CartProps) {
         total += food.count * food.item?.price;
       }
     });
+
+    const coupon = promoCode.find((item) => item.code == promo)?.value?? 0;
+    if(validPromo){
+      total -= coupon
+    }
+    
     return total;
   };
 

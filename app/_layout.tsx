@@ -79,8 +79,23 @@ function RootLayoutNav() {
             },
           }}
         />
+        <Stack.Screen
+          name="delivery"
+          options={{
+            title: "Delivery",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: false,
+            gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        <Stack.Screen name="success" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="success"
+          options={{ presentation: "modal", headerShown: false }}
+        />
       </Stack>
     </ThemeProvider>
   );

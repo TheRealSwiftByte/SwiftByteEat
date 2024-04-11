@@ -20,6 +20,9 @@ import {
   ParamListBase,
   RouteProp,
 } from "@react-navigation/native";
+import VisaLogo from "../assets/icons/logo-visa.svg";
+import MasterLogo from "../assets/icons/logo-master.svg";
+import PaypalLogo from "../assets/icons/logo-paypal.svg";
 
 interface PaymentProps {
   route: RouteProp<ParamListBase, string>;
@@ -44,18 +47,15 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
                     <View
                       style={[styles.dFlex, { justifyContent: "flex-start" }]}
                     >
-                      <Image
-                        source={
-                          card.type == "visa"
-                            ? require("../assets/icons/logo-visa.png")
-                            : card.type == "master"
-                            ? require("../assets/icons/logo-master.png")
-                            : require("../assets/icons/logo-paypal.png")
-                        }
-                        width={44}
-                        height={30}
-                        style={{ marginRight: 16 }}
-                      />
+                      <View style={{ marginRight: 16 }}>
+                        {card.type == "visa" ? (
+                          <VisaLogo />
+                        ) : card.type == "master" ? (
+                          <MasterLogo />
+                        ) : (
+                          <PaypalLogo />
+                        )}
+                      </View>
                       <Text>**** {card.last3Digits}</Text>
                     </View>
                     <TouchableOpacity onPress={() => setSelectedCard(card)}>
