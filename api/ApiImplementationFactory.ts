@@ -1,17 +1,20 @@
-import { Venue, Order, Customer, Review, Cart } from './schema/db.types.ts';
+import { Customer } from './schema/Customer.ts';
+import { Order } from './schema/Order.ts';
+import { Review } from './schema/Review.ts';
+import { Restaurant } from './schema/Restaurant.ts';
 
 
 export interface ApiImplementationFactory {
     initialise(): void;
 
-    //venues
-    getVenue(id: string): Promise<Venue>;
-    getVenues(): Promise<Venue[]>;
-    createVenue(venue: Venue): Promise<Venue>;
+    //Restaurants
+    getRestaurant(id: string): Promise<Restaurant>;
+    getRestaurants(): Promise<Restaurant[]>;
+    createRestaurant(Restaurant: Restaurant): Promise<Restaurant>;
 
     //orders
     getOrder(id: string): Promise<Order>;
-    getOrders(cusomer: Customer): Promise<Order[]>;
+    getOrders(customer: Customer): Promise<Order[]>;
     createOrder(order: Order): Promise<Order>;
     updateOrder(order: Order): Promise<Order>;
 
@@ -26,11 +29,5 @@ export interface ApiImplementationFactory {
     getReviews(): Promise<Review[]>;
     createReview(review: Review): Promise<Review>;
     updateReview(review: Review): Promise<Review>;
-
-    //cart
-    getCart(id: string): Promise<Cart>;
-    addToCart(cartId: string, itemId: string): Promise<Cart>;
-    removeFromCart(cartId: string, itemId: string): Promise<Cart>;
-
 
 }

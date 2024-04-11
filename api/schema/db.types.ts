@@ -1,9 +1,12 @@
+import { Restaurant } from "./Restaurant";
+
 export enum MenuItemType {
     MAIN = "main",
     SIDE = "side",
     DRINK = "drink",
     STARTER = "starter",
     DESSERT = "dessert",
+    POPULAR = "popular",
 }
 
 export interface MenuItem {
@@ -35,31 +38,6 @@ export enum FoodCategory {
     PIZZA = "pizza",
 }
 
-export interface Restaurant {
-    id: string;
-    categories: FoodCategory[];
-    name: string;
-    address: string;
-    phone: string;
-    averageRating: number;
-    averageWaitTime: number;
-    menu: MenuItem[];
-}
-
-export interface Order {
-    id: string;
-    customer: Customer;
-    restaurant: Restaurant;
-    items: MenuItem[];
-    status: "pending"|"accepted"|"declined"|"completed";
-    netTotal: number;
-    promoCode: string;
-    discount: number;
-    createdAt: string;
-    updatedAt: string;
-    payment:Payment
-}
-
 export interface Payment{
     id:string
     amount:number
@@ -67,14 +45,6 @@ export interface Payment{
     last4Digits?:string
     createdAt:string
     updatedAt:string
-}
-
-export interface Review{
-    id:string
-    author:Customer
-    rating:number
-    comment:string
-    createdAt:string
 }
 
 export interface Cart {
@@ -91,13 +61,4 @@ export interface User {
     lastName: string;
     email: string;
     phone: string;
-}
-
-export interface Customer extends User {
-    activeCartId: string | null;
-}
-
-export interface Driver extends User {
-    vehicle: string;
-    licensePlate: string;
 }
