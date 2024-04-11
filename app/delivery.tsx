@@ -4,6 +4,8 @@ import PrepareFood from "../assets/images/prepare-food.svg";
 import FindDriver from "../assets/images/find-driver.svg";
 import OrderDelivery from "../assets/images/order-delivery.svg";
 import OrderArrive from "../assets/images/order-arrive.svg";
+import { SB_COLOR_SCHEME } from "@/constants";
+import { restaurants } from "@/mock_data";
 
 enum Status {
   PREPARE = "Preparing",
@@ -20,9 +22,13 @@ interface Driver {
 }
 
 export default function delivery() {
-  const [heading, setHeading] = useState<string>(
-    "Sit back and relax!\nYour food is being prepared"
-  );
+  const headings = [
+    "Sit back and relax!\nYour food is being prepared",
+    "Just one more step!",
+    "Your order is on its way!",
+    "Your driver has arrived!",
+  ];
+  const [heading, setHeading] = useState<string>(headings[0]);
   const [description, setDescription] = useState<string>("");
   const [currentProcess, setCurrentProcess] = useState<Status>(Status.PREPARE);
   const [driver, setDriver] = useState<Driver>();
@@ -32,7 +38,12 @@ export default function delivery() {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <Text
-            style={{ textAlign: "center", fontSize: 20, fontWeight: "500" }}
+            style={{
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "500",
+              color: SB_COLOR_SCHEME.SB_PRIMARY,
+            }}
           >
             {heading}
           </Text>
@@ -48,23 +59,60 @@ export default function delivery() {
           ) : (
             <OrderArrive />
           )}
-          <View>
-            <View>
-              <View></View>
-              <Text>{Status.PREPARE}</Text>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              gap: 10,
+              paddingVertical: 16,
+            }}
+          >
+            <View style={{ flex: 1, gap: 10 }}>
+              <View
+                style={{
+                  backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
+                  height: 4,
+                }}
+              ></View>
+              <Text style={{ textAlign: "center" }}>{Status.PREPARE}</Text>
             </View>
-            <View>
-              <View></View>
-              <Text>{Status.FIND_DRIVER}</Text>
+            <View style={{ flex: 1, gap: 10 }}>
+              <View
+                style={{
+                  backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                  height: 4,
+                }}
+              ></View>
+              <Text style={{ textAlign: "center", lineHeight: 20 }}>
+                {Status.FIND_DRIVER}
+              </Text>
             </View>
-            <View>
-              <View></View>
-              <Text>{Status.DELIVERY}</Text>
+            <View style={{ flex: 1, gap: 10 }}>
+              <View
+                style={{
+                  backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                  height: 4,
+                }}
+              ></View>
+              <Text style={{ textAlign: "center" }}>{Status.DELIVERY}</Text>
             </View>
-            <View>
-              <View></View>
-              <Text>{Status.RECEIVE}</Text>
+            <View style={{ flex: 1, gap: 10 }}>
+              <View
+                style={{
+                  backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                  height: 4,
+                }}
+              ></View>
+              <Text style={{ textAlign: "center" }}>{Status.RECEIVE}</Text>
             </View>
+          </View>
+          <View style={{ width: '100%'}}>
+            <Text style={{ fontWeight: 'bold' }}>Restaurant</Text>
+            <Text>{restaurants[0].name}</Text>
+            <Text>
+              {restaurants[0].address.street}, {restaurants[0].address.city},{" "}
+              {restaurants[0].address.state}, {restaurants[0].address.zipCode}
+            </Text>
           </View>
         </View>
       </ScrollView>
