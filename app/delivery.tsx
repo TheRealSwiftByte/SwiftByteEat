@@ -5,7 +5,9 @@ import FindDriver from "../assets/images/find-driver.svg";
 import OrderDelivery from "../assets/images/order-delivery.svg";
 import OrderArrive from "../assets/images/order-arrive.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
-import { restaurants } from "@/mock_data";
+import { MenuItem, cart, promoCode, restaurants } from "@/mock_data";
+import { Link, router } from "expo-router";
+import { Button } from "@swift-byte/switftbytecomponents";
 
 enum Status {
   PREPARE = "Preparing",
@@ -33,8 +35,58 @@ export default function delivery() {
   const [currentProcess, setCurrentProcess] = useState<Status>(Status.PREPARE);
   const [driver, setDriver] = useState<Driver>();
 
+  const itemIdCounts: { [itemId: string]: number } = {};
+
+  cart.items.forEach((item) => {
+    const itemId = item.id.toString();
+    itemIdCounts[itemId] = (itemIdCounts[itemId] || 0) + 1;
+  });
+
+  const myItems: {
+    item: MenuItem | undefined;
+    count: number;
+  }[] = Object.keys(itemIdCounts).map((itemId) => ({
+    item: cart.items.find((i) => i.id == itemId),
+    count: itemIdCounts[itemId],
+  }));
+
+  const getDeliveryFee = () => {
+    let total = 0;
+    myItems.forEach((food) => {
+      if (food.item?.price) {
+        total += food.count * food.item?.price;
+      }
+    });
+    return total * 0.04;
+  };
+
+  const getVAT = () => {
+    let total = 0;
+    myItems.forEach((food) => {
+      if (food.item?.price) {
+        total += food.count * food.item?.price;
+      }
+    });
+    return total * 0.05;
+  };
+
+  const getTotal = () => {
+    let total = 0;
+
+    total += getVAT();
+    total += getDeliveryFee();
+
+    myItems.forEach((food) => {
+      if (food.item?.price) {
+        total += food.count * food.item?.price;
+      }
+    });
+
+    return total;
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <Text
@@ -47,18 +99,27 @@ export default function delivery() {
           >
             {heading}
           </Text>
-          <Text style={{ textAlign: "center", fontSize: 16 }}>
+          <Text
+            style={
+              description
+                ? { textAlign: "center", fontSize: 16 }
+                : { display: "none" }
+            }
+          >
             {description}
           </Text>
-          {currentProcess == Status.PREPARE ? (
-            <PrepareFood />
-          ) : currentProcess == Status.FIND_DRIVER ? (
-            <FindDriver />
-          ) : currentProcess == Status.DELIVERY ? (
-            <OrderDelivery />
-          ) : (
-            <OrderArrive />
-          )}
+          <View style={{ marginTop: 4 }}>
+            {currentProcess == Status.PREPARE ? (
+              <PrepareFood />
+            ) : currentProcess == Status.FIND_DRIVER ? (
+              <FindDriver />
+            ) : currentProcess == Status.DELIVERY ? (
+              <OrderDelivery />
+            ) : (
+              <OrderArrive />
+            )}
+          </View>
+
           <View
             style={{
               flex: 1,
@@ -78,10 +139,17 @@ export default function delivery() {
             </View>
             <View style={{ flex: 1, gap: 10 }}>
               <View
-                style={{
-                  backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
-                  height: 4,
-                }}
+                style={
+                  currentProcess != Status.PREPARE
+                    ? {
+                        backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
+                        height: 4,
+                      }
+                    : {
+                        backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                        height: 4,
+                      }
+                }
               ></View>
               <Text style={{ textAlign: "center", lineHeight: 20 }}>
                 {Status.FIND_DRIVER}
@@ -89,30 +157,147 @@ export default function delivery() {
             </View>
             <View style={{ flex: 1, gap: 10 }}>
               <View
-                style={{
-                  backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
-                  height: 4,
-                }}
+                style={
+                  currentProcess != Status.FIND_DRIVER
+                    ? {
+                        backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
+                        height: 4,
+                      }
+                    : {
+                        backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                        height: 4,
+                      }
+                }
               ></View>
               <Text style={{ textAlign: "center" }}>{Status.DELIVERY}</Text>
             </View>
             <View style={{ flex: 1, gap: 10 }}>
               <View
-                style={{
-                  backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
-                  height: 4,
-                }}
+                style={
+                  currentProcess != Status.DELIVERY
+                    ? {
+                        backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
+                        height: 4,
+                      }
+                    : {
+                        backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                        height: 4,
+                      }
+                }
               ></View>
               <Text style={{ textAlign: "center" }}>{Status.RECEIVE}</Text>
             </View>
           </View>
-          <View style={{ width: '100%'}}>
-            <Text style={{ fontWeight: 'bold' }}>Restaurant</Text>
-            <Text>{restaurants[0].name}</Text>
-            <Text>
+          <View style={{ width: "100%", marginBottom: 8 }}>
+            <Text style={styles.subtitle}>Restaurant</Text>
+            <Text style={{ marginTop: 8 }}>{restaurants[0].name}</Text>
+            <Text style={{ lineHeight: 25 }}>
               {restaurants[0].address.street}, {restaurants[0].address.city},{" "}
               {restaurants[0].address.state}, {restaurants[0].address.zipCode}
             </Text>
+          </View>
+          <View style={{ width: "100%", marginBottom: 8 }}>
+            <Text style={styles.subtitle}>Delivery Address</Text>
+            <Text style={{ lineHeight: 25, marginTop: 8 }}>
+              3 Crown Street, Wollongong
+            </Text>
+          </View>
+          <View style={{ width: "100%", marginBottom: 8 }}>
+            <Text style={styles.subtitle}>Delivery Instruction</Text>
+            <Text style={{ lineHeight: 25, marginTop: 8 }}>
+              Leave at the door
+            </Text>
+          </View>
+          <View style={{ width: "100%" }}>
+            <Text style={styles.subtitle}>Order Summary</Text>
+            <View>
+              {myItems.map((item) => {
+                return (
+                  <View key={item.item?.id} style={styles.summaryItem}>
+                    <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                      {item.count}x {item.item?.name}
+                    </Text>
+                    <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                      $
+                      {item.item?.price
+                        ? item.item?.price * item.count
+                        : item.item?.price}
+                    </Text>
+                  </View>
+                );
+              })}
+              <View style={styles.summaryItem}>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                  Delivery Fee
+                </Text>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                  ${getDeliveryFee().toFixed(2)}
+                </Text>
+              </View>
+              <View style={styles.summaryItem}>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>VAT</Text>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                  ${getVAT().toFixed(2)}
+                </Text>
+              </View>
+              {/* <View
+                style={validPromo ? styles.summaryItem : { display: "none" }}
+              >
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                  Coupon
+                </Text>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
+                  -${promoCode.find((item) => item.code == promo)?.value}
+                </Text>
+              </View> */}
+              <View style={[styles.summaryItem, { borderBottomWidth: 0 }]}>
+                <Text
+                  style={{
+                    color: SB_COLOR_SCHEME.SB_PRIMARY,
+                    fontWeight: "bold",
+                    fontSize: 16,
+                  }}
+                >
+                  Total
+                </Text>
+                <Text
+                  style={{
+                    color: SB_COLOR_SCHEME.SB_PRIMARY,
+                    fontWeight: "bold",
+                    fontSize: 16,
+                  }}
+                >
+                  ${getTotal().toFixed(2)}
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={
+              currentProcess == Status.PREPARE
+                ? [
+                    styles.container,
+                    { borderBottomWidth: 0, padding: 0, gap: 0 },
+                  ]
+                : { display: "none" }
+            }
+          >
+            <Link href="/delivery" asChild onPress={() => router.back()}>
+              <Button
+                text={"Cancel order"}
+                type={"primary"}
+                onPress={function (): void {}}
+                textStyle={{ color: SB_COLOR_SCHEME.SB_ERROR }}
+                buttonStyle={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  borderColor: SB_COLOR_SCHEME.SB_ERROR,
+                  borderWidth: 1,
+                  marginTop: -8,
+                  marginBottom: -8,
+                }}
+              ></Button>
+            </Link>
           </View>
         </View>
       </ScrollView>
@@ -132,5 +317,18 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: "white",
+  },
+  subtitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: SB_COLOR_SCHEME.SB_PRIMARY,
+  },
+  summaryItem: {
+    paddingVertical: 16,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomColor: SB_COLOR_SCHEME.SB_SEPARATOR,
+    borderBottomWidth: 1,
   },
 });
