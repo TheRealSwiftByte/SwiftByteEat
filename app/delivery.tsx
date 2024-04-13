@@ -68,7 +68,9 @@ export default function delivery() {
       setDescription("");
     }, 30000);
 
-    
+    setTimeout(() => {
+      router.navigate({ pathname: "/success", params: { type: "delivery" } });
+    }, 40000);
   }, []);
 
   cart.items.forEach((item) => {
@@ -343,7 +345,7 @@ export default function delivery() {
                 : { display: "none" }
             }
           >
-            <Link href="/delivery" asChild onPress={() => router.back()}>
+            <Link href="/checkout" asChild onPress={() => router.back()}>
               <Button
                 text={"Cancel order"}
                 type={"primary"}

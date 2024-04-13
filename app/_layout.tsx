@@ -90,7 +90,7 @@ function RootLayoutNav() {
             },
           }}
         />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         <Stack.Screen
           name="success"
           options={{ presentation: "modal", headerShown: false }}
