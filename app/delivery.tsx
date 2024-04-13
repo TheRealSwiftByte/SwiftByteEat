@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PrepareFood from "../assets/images/prepare-food.svg";
 import FindDriver from "../assets/images/find-driver.svg";
 import OrderDelivery from "../assets/images/order-delivery.svg";
@@ -8,6 +8,7 @@ import { SB_COLOR_SCHEME } from "@/constants";
 import { MenuItem, cart, promoCode, restaurants } from "@/mock_data";
 import { Link, router } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
+import ChatIcon from "../assets/icons/icon-chat.svg";
 
 enum Status {
   PREPARE = "Preparing",
@@ -19,7 +20,6 @@ enum Status {
 interface Driver {
   id: string;
   name: string;
-  imageUrl: string;
   carName: string;
 }
 
@@ -30,12 +30,46 @@ export default function delivery() {
     "Your order is on its way!",
     "Your driver has arrived!",
   ];
+  const driver_tmp = {
+    id: "SB-234KT",
+    name: "Henry Earls",
+    carName: "Red Mazda 3 (64SEAT)",
+  };
   const [heading, setHeading] = useState<string>(headings[0]);
   const [description, setDescription] = useState<string>("");
   const [currentProcess, setCurrentProcess] = useState<Status>(Status.PREPARE);
   const [driver, setDriver] = useState<Driver>();
 
   const itemIdCounts: { [itemId: string]: number } = {};
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCurrentProcess(Status.PREPARE);
+      setHeading(headings[0]);
+      setDescription("");
+    }, 500);
+
+    setTimeout(() => {
+      setCurrentProcess(Status.FIND_DRIVER);
+      setHeading(headings[1]);
+      setDescription("Looking for your driver");
+    }, 10000);
+
+    setTimeout(() => {
+      setCurrentProcess(Status.DELIVERY);
+      setHeading(headings[2]);
+      setDescription("");
+      setDriver(driver_tmp);
+    }, 20000);
+
+    setTimeout(() => {
+      setCurrentProcess(Status.RECEIVE);
+      setHeading(headings[3]);
+      setDescription("");
+    }, 30000);
+
+    
+  }, []);
 
   cart.items.forEach((item) => {
     const itemId = item.id.toString();
@@ -140,13 +174,13 @@ export default function delivery() {
             <View style={{ flex: 1, gap: 10 }}>
               <View
                 style={
-                  currentProcess != Status.PREPARE
+                  currentProcess == Status.PREPARE
                     ? {
-                        backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
+                        backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
                         height: 4,
                       }
                     : {
-                        backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                        backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
                         height: 4,
                       }
                 }
@@ -158,7 +192,8 @@ export default function delivery() {
             <View style={{ flex: 1, gap: 10 }}>
               <View
                 style={
-                  currentProcess != Status.FIND_DRIVER
+                  currentProcess == Status.DELIVERY ||
+                  currentProcess == Status.RECEIVE
                     ? {
                         backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
                         height: 4,
@@ -174,7 +209,7 @@ export default function delivery() {
             <View style={{ flex: 1, gap: 10 }}>
               <View
                 style={
-                  currentProcess != Status.DELIVERY
+                  currentProcess == Status.RECEIVE
                     ? {
                         backgroundColor: SB_COLOR_SCHEME.SB_PRIMARY,
                         height: 4,
@@ -187,6 +222,32 @@ export default function delivery() {
               ></View>
               <Text style={{ textAlign: "center" }}>{Status.RECEIVE}</Text>
             </View>
+          </View>
+          <View
+            style={
+              currentProcess == Status.DELIVERY ||
+              currentProcess == Status.RECEIVE
+                ? {
+                    width: "100%",
+                    marginBottom: 8,
+                    padding: 18,
+                    borderRadius: 10,
+                    backgroundColor: SB_COLOR_SCHEME.SB_SECONDARY,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }
+                : { display: "none" }
+            }
+          >
+            <View style={{ paddingLeft: 4 }}>
+              <Text style={{ marginBottom: 8, fontWeight: "500" }}>
+                {driver?.name}
+              </Text>
+              <Text>{driver?.carName}</Text>
+            </View>
+            <ChatIcon />
           </View>
           <View style={{ width: "100%", marginBottom: 8 }}>
             <Text style={styles.subtitle}>Restaurant</Text>
