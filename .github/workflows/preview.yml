@@ -13,10 +13,9 @@ jobs:
         - uses: actions/checkout@v3
         - name: Use Node.js 18.x
 
-          uses: actions/setup-node@v3
+          uses: actions/setup-node@v4
           with:
             node-version: 18.x
-            cache: npm
               
         - name: Install dependencies
           run: npm ci
@@ -25,15 +24,14 @@ jobs:
           run: npm test 
           
   create_preview:
-      needs: test
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
-        - name: Use Node.js 16.x
-          uses: actions/setup-node@v3
+        
+        - name: Use Node.js 18.x
+          uses: actions/setup-node@v4
           with:
             node-version: 18.x
-            cache: npm
 
         - name: Setup EAS
           uses: expo/expo-github-action@v8
