@@ -1,5 +1,5 @@
 import React from "react";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 
@@ -12,7 +12,7 @@ function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   color: string;
 }) {
-  return <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <Ionicons size={22} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -28,7 +28,7 @@ export default function TabLayout() {
         headerStyle: {
           height: 90,
         },
-        tabBarStyle: { 
+        tabBarStyle: {
           height: 90,
           paddingBottom: 32,
           paddingTop: 8,
@@ -39,7 +39,9 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="home-outline" color={color} />
+          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -60,7 +62,9 @@ export default function TabLayout() {
         name="Explore"
         options={{
           title: "Explore",
-          tabBarIcon: ({ color }) => <TabBarIcon name="search-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="search-outline" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -85,7 +89,9 @@ export default function TabLayout() {
         name="Profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="person-circle-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="person-circle-outline" color={color} />
+          ),
         }}
       />
     </Tabs>
