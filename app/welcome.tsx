@@ -15,14 +15,14 @@ export default function welcome() {
         <Logo width={200} height={50} />
         <Welcome />
         <View>
-          <Link href="/(tabs)" asChild onPress={() => router.back()}>
+          <Link href="/signIn" asChild>
             <Button
               text={"Sign In"}
               type={"secondary"}
               onPress={function (): void {}}
             ></Button>
           </Link>
-          <Link href="/(tabs)" asChild onPress={() => router.back()}>
+          <Link href="/signUp" asChild>
             <Button
               text={"Sign Up"}
               type={"primary"}
