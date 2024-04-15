@@ -21,10 +21,6 @@ export class ApiStubFactory implements ApiImplementationFactory {
         this.reviews = [];
     }
 
-    initialise(): void {
-        this.seedData();
-    }
-
     //Restaurants
     getRestaurant(id: string): Promise<Restaurant> {
         const Restaurant = this.Restaurants.find(v => v.id === id);

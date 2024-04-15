@@ -1,24 +1,5 @@
 import { Restaurant } from "./Restaurant";
 
-export enum MenuItemType {
-    MAIN = "main",
-    SIDE = "side",
-    DRINK = "drink",
-    STARTER = "starter",
-    DESSERT = "dessert",
-    POPULAR = "popular",
-}
-
-export interface MenuItem {
-    id: string;
-    type: MenuItemType;
-    name: string;
-    price: number;
-    description: string;
-    imagePath: string;
-    isAvailable: boolean;
-}
-
 export enum FoodCategory {
     KOREAN = "korean",
     JAPANESE = "japanese",
@@ -38,27 +19,34 @@ export enum FoodCategory {
     PIZZA = "pizza",
 }
 
+export enum MenuItemType {
+    MAIN = "main",
+    SIDE = "side",
+    DRINK = "drink",
+    STARTER = "starter",
+    DESSERT = "dessert",
+    POPULAR = "popular",
+}
+
+export interface MenuItem {
+    type: MenuItemType;
+    name: string;
+    price: number;
+    description: string;
+    imagePath: string;
+    isAvailable: boolean;
+}
+
+
 export interface Payment{
-    id:string
     amount:number
     type:"card"|"paypal"
     last4Digits?:string
     createdAt:string
-    updatedAt:string
 }
 
 export interface Cart {
-    id: string
     restaurant: Restaurant
     items: MenuItem[]
-    promoCode: string
-    netTotal: number
-}
-
-export interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
+    total: number
 }

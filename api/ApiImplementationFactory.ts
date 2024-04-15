@@ -5,8 +5,6 @@ import { Restaurant } from './schema/Restaurant.ts';
 
 
 export interface ApiImplementationFactory {
-    initialise(): void;
-
     //Restaurants
     getRestaurant(id: string): Promise<Restaurant>;
     getRestaurants(): Promise<Restaurant[]>;
@@ -20,7 +18,7 @@ export interface ApiImplementationFactory {
 
     //customers
     getCustomer(id: string): Promise<Customer>;
-    getCustomers(): Promise<Customer[]>;
+    getCustomers(): Promise<Customer[]>; //possibly unnecessary
     createCustomer(customer: Customer): Promise<Customer>;
     updateCustomer(customer: Customer): Promise<Customer>;
 
@@ -29,5 +27,4 @@ export interface ApiImplementationFactory {
     getReviews(): Promise<Review[]>;
     createReview(review: Review): Promise<Review>;
     updateReview(review: Review): Promise<Review>;
-
 }
