@@ -23,17 +23,17 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-          <View style={styles.dFlex}>
+          {/* <View style={styles.dFlex}>
             <Text style={styles.title}>Home</Text>
             <NotificationBadge />
-          </View>
+          </View> */}
           <View
             style={[
               styles.dFlex,
               {
                 justifyContent: "flex-start",
                 gap: 8,
-                marginTop: 20,
+                
                 marginBottom: 20,
               },
             ]}

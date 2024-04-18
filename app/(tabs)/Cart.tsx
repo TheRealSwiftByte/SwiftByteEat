@@ -42,14 +42,14 @@ export default function CartScreen({route, navigation}: CartProps) {
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <View>
-            <View style={styles.dFlex}>
+            {/* <View style={styles.dFlex}>
               <Text style={styles.title}>Cart</Text>
               <NotificationBadge />
-            </View>
+            </View> */}
             {/* Menu items */}
             <View>
               <Text
-                style={[styles.subtitle, { marginVertical: 16, fontSize: 16 }]}
+                style={[styles.subtitle, { marginBottom: 16, fontSize: 16 }]}
               >
                 {cart.restaurant.name}
               </Text>
