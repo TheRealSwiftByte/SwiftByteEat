@@ -4,13 +4,14 @@ import { SB_COLOR_SCHEME } from "@/constants";
 import { Button, TextInput } from "@swift-byte/switftbytecomponents";
 import { Link, router } from "expo-router";
 import Logo from "../assets/images/logo-green.svg";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function signIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>
-      <ScrollView style={styles.scrollView}>
+      <KeyboardAwareScrollView style={styles.scrollView}>
         <View style={styles.container}>
           <Logo width={150} height={40} />
           <Text
@@ -113,7 +114,7 @@ export default function signIn() {
             </Text>
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
