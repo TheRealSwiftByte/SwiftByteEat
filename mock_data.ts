@@ -227,7 +227,7 @@ export const cart: Cart = {
 export const promoCode = [
   {code: 'SPRING30', value: 4},
   {code: 'AUTUMN22', value: 2.5},
-  {code: 'JOYFUL2024', value: 5},
+  {code: 'JOY2024', value: 5},
   {code: 'NYC234', value: 2}
 ]
 

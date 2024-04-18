@@ -1,7 +1,6 @@
 import { StyleSheet, Image, SafeAreaView, ScrollView } from "react-native";
 
 import { Text, View } from "@/components/Themed";
-import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 import LocationIcon from "../../assets/icons/icon-location.svg";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 import SearchIcon from "../../assets/icons/icon-search.svg";
