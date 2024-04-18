@@ -55,6 +55,16 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="welcome" options={{ headerShown: false }} />
+         <Stack.Screen
+          name="signIn"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="signUp"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="checkout"
@@ -90,7 +100,7 @@ function RootLayoutNav() {
             },
           }}
         />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen
           name="success"
           options={{ presentation: "modal", headerShown: false }}
