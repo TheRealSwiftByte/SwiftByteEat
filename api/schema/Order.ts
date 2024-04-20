@@ -1,6 +1,5 @@
-import { Restaurant } from "./Restaurant";
-import { Payment, MenuItem } from "./db.types";
-import { Customer } from "./Customer";
+import { Payment, MenuItem, Customer, Restaurant } from "./SwiftByteTypes";
+import Realm, { BSON } from 'realm';
 
 export interface OrderDetails {
     customer: Customer,
@@ -9,34 +8,34 @@ export interface OrderDetails {
     deliveryAddress: string,
 }
 
-export class Order {
-    public id: string
-    public customer: Customer
-    public restaurant: Restaurant
-    public items: MenuItem[]
-    public status: "pending" | "accepted" | "declined" | "completed"
-    public total: number
-    // public discount: number //I don't like how this is done
-    public orderDate: Date
+export class Order extends Realm.Object<Order> {
+    public static schema: Realm.ObjectSchema = {
+        name: 'Order',
+        primaryKey: 'id',
+        properties: {
+            id: 'string',
+            customer: 'Customer',
+            restaurant: 'Restaurant',
+            items: 'MenuItem[]',
+            status: 'string',
+            total: 'double',
+            orderDate: 'date',
+            payment: 'Payment?',
+            deliveryInstruction: 'string',
+            deliveryAddress: 'string',
+        },
+    };
+    public id!: string
+    public customer!: Customer
+    public restaurant!: Restaurant
+    public items!: MenuItem[]
+    public status!: "pending" | "accepted" | "declined" | "completed"
+    public total!: number
+    public orderDate!: Date
     public payment: Payment | undefined
-    public deliveryInstruction: string
-    public deliveryAddress: string
-    constructor(orderDetails: OrderDetails){
-        this.id = Math.random().toString(36);
-        this.customer = orderDetails.customer;
-        this.restaurant = orderDetails.restaurant;
-        this.status = "pending";
-        const cart = this.customer.getCart();
-        if (!cart) {
-            throw new Error("Cart not found");
-        }
-        this.items = cart.items;
-        this.total = cart.total;
-        this.deliveryAddress = orderDetails.deliveryAddress;
-        this.deliveryInstruction = orderDetails.deliveryInstruction;
-        this.orderDate = new Date();
-    }
-    
+    public deliveryInstruction!: string
+    public deliveryAddress!: string
+
     private applyDiscount(): void {
         if (this.customer.isMember) {
             this.total *= 0.9;
