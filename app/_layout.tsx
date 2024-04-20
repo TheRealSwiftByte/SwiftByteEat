@@ -100,7 +100,7 @@ function RootLayoutNav() {
             },
           }}
         />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen name="notifications" options={{ presentation: "modal", headerTitle: 'Notifications' }} />
         <Stack.Screen
           name="success"
           options={{ presentation: "modal", headerShown: false }}
