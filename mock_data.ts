@@ -19,7 +19,9 @@ export interface Restaurant {
   description: string;
   imageUrl: string;
   menu: MenuItem[];
+  categories: Category[];
   address: Address;
+  averageRating: number;
 }
 
 export interface Address {
@@ -124,7 +126,9 @@ export const restaurants: Restaurant[] = [
   {
       id: 1,
       name: 'Kinn Thai',
+      categories: [categories[0], categories[1]],
       description: 'Free delivery on order above $35',
+      averageRating: 4,
       imageUrl: 'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       menu: [
           { id: '304', name: 'Margherita Pizza', description: 'Classic tomato sauce, mozzarella, basil', price: 10.99, imageUrl: 'margherita.jpg' },
@@ -141,6 +145,8 @@ export const restaurants: Restaurant[] = [
   {
       id: 2,
       name: 'Diggies',
+      categories: [categories[4], categories[7]],
+      averageRating: 4.1,
       description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
       imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSuSukk8gKjQvpguurAbU340D8Qw7U7jINgdKWpZXsZA&s',
       menu: [
@@ -158,6 +164,8 @@ export const restaurants: Restaurant[] = [
   {
     id: 3,
     name: 'Hong Kong Chef',
+    categories: [categories[4]],
+    averageRating: 4.6,
     description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
     imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/14/29/52/54/hong-teh-chinese-restaurant.jpg',
     menu: [

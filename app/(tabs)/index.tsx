@@ -1,15 +1,22 @@
-import { StyleSheet, Image, SafeAreaView, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 
 import { Text, View } from "@/components/Themed";
 import LocationIcon from "../../assets/icons/icon-location.svg";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 import SearchIcon from "../../assets/icons/icon-search.svg";
-import FilterIcon from "../../assets/icons/icon-filter.svg";
-
+import GoSearchIcon from "../../assets/icons/icon-arrow-right.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { categories, restaurants } from "@/mock_data";
 import { TextInput } from "@swift-byte/switftbytecomponents";
 import { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const [search, setSearch] = useState<string>("");
@@ -32,7 +39,7 @@ export default function HomeScreen() {
               {
                 justifyContent: "flex-start",
                 gap: 8,
-                
+
                 marginBottom: 20,
               },
             ]}
@@ -66,7 +73,7 @@ export default function HomeScreen() {
                 },
               ]}
             >
-              <View style={[styles.dFlex, {backgroundColor: 'transparent'}]}>
+              <View style={[styles.dFlex, { backgroundColor: "transparent" }]}>
                 <SearchIcon style={{ marginLeft: 20 }} />
                 <TextInput
                   value={search}
@@ -76,7 +83,22 @@ export default function HomeScreen() {
                 ></TextInput>
               </View>
 
-              <FilterIcon style={{ marginRight: 20 }}/>
+              {search ? (
+                <TouchableOpacity
+                  onPress={() =>
+                    router.navigate({
+                      pathname: "/Explore",
+                      params: { searchValue: search },
+                    })
+                  }
+                >
+                  <GoSearchIcon
+                    style={{ marginRight: 20 }}
+                    width={13}
+                    height={13}
+                  />
+                </TouchableOpacity>
+              ) : null}
             </View>
           </View>
           <View style={styles.banner}>
@@ -194,7 +216,7 @@ export default function HomeScreen() {
                               height={16}
                               style={{ marginRight: 4 }}
                             />
-                            <Text>4.5</Text>
+                            <Text>{item.averageRating}</Text>
                           </View>
                         </View>
 
