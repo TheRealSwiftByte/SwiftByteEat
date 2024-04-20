@@ -1,18 +1,19 @@
 import React from "react";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link, Tabs } from "expo-router";
 import { Pressable } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   color: string;
 }) {
-  return <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <Ionicons size={22} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -28,7 +29,7 @@ export default function TabLayout() {
         headerStyle: {
           height: 90,
         },
-        tabBarStyle: { 
+        tabBarStyle: {
           height: 90,
           paddingBottom: 32,
           paddingTop: 8,
@@ -39,17 +40,20 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="home-outline" color={color} />
+          ),
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/notifications" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <Ionicons
-                    name="information-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                  // <Ionicons
+                  //   name="information-circle"
+                  //   size={25}
+                  //   color={Colors[colorScheme ?? "light"].text}
+                  //   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  // />
                 )}
               </Pressable>
             </Link>
@@ -60,7 +64,9 @@ export default function TabLayout() {
         name="Explore"
         options={{
           title: "Explore",
-          tabBarIcon: ({ color }) => <TabBarIcon name="search-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="search-outline" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -79,13 +85,30 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="cart-outline" color={color} />
           ),
+          headerRight: () => (
+            <Link href="/notifications" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                  // <Ionicons
+                  //   name="information-circle"
+                  //   size={25}
+                  //   color={Colors[colorScheme ?? "light"].text}
+                  //   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  // />
+                )}
+              </Pressable>
+            </Link>
+          ),
         }}
       />
       <Tabs.Screen
         name="Profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => <TabBarIcon name="person-circle-outline" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="person-circle-outline" color={color} />
+          ),
         }}
       />
     </Tabs>
