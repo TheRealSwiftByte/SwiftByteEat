@@ -288,6 +288,7 @@ export default function ExploreScreen() {
                             style={{
                               color: SB_COLOR_SCHEME.SB_SECONDARY,
                               fontSize: 18,
+                              fontStyle: 'italic'
                             }}
                           >
                             {item.code}

@@ -115,19 +115,17 @@ export default function HomeScreen() {
               <Text style={[styles.title, { fontSize: 18 }]}>
                 Top Categories
               </Text>
-              <Text
-                style={{
-                  color: SB_COLOR_SCHEME.SB_DISABLED,
-                  fontWeight: "bold",
-                }}
-              >
-                See all
-              </Text>
             </View>
             <View style={[styles.dFlex, { marginTop: 20, marginBottom: 10 }]}>
               {categories.slice(0, 4).map((item) => {
                 return (
-                  <View
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.navigate({
+                        pathname: "/Explore",
+                        params: { searchValue: item.name.toLowerCase() },
+                      });
+                    }}
                     key={item.id}
                     style={[
                       styles.dFlex,
@@ -152,7 +150,7 @@ export default function HomeScreen() {
                     >
                       {item.name}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
             </View>
@@ -162,14 +160,6 @@ export default function HomeScreen() {
             <View style={styles.dFlex}>
               <Text style={[styles.title, { fontSize: 18 }]}>
                 Popular Restaurants Nearby
-              </Text>
-              <Text
-                style={{
-                  color: SB_COLOR_SCHEME.SB_DISABLED,
-                  fontWeight: "bold",
-                }}
-              >
-                See all
               </Text>
             </View>
             <ScrollView horizontal={true} style={styles.scrollContainer}>
