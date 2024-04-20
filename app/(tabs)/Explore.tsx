@@ -26,7 +26,7 @@ export default function ExploreScreen() {
     if (searchValue) {
       handleSearch(searchValue.toLowerCase());
     }
-  }, []);
+  }, [searchValue]);
 
   const handleSearch = (val: string) => {
     setSearch(val.toLowerCase());

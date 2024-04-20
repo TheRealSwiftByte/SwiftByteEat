@@ -85,12 +85,13 @@ export default function HomeScreen() {
 
               {search ? (
                 <TouchableOpacity
-                  onPress={() =>
+                  onPress={() => {
                     router.navigate({
                       pathname: "/Explore",
                       params: { searchValue: search },
-                    })
-                  }
+                    });
+                    setSearch("");
+                  }}
                 >
                   <GoSearchIcon
                     style={{ marginRight: 20 }}
