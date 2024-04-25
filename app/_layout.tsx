@@ -55,6 +55,22 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen
+          name="ProfileScreen"
+          options={{ contentStyle: { backgroundColor: "white" } }}
+        />
+        <Stack.Screen
+          name="ChangePassword"
+          options={{
+            title: "Change Password",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: true,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="checkout"
@@ -90,7 +106,7 @@ function RootLayoutNav() {
             },
           }}
         />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen
           name="success"
           options={{ presentation: "modal", headerShown: false }}
