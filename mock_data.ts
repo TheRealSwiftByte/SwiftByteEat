@@ -13,6 +13,14 @@ export interface MenuItem {
   imageUrl: string;
 }
 
+export interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  isNew: boolean;
+  createdAt: string;
+}
+
 export interface Restaurant {
   id: number;
   name: string;
@@ -378,6 +386,20 @@ export const orders: Order[] = [
   }
 ]
 
-export const notifications = [{
-  
-}]
+export const notifications = [
+  {
+    id: '1',
+    title: 'Your order has arrived',
+    description: 'Please contact with the driver to receive the order',
+    createdAt: new Date().toLocaleString(),
+    isNew: false,
+  },
+  {
+    id: '2',
+    title: "Don't forget to rate the restaurant!",
+    description: 'Lorem ipsum dolor anet',
+    createdAt: new Date().toLocaleString(),
+    isNew: true,
+  },
+
+]
