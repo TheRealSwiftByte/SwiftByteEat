@@ -48,16 +48,11 @@ export default function TabLayout() {
               <Pressable>
                 {({ pressed }) => (
                   <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
-                  // <Ionicons
-                  //   name="information-circle"
-                  //   size={25}
-                  //   color={Colors[colorScheme ?? "light"].text}
-                  //   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  // />
                 )}
               </Pressable>
             </Link>
           ),
+          
         }}
       />
       <Tabs.Screen
@@ -67,6 +62,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="search-outline" color={color} />
           ),
+          headerRight: () => (
+            <Link href="/notifications" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                )}
+              </Pressable>
+            </Link>
+          ),
         }}
       />
       <Tabs.Screen
@@ -75,6 +79,15 @@ export default function TabLayout() {
           title: "Orders",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="receipt-outline" color={color} />
+          ),
+          headerRight: () => (
+            <Link href="/notifications" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                )}
+              </Pressable>
+            </Link>
           ),
         }}
       />
@@ -90,12 +103,6 @@ export default function TabLayout() {
               <Pressable>
                 {({ pressed }) => (
                   <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
-                  // <Ionicons
-                  //   name="information-circle"
-                  //   size={25}
-                  //   color={Colors[colorScheme ?? "light"].text}
-                  //   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  // />
                 )}
               </Pressable>
             </Link>

@@ -32,6 +32,7 @@ export interface Address {
 }
 
 export interface Customer {
+  id: string,
   name: string;
   email: string;
   phone: string;
@@ -75,7 +76,42 @@ export interface Order {
   payment: Payment;
   deliveryInstruction: string;
   deliveryAddress: string;
+  completedAt?: Date;
+  eta: Date;
+  deliveryPerson: DeliveryPerson;
 }
+
+export interface DeliveryPerson {
+  id: string;
+  name: string;
+  carName: string;
+  phone: string;
+  avgRating: number;
+}
+
+export const deliverer: DeliveryPerson[] = [
+  {
+    id: '1',
+    name: 'Henry Earls',
+    carName: 'Mazda 3 Black',
+    phone: '0456736543',
+    avgRating: 4.5
+  },
+  {
+    id: '2',
+    name: 'John Smith',
+    carName: 'Honda HRV White',
+    phone: '0456736543',
+    avgRating: 4.5
+  },
+  {
+    id: '3',
+    name: 'Jason Lee',
+    carName: 'Honda HRV White',
+    phone: '0456736543',
+    avgRating: 4.5
+  }
+]
 
 
 // EXAMPLE DATA
@@ -169,8 +205,8 @@ export const restaurants: Restaurant[] = [
     description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
     imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/14/29/52/54/hong-teh-chinese-restaurant.jpg',
     menu: [
-        { id: '208', name: 'California Roll', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
-        { id: '209', name: 'Spicy Tuna Roll', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
+        { id: '208', name: 'Crispy Tofu', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
+        { id: '209', name: 'Spicy Beef Rice', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
         // More menu items...
     ],
     address: {
@@ -259,3 +295,89 @@ export const myCards: Card[] = [
     title: 'Paypal'
   }
 ]
+
+export const customers: Customer[] = [
+  {
+    id: '1',
+    name: 'Celine Husen',
+    phone: '0456987576',
+    email: 'cel@sb.com'
+  },
+  {
+    id: '2',
+    name: 'Jenny Do',
+    phone: '0456987576',
+    email: 'jen@sb.com'
+  }
+]
+
+export const payment: Payment = {
+  id: '1',
+  amount: 84,
+  type: 'card',
+  last3Digits: '456',
+  datePaid: new Date()
+}
+
+export const orders: Order[] = [
+  {
+    id: 'SBE1',
+    customer: customers[0],
+    restaurant: restaurants[0],
+    items: [restaurants[0].menu[0], restaurants[0].menu[1]],
+    status: 'accepted',
+    total: 80,
+    tax: 8,
+    netTotal: 88,
+    promoCode: 'SPRING30',
+    discount: 4,
+    orderDate: new Date(),
+    payment,
+    deliveryInstruction: 'Leave at the door',
+    deliveryAddress: '1 Daisy Street, Fairy Meadow, NSW 2519',
+    eta: new Date(),
+    deliveryPerson: deliverer[0],
+  },
+  {
+    id: 'SBE2',
+    customer: customers[0],
+    restaurant: restaurants[2],
+    items: [restaurants[2].menu[0], restaurants[2].menu[1]],
+    status: 'completed',
+    total: 80,
+    tax: 8,
+    netTotal: 88,
+    promoCode: 'SPRING30',
+    discount: 4,
+    orderDate: new Date(),
+    payment,
+    deliveryInstruction: 'Leave at the door',
+    deliveryAddress: '1 Daisy Street, Fairy Meadow, NSW 2519',
+    eta: new Date(),
+    deliveryPerson: deliverer[1],
+    completedAt: new Date()
+  },
+  {
+    id: 'SBE3',
+    customer: customers[0],
+    restaurant: restaurants[1],
+    items: [restaurants[1].menu[0], restaurants[1].menu[1]],
+    status: 'completed',
+    total: 26,
+    tax: 8,
+    netTotal: 88,
+    promoCode: 'SPRING30',
+    discount: 4,
+    orderDate: new Date(),
+    payment,
+    deliveryInstruction: 'Leave at the door',
+    deliveryAddress: '1 Daisy Street, Fairy Meadow, NSW 2519',
+    eta: new Date(),
+    deliveryPerson: deliverer[2],
+    completedAt: new Date()
+  }
+]
+
+export const notifications = [{
+  
+}]
