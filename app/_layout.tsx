@@ -55,6 +55,17 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+      <Stack.Screen
+          name="editProfile"
+          options={{
+            title: "Edit Profile",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: true,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
         <Stack.Screen
           name="ProfileScreen"
           options={{ contentStyle: { backgroundColor: "white" } }}

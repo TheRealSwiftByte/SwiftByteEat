@@ -1,7 +1,8 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-
 import { Text, View } from "@/components/Themed";
 import { Button } from "@swift-byte/switftbytecomponents";
+import UserCircle from "../../assets/icons/UserCircle.svg"
+import { Circle } from "react-native-svg";
 
 export default function ProfileScreen() {
   return (
@@ -11,7 +12,7 @@ export default function ProfileScreen() {
         <View style={styles.painName}>
           <Text style={styles.username}>John Smith</Text>
           <View>
-            <Text style={{ marginLeft: 16 }}>Standard</Text>
+            <Text style={styles.status}>Standard</Text>
           </View>
         </View>
 
@@ -50,6 +51,14 @@ export default function ProfileScreen() {
         <TouchableOpacity>
           <View style={styles.setting}>
             <Text style={styles.settingText}>My Reviews</Text>
+            <Text style={styles.chevron}>›</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* SwiftByte Elite */}
+        <TouchableOpacity>
+          <View style={styles.setting}>
+            <Text style={styles.settingText}>ByteElite</Text>
             <Text style={styles.chevron}>›</Text>
           </View>
         </TouchableOpacity>
@@ -125,5 +134,11 @@ const styles = StyleSheet.create({
   painName: {
     flexDirection: "column",
     justifyContent: "center",
+  },
+  status: {
+    backgroundColor: "#F1E05E",
+    marginLeft: 16,
+    justifyContent: "center",
+    textAlign: "center",
   },
 });
