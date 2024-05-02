@@ -81,11 +81,9 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                   }}
                 ></Button>
               </Link>
-
               </View>
             </View>
         </View>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     height: "100%",
     justifyContent: "space-between",
     flexDirection: 'column'
-    // paddingBottom: 100,
+    //paddingBottom: 100,
   },
   scrollView: {
     backgroundColor: "white",
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     borderColor: "transparent",
     paddingLeft: 10,
-    paddingBottom: 60,
+    //paddingBottom: 60,
   }
   
 })
