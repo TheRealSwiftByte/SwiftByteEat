@@ -1,0 +1,122 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+
+enum Status {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+}
+
+enum FoodCategory {
+    KOREAN
+    JAPANESE
+    VIETNAMESE
+    CHINESE
+    THAI
+    INDIAN
+    MIDDLE_EASTERN
+    MEDITERRANEAN
+    ITALIAN
+    VEGAN
+    EASTERN
+    WESTERN
+    ASIAN
+    CHICKEN
+    BURGER
+    PIZZA
+}
+
+
+type Restaurant @model {
+  categories: [FoodCategory]
+  name: String!
+  address: String!
+  phone: String!
+  averageRating: Float
+  averageWaitTime: Float
+  description: String!
+}
+
+type Order @model {
+  customer: Customer  
+  restaurant: Restaurant  
+  items: [MenuItem] @hasMany
+  status: Status
+  total: Float
+  orderDate: AWSDateTime
+  payment: Payment @hasOne
+  deliveryInstruction: String!
+  deliveryAddress: String!
+}
+
+type Customer @model {
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  address: String!
+  password: String!
+  isMember: Boolean!
+  cart: Cart @hasOne
+}
+
+type RestaurantOwner @model {
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  address: String!
+  password: String!
+  isMember: Boolean!
+  restaurantsOwned: [Restaurant] @hasMany
+}
+
+type Review @model {
+  author: Customer
+  restaurant: Restaurant
+  rating: Int!
+  comment: String!
+  createdAt: AWSDateTime
+}
+
+enum MenuItemType {
+    MAIN
+    SIDE
+    DRINK
+    STARTER
+    DESSERT
+    POPULAR
+}
+
+type MenuItem @model{
+  type: MenuItemType
+  name: String
+  price: Float
+  description: String
+  imagePath: String
+  isAvailable: Boolean!
+  restuarant: Restaurant  
+}
+
+enum CardType {
+  VISA
+  MASTERCARD
+  AMEX
+  DISCOVER
+  PAYPAL
+}
+
+type Payment @model {
+  amount: Float
+  type: CardType
+  last3Digits: String
+  Paid: AWSDateTime
+}
+
+type Cart @model {
+  items: [MenuItem] @hasMany
+  total: Float
+}

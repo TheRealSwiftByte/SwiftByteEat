@@ -10,6 +10,11 @@
       "StackName": "amplify-swiftbyteeat-dev-253be",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:519845367156:stack/amplify-swiftbyteeat-dev-253be/c1d7b780-083a-11ef-98d4-0ad74c7b3b27",
       "AmplifyAppId": "d2lwfrha7a5i61"
+    },
+    "categories": {
+      "api": {
+        "swiftbyteeat": {}
+      }
     }
   }
 }

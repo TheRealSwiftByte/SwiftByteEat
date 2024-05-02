@@ -1,0 +1,5 @@
+{
+  "AppSyncApiName": "swiftbyteeat",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false
+}
