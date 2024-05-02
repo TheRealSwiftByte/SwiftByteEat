@@ -94,8 +94,19 @@ function RootLayoutNav() {
           options={{
             title: "Delivery",
             headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
-            headerBackVisible: false,
+            headerBackTitle: "Back",
             gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="orderHistory"
+          options={{
+            title: "Order History",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
             contentStyle: {
               backgroundColor: "white",
             },
