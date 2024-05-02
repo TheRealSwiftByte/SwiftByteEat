@@ -7,7 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { Card, myCards } from "@/mock_data";
 import RadioOutline from "../assets/icons/icon-radio-outline.svg";
@@ -30,7 +30,12 @@ interface PaymentProps {
 }
 
 export default function PaymentMethod({ route, navigation }: PaymentProps) {
+  const [cards, setCards] = useState<Card[]>(myCards);
   const [selectedCard, setSelectedCard] = useState<Card>(myCards[0]);
+
+  useEffect(() => {
+    setCards(myCards)
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,7 +43,7 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
         <View style={styles.container}>
           <View style={{ paddingBottom: 24 }}>
             <View>
-              {myCards.map((card) => {
+              {cards.map((card: Card) => {
                 return (
                   <View
                     key={card.id}
@@ -56,7 +61,9 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
                           <PaypalLogo />
                         )}
                       </View>
-                      <Text>**** {card.last3Digits}</Text>
+                      <Text>
+                        {card.cardNumber.toString().replace(/.(?=.{3})/g, "*")}
+                      </Text>
                     </View>
                     <TouchableOpacity onPress={() => setSelectedCard(card)}>
                       <RadioOutline
@@ -77,7 +84,10 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
                 );
               })}
             </View>
-            <TouchableOpacity style={[styles.dFlex, { justifyContent: "flex-start" }]} onPress={() => router.navigate("/AddCard")}>
+            <TouchableOpacity
+              style={[styles.dFlex, { justifyContent: "flex-start" }]}
+              onPress={() => router.navigate("/AddCard")}
+            >
               <AddCard style={{ marginRight: 16 }} />
               <Text>New payment method</Text>
             </TouchableOpacity>
@@ -88,7 +98,7 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
               text={"Pay Now"}
               type={"primary"}
               onPress={function (): void {
-                console.log("pressed");
+                // router.navigate({ pathname: '/success', params: { type: ''}})
               }}
             ></Button>
           </Link>

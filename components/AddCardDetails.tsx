@@ -3,19 +3,30 @@ import React from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
 const AddCardDetails = () => {
-
   return (
     <View style={styles.card}>
       <Text style={styles.label}>Name</Text>
-      <TextInput style={styles.input} placeholder="e.g. John Smith" />
+      <TextInput
+        style={styles.input}
+        placeholder="e.g. John Smith"
+        // value={name}
+        // onChangeText={setName}
+      />
       <Text style={styles.label}>Card Number</Text>
-      <TextInput style={styles.input} placeholder="XXXX XXXX XXXX XXXX" />
+      <TextInput
+        style={styles.input}
+        placeholder="XXXX XXXX XXXX XXXX"
+        // value={cardNumber.toString()}
+        keyboardType="numeric"
+        maxLength={16}
+        // onChangeText={(input) => setCardNumber(parseInt(input))}
+      />
       <View style={styles.row}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Text style={styles.label}>CVV</Text>
           <TextInput style={styles.smallInput} placeholder="XXX" />
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Text style={styles.label}>Expiry Date</Text>
           <TextInput style={styles.smallInput} placeholder="dd/mm/yyyy" />
         </View>
@@ -34,7 +45,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: SB_COLOR_SCHEME.SB_PRIMARY,
-    marginBottom: 10
+    marginBottom: 10,
   },
   input: {
     fontSize: 16,
@@ -47,7 +58,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     gap: 10,
-    flex: 1
+    flex: 1,
   },
   smallInput: {
     fontSize: 16,

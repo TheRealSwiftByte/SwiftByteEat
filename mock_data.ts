@@ -46,6 +46,18 @@ export interface Customer {
   phone: string;
 }
 
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  password: string;
+  isMember: string;
+  cards: Card[];
+}
+
 export interface Payment {
   id: string;
   amount: number;
@@ -64,9 +76,11 @@ export interface Cart {
 
 export interface Card {
   id: number,
-  type: string,
-  last3Digits: number,
-  title: string
+  name: string;
+  cardNumber: number;
+  cvv: number;
+  expiryDate: string; // dd/mm/yyyy
+  type: 'visa' | 'master' | 'paypal' // visa, master, or paypal
 }
 
 export interface Order {
@@ -286,23 +300,29 @@ export const promoCode = [
 export const myCards: Card[] = [
   {
     id: 1,
-    type: 'visa',
-    last3Digits: 4567,
-    title: ''
+    name: "John Doe",
+    cardNumber: 1234567890123456,
+    cvv: 123,
+    expiryDate: "12/25/2024",
+    type: "visa"
   },
   {
     id: 2,
-    type: 'master',
-    last3Digits: 7890,
-    title: 'Credit Card'
+    name: "Alice Smith",
+    cardNumber: 9876543210987654,
+    cvv: 456,
+    expiryDate: "06/27/2023",
+    type: "master"
   },
   {
     id: 3,
-    type: 'paypal',
-    last3Digits: 2345,
-    title: 'Paypal'
+    name: "Bob Johnson",
+    cardNumber: 4567890123456789,
+    cvv: 789,
+    expiryDate: "09/30/2025",
+    type: "paypal"
   }
-]
+];
 
 export const customers: Customer[] = [
   {
@@ -403,3 +423,7 @@ export const notifications = [
   },
 
 ]
+
+// export currentUser: User = {
+
+// }
