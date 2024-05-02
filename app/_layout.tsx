@@ -55,6 +55,7 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="Reviews"/>
         <Stack.Screen name="welcome" options={{ headerShown: false }} />
          <Stack.Screen
           name="signIn"
