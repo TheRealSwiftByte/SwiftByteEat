@@ -55,7 +55,16 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-      <Stack.Screen
+        <Stack.Screen
+          name="UserSavedPayments"
+          options={{
+            title: "Paymnent",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
           name="editProfile"
           options={{
             title: "Edit Profile",
@@ -70,6 +79,7 @@ function RootLayoutNav() {
           name="ProfileScreen"
           options={{ contentStyle: { backgroundColor: "white" } }}
         />
+
         <Stack.Screen
           name="ChangePassword"
           options={{

@@ -82,16 +82,6 @@ import {
                 <Text>New payment method</Text>
               </View>
             </View>
-  
-            <Link href="/success" asChild>
-              <Button
-                text={"Pay Now"}
-                type={"primary"}
-                onPress={function (): void {
-                  console.log("pressed");
-                }}
-              ></Button>
-            </Link>
           </View>
         </ScrollView>
       </SafeAreaView>
