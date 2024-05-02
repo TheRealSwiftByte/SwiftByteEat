@@ -13,7 +13,7 @@ import { Card, myCards } from "@/mock_data";
 import RadioOutline from "../assets/icons/icon-radio-outline.svg";
 import RadioFilled from "../assets/icons/icon-radio-filled.svg";
 import AddCard from "../assets/icons/logo-add-card.svg";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
 import {
   NavigationProp,
@@ -77,10 +77,10 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
                 );
               })}
             </View>
-            <View style={[styles.dFlex, { justifyContent: "flex-start" }]}>
+            <TouchableOpacity style={[styles.dFlex, { justifyContent: "flex-start" }]} onPress={() => router.navigate("/AddCard")}>
               <AddCard style={{ marginRight: 16 }} />
               <Text>New payment method</Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <Link href="/success" asChild>
