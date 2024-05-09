@@ -55,6 +55,70 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="Reviews"/>
+        <Stack.Screen name="welcome" options={{ headerShown: false }} />
+         <Stack.Screen
+          name="signIn"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="signUp"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="checkout"
+          options={{
+            title: "Checkout",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="PaymentMethod"
+          options={{
+            title: "Payment",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="delivery"
+          options={{
+            title: "Delivery",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="orderHistory"
+          options={{
+            title: "Order History",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen name="notifications" options={{ presentation: "modal", headerTitle: 'Notifications' }} />
+        <Stack.Screen
+          name="success"
+          options={{ presentation: "modal", headerShown: false }}
+        />
+      </Stack>
       <UserContextProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

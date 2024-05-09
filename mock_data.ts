@@ -13,13 +13,23 @@ export interface MenuItem {
   imageUrl: string;
 }
 
+export interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  isNew: boolean;
+  createdAt: string;
+}
+
 export interface Restaurant {
   id: number;
   name: string;
   description: string;
   imageUrl: string;
   menu: MenuItem[];
+  categories: Category[];
   address: Address;
+  averageRating: number;
 }
 
 export interface Address {
@@ -30,6 +40,7 @@ export interface Address {
 }
 
 export interface Customer {
+  id: string,
   name: string;
   email: string;
   phone: string;
@@ -73,7 +84,42 @@ export interface Order {
   payment: Payment;
   deliveryInstruction: string;
   deliveryAddress: string;
+  completedAt?: Date;
+  eta: Date;
+  deliveryPerson: DeliveryPerson;
 }
+
+export interface DeliveryPerson {
+  id: string;
+  name: string;
+  carName: string;
+  phone: string;
+  avgRating: number;
+}
+
+export const deliverer: DeliveryPerson[] = [
+  {
+    id: '1',
+    name: 'Henry Earls',
+    carName: 'Mazda 3 Black',
+    phone: '0456736543',
+    avgRating: 4.5
+  },
+  {
+    id: '2',
+    name: 'John Smith',
+    carName: 'Honda HRV White',
+    phone: '0456736543',
+    avgRating: 4.5
+  },
+  {
+    id: '3',
+    name: 'Jason Lee',
+    carName: 'Honda HRV White',
+    phone: '0456736543',
+    avgRating: 4.5
+  }
+]
 
 
 // EXAMPLE DATA
@@ -124,7 +170,9 @@ export const restaurants: Restaurant[] = [
   {
       id: 1,
       name: 'Kinn Thai',
+      categories: [categories[0], categories[1]],
       description: 'Free delivery on order above $35',
+      averageRating: 4,
       imageUrl: 'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       menu: [
           { id: '304', name: 'Margherita Pizza', description: 'Classic tomato sauce, mozzarella, basil', price: 10.99, imageUrl: 'margherita.jpg' },
@@ -141,6 +189,8 @@ export const restaurants: Restaurant[] = [
   {
       id: 2,
       name: 'Diggies',
+      categories: [categories[4], categories[7]],
+      averageRating: 4.1,
       description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
       imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSuSukk8gKjQvpguurAbU340D8Qw7U7jINgdKWpZXsZA&s',
       menu: [
@@ -158,11 +208,13 @@ export const restaurants: Restaurant[] = [
   {
     id: 3,
     name: 'Hong Kong Chef',
+    categories: [categories[4]],
+    averageRating: 4.6,
     description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
     imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/14/29/52/54/hong-teh-chinese-restaurant.jpg',
     menu: [
-        { id: '208', name: 'California Roll', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
-        { id: '209', name: 'Spicy Tuna Roll', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
+        { id: '208', name: 'Crispy Tofu', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
+        { id: '209', name: 'Spicy Beef Rice', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
         // More menu items...
     ],
     address: {
@@ -227,7 +279,7 @@ export const cart: Cart = {
 export const promoCode = [
   {code: 'SPRING30', value: 4},
   {code: 'AUTUMN22', value: 2.5},
-  {code: 'JOYFUL2024', value: 5},
+  {code: 'JOY2024', value: 5},
   {code: 'NYC234', value: 2}
 ]
 
@@ -250,4 +302,104 @@ export const myCards: Card[] = [
     last3Digits: 2345,
     title: 'Paypal'
   }
+]
+
+export const customers: Customer[] = [
+  {
+    id: '1',
+    name: 'Celine Husen',
+    phone: '0456987576',
+    email: 'cel@sb.com'
+  },
+  {
+    id: '2',
+    name: 'Jenny Do',
+    phone: '0456987576',
+    email: 'jen@sb.com'
+  }
+]
+
+export const payment: Payment = {
+  id: '1',
+  amount: 84,
+  type: 'card',
+  last3Digits: '456',
+  datePaid: new Date()
+}
+
+export const orders: Order[] = [
+  {
+    id: 'SBE1',
+    customer: customers[0],
+    restaurant: restaurants[0],
+    items: [restaurants[0].menu[0], restaurants[0].menu[1]],
+    status: 'accepted',
+    total: 80,
+    tax: 8,
+    netTotal: 88,
+    promoCode: 'SPRING30',
+    discount: 4,
+    orderDate: new Date(),
+    payment,
+    deliveryInstruction: 'Leave at the door',
+    deliveryAddress: '1 Daisy Street, Fairy Meadow, NSW 2519',
+    eta: new Date(),
+    deliveryPerson: deliverer[0],
+  },
+  {
+    id: 'SBE2',
+    customer: customers[0],
+    restaurant: restaurants[2],
+    items: [restaurants[2].menu[0], restaurants[2].menu[1]],
+    status: 'completed',
+    total: 80,
+    tax: 8,
+    netTotal: 88,
+    promoCode: 'SPRING30',
+    discount: 4,
+    orderDate: new Date(),
+    payment,
+    deliveryInstruction: 'Leave at the door',
+    deliveryAddress: '1 Daisy Street, Fairy Meadow, NSW 2519',
+    eta: new Date(),
+    deliveryPerson: deliverer[1],
+    completedAt: new Date()
+  },
+  {
+    id: 'SBE3',
+    customer: customers[0],
+    restaurant: restaurants[1],
+    items: [restaurants[1].menu[0], restaurants[1].menu[1]],
+    status: 'completed',
+    total: 26,
+    tax: 8,
+    netTotal: 88,
+    promoCode: 'SPRING30',
+    discount: 4,
+    orderDate: new Date(),
+    payment,
+    deliveryInstruction: 'Leave at the door',
+    deliveryAddress: '1 Daisy Street, Fairy Meadow, NSW 2519',
+    eta: new Date(),
+    deliveryPerson: deliverer[2],
+    completedAt: new Date()
+  }
+]
+
+export const notifications = [
+  {
+    id: '1',
+    title: 'Your order has arrived',
+    description: 'Please contact with the driver to receive the order',
+    createdAt: new Date().toLocaleString(),
+    isNew: false,
+  },
+  {
+    id: '2',
+    title: "Don't forget to rate the restaurant!",
+    description: 'Lorem ipsum dolor anet',
+    createdAt: new Date().toLocaleString(),
+    isNew: true,
+  },
+
 ]

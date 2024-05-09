@@ -6,6 +6,7 @@ import { Pressable } from "react-native";
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -43,19 +44,15 @@ export default function TabLayout() {
             <TabBarIcon name="home-outline" color={color} />
           ),
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/notifications" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <Ionicons
-                    name="information-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
                 )}
               </Pressable>
             </Link>
           ),
+          
         }}
       />
       <Tabs.Screen
@@ -64,6 +61,15 @@ export default function TabLayout() {
           title: "Explore",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="search-outline" color={color} />
+          ),
+          headerRight: () => (
+            <Link href="/notifications" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                )}
+              </Pressable>
+            </Link>
           ),
         }}
       />
@@ -74,6 +80,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="receipt-outline" color={color} />
           ),
+          headerRight: () => (
+            <Link href="/notifications" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                )}
+              </Pressable>
+            </Link>
+          ),
         }}
       />
       <Tabs.Screen
@@ -82,6 +97,15 @@ export default function TabLayout() {
           title: "Cart",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="cart-outline" color={color} />
+          ),
+          headerRight: () => (
+            <Link href="/notifications" asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <NotificationBadge style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}/>
+                )}
+              </Pressable>
+            </Link>
           ),
         }}
       />
