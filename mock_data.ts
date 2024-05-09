@@ -176,7 +176,7 @@ export const restaurants: Restaurant[] = [
       imageUrl: 'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       menu: [
           { id: '304', name: 'Margherita Pizza', description: 'Classic tomato sauce, mozzarella, basil', price: 10.99, imageUrl: 'margherita.jpg' },
-          { id: '304', name: 'Pepperoni Pizza', description: 'Tomato sauce, mozzarella, pepperoni slices', price: 12.99, imageUrl: 'pepperoni.jpg' },
+          { id: '305', name: 'Pepperoni Pizza', description: 'Tomato sauce, mozzarella, pepperoni slices', price: 12.99, imageUrl: 'pepperoni.jpg' },
           // More menu items...
       ],
       address: {
