@@ -17,6 +17,7 @@
     "@react-navigation/native": "^6.0.2",
     "@realm/react": "^0.6.2",
     "@swift-byte/switftbytecomponents": "^1.0.10",
+    "aws-amplify": "^6.3.0",
     "expo": "~50.0.13",
     "expo-font": "~11.10.3",
     "expo-linking": "~6.2.2",
