@@ -25,61 +25,7 @@ export interface User {
 //const UserContext = createContext<User | null>(null);
 const UserContext = createContext<useUserReturn>(null as any);
 
-function UserProvider({ children }: any) {
-  // const [user, setUser] = useState<User>(null as any);
-
-  // const setName = (firstName: string, lastName: string) => {
-  //     setUser((prevUser) => ({
-  //         ...prevUser,
-  //         firstName,
-  //         lastName,
-  //   }));
-  // };
-
-  // const setEmail = (email: string) => {
-  //     setUser((prevUser) => ({
-  //         ...prevUser,
-  //         email
-  //     }));
-  // };
-
-  // const setPhone = (phone: number) => {
-  //     setUser((prevUser) => ({
-  //         ...prevUser,
-  //         phone
-  //     }));
-  // };
-
-  // const setAddress = (address: string) => {
-  //     setUser((prevUser) => ({
-  //         ...prevUser,
-  //         address
-  //     }));
-  // };
-
-  // const setPassword = (password: string) => {
-  //     setUser((prevUser) => ({
-  //         ...prevUser,
-  //         password
-  //     }));
-  // };
-
-  // const setIsMember = (isMember: boolean) => {
-  //     setUser((prevUser) => ({
-  //         ...prevUser,
-  //         isMember
-  //     }));
-  // };
-
-  // const addCard = (newCard: Card) => {
-  //   setUser((prevUser) => ({
-  //     ...prevUser,
-  //     cards: [...(prevUser?.cards || []), newCard],
-  //   }));
-  // };
-
-  // const value = user ? { ...user, setName, setEmail, setAddress, setPassword, setIsMember, addCard} : null;
-
+export function UserContextProvider({ children }: any) {
   const value = useUser();
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
