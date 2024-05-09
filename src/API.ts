@@ -134,11 +134,170 @@ export type Restaurant = {
   averageRating?: number | null,
   averageWaitTime?: number | null,
   description: string,
+  owner?: RestaurantOwner | null,
+  menu?: ModelMenuItemConnection | null,
+  orders?: ModelOrderConnection | null,
+  reviews?: ModelReviewConnection | null,
   id: string,
   createdAt: string,
   updatedAt: string,
   restaurantOwnerRestaurantsOwnedId?: string | null,
 };
+
+export type RestaurantOwner = {
+  __typename: "RestaurantOwner",
+  firstName: string,
+  lastName: string,
+  email: string,
+  phone: string,
+  address: string,
+  password: string,
+  isMember: boolean,
+  restaurantsOwned?: ModelRestaurantConnection | null,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelRestaurantConnection = {
+  __typename: "ModelRestaurantConnection",
+  items:  Array<Restaurant | null >,
+  nextToken?: string | null,
+};
+
+export type ModelMenuItemConnection = {
+  __typename: "ModelMenuItemConnection",
+  items:  Array<MenuItem | null >,
+  nextToken?: string | null,
+};
+
+export type MenuItem = {
+  __typename: "MenuItem",
+  type?: MenuItemType | null,
+  name?: string | null,
+  price?: number | null,
+  description?: string | null,
+  imagePath?: string | null,
+  isAvailable: boolean,
+  restuarant?: Restaurant | null,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  restaurantMenuId?: string | null,
+  orderItemsId?: string | null,
+  cartItemsId?: string | null,
+};
+
+export enum MenuItemType {
+  MAIN = "MAIN",
+  SIDE = "SIDE",
+  DRINK = "DRINK",
+  STARTER = "STARTER",
+  DESSERT = "DESSERT",
+  POPULAR = "POPULAR",
+}
+
+
+export type ModelOrderConnection = {
+  __typename: "ModelOrderConnection",
+  items:  Array<Order | null >,
+  nextToken?: string | null,
+};
+
+export type Order = {
+  __typename: "Order",
+  customer?: Customer | null,
+  restaurant?: Restaurant | null,
+  items?: ModelMenuItemConnection | null,
+  status?: Status | null,
+  total?: number | null,
+  orderDate?: string | null,
+  payment?: Payment | null,
+  deliveryInstruction: string,
+  deliveryAddress: string,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  restaurantOrdersId?: string | null,
+  customerOrdersId?: string | null,
+  orderPaymentId?: string | null,
+};
+
+export type Customer = {
+  __typename: "Customer",
+  firstName: string,
+  lastName: string,
+  email: string,
+  phone: string,
+  address: string,
+  password: string,
+  isMember: boolean,
+  cart?: Cart | null,
+  orders?: ModelOrderConnection | null,
+  reviews?: ModelReviewConnection | null,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  customerCartId?: string | null,
+};
+
+export type Cart = {
+  __typename: "Cart",
+  customer?: Customer | null,
+  items?: ModelMenuItemConnection | null,
+  total?: number | null,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  cartCustomerId?: string | null,
+};
+
+export type ModelReviewConnection = {
+  __typename: "ModelReviewConnection",
+  items:  Array<Review | null >,
+  nextToken?: string | null,
+};
+
+export type Review = {
+  __typename: "Review",
+  author?: Customer | null,
+  restaurant?: Restaurant | null,
+  rating: number,
+  comment: string,
+  createdAt?: string | null,
+  id: string,
+  updatedAt: string,
+  restaurantReviewsId?: string | null,
+  customerReviewsId?: string | null,
+};
+
+export enum Status {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  DECLINED = "DECLINED",
+  COMPLETED = "COMPLETED",
+}
+
+
+export type Payment = {
+  __typename: "Payment",
+  amount?: number | null,
+  type?: CardType | null,
+  last3Digits?: string | null,
+  Paid?: string | null,
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export enum CardType {
+  VISA = "VISA",
+  MASTERCARD = "MASTERCARD",
+  AMEX = "AMEX",
+  DISCOVER = "DISCOVER",
+  PAYPAL = "PAYPAL",
+}
+
 
 export type UpdateRestaurantInput = {
   categories?: Array< FoodCategory | null > | null,
@@ -163,16 +322,10 @@ export type CreateOrderInput = {
   deliveryInstruction: string,
   deliveryAddress: string,
   id?: string | null,
+  restaurantOrdersId?: string | null,
+  customerOrdersId?: string | null,
   orderPaymentId?: string | null,
 };
-
-export enum Status {
-  PENDING = "PENDING",
-  ACCEPTED = "ACCEPTED",
-  DECLINED = "DECLINED",
-  COMPLETED = "COMPLETED",
-}
-
 
 export type ModelOrderConditionInput = {
   status?: ModelStatusInput | null,
@@ -185,6 +338,8 @@ export type ModelOrderConditionInput = {
   not?: ModelOrderConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  restaurantOrdersId?: ModelIDInput | null,
+  customerOrdersId?: ModelIDInput | null,
   orderPaymentId?: ModelIDInput | null,
 };
 
@@ -193,100 +348,6 @@ export type ModelStatusInput = {
   ne?: Status | null,
 };
 
-export type Order = {
-  __typename: "Order",
-  customer?: Customer | null,
-  restaurant?: Restaurant | null,
-  items?: ModelMenuItemConnection | null,
-  status?: Status | null,
-  total?: number | null,
-  orderDate?: string | null,
-  payment?: Payment | null,
-  deliveryInstruction: string,
-  deliveryAddress: string,
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-  orderPaymentId?: string | null,
-};
-
-export type Customer = {
-  __typename: "Customer",
-  firstName: string,
-  lastName: string,
-  email: string,
-  phone: string,
-  address: string,
-  password: string,
-  isMember: boolean,
-  cart?: Cart | null,
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-  customerCartId?: string | null,
-};
-
-export type Cart = {
-  __typename: "Cart",
-  items?: ModelMenuItemConnection | null,
-  total?: number | null,
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelMenuItemConnection = {
-  __typename: "ModelMenuItemConnection",
-  items:  Array<MenuItem | null >,
-  nextToken?: string | null,
-};
-
-export type MenuItem = {
-  __typename: "MenuItem",
-  type?: MenuItemType | null,
-  name?: string | null,
-  price?: number | null,
-  description?: string | null,
-  imagePath?: string | null,
-  isAvailable: boolean,
-  restuarant?: Restaurant | null,
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-  orderItemsId?: string | null,
-  cartItemsId?: string | null,
-};
-
-export enum MenuItemType {
-  MAIN = "MAIN",
-  SIDE = "SIDE",
-  DRINK = "DRINK",
-  STARTER = "STARTER",
-  DESSERT = "DESSERT",
-  POPULAR = "POPULAR",
-}
-
-
-export type Payment = {
-  __typename: "Payment",
-  amount?: number | null,
-  type?: CardType | null,
-  last3Digits?: string | null,
-  Paid?: string | null,
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export enum CardType {
-  VISA = "VISA",
-  MASTERCARD = "MASTERCARD",
-  AMEX = "AMEX",
-  DISCOVER = "DISCOVER",
-  PAYPAL = "PAYPAL",
-}
-
-
 export type UpdateOrderInput = {
   status?: Status | null,
   total?: number | null,
@@ -294,6 +355,8 @@ export type UpdateOrderInput = {
   deliveryInstruction?: string | null,
   deliveryAddress?: string | null,
   id: string,
+  restaurantOrdersId?: string | null,
+  customerOrdersId?: string | null,
   orderPaymentId?: string | null,
 };
 
@@ -378,27 +441,6 @@ export type ModelRestaurantOwnerConditionInput = {
   updatedAt?: ModelStringInput | null,
 };
 
-export type RestaurantOwner = {
-  __typename: "RestaurantOwner",
-  firstName: string,
-  lastName: string,
-  email: string,
-  phone: string,
-  address: string,
-  password: string,
-  isMember: boolean,
-  restaurantsOwned?: ModelRestaurantConnection | null,
-  id: string,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type ModelRestaurantConnection = {
-  __typename: "ModelRestaurantConnection",
-  items:  Array<Restaurant | null >,
-  nextToken?: string | null,
-};
-
 export type UpdateRestaurantOwnerInput = {
   firstName?: string | null,
   lastName?: string | null,
@@ -419,6 +461,8 @@ export type CreateReviewInput = {
   comment: string,
   createdAt?: string | null,
   id?: string | null,
+  restaurantReviewsId?: string | null,
+  customerReviewsId?: string | null,
 };
 
 export type ModelReviewConditionInput = {
@@ -429,6 +473,8 @@ export type ModelReviewConditionInput = {
   or?: Array< ModelReviewConditionInput | null > | null,
   not?: ModelReviewConditionInput | null,
   updatedAt?: ModelStringInput | null,
+  restaurantReviewsId?: ModelIDInput | null,
+  customerReviewsId?: ModelIDInput | null,
 };
 
 export type ModelIntInput = {
@@ -443,22 +489,13 @@ export type ModelIntInput = {
   attributeType?: ModelAttributeTypes | null,
 };
 
-export type Review = {
-  __typename: "Review",
-  author?: Customer | null,
-  restaurant?: Restaurant | null,
-  rating: number,
-  comment: string,
-  createdAt?: string | null,
-  id: string,
-  updatedAt: string,
-};
-
 export type UpdateReviewInput = {
   rating?: number | null,
   comment?: string | null,
   createdAt?: string | null,
   id: string,
+  restaurantReviewsId?: string | null,
+  customerReviewsId?: string | null,
 };
 
 export type DeleteReviewInput = {
@@ -473,6 +510,7 @@ export type CreateMenuItemInput = {
   imagePath?: string | null,
   isAvailable: boolean,
   id?: string | null,
+  restaurantMenuId?: string | null,
   orderItemsId?: string | null,
   cartItemsId?: string | null,
 };
@@ -489,6 +527,7 @@ export type ModelMenuItemConditionInput = {
   not?: ModelMenuItemConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  restaurantMenuId?: ModelIDInput | null,
   orderItemsId?: ModelIDInput | null,
   cartItemsId?: ModelIDInput | null,
 };
@@ -506,6 +545,7 @@ export type UpdateMenuItemInput = {
   imagePath?: string | null,
   isAvailable?: boolean | null,
   id: string,
+  restaurantMenuId?: string | null,
   orderItemsId?: string | null,
   cartItemsId?: string | null,
 };
@@ -554,6 +594,7 @@ export type DeletePaymentInput = {
 export type CreateCartInput = {
   total?: number | null,
   id?: string | null,
+  cartCustomerId?: string | null,
 };
 
 export type ModelCartConditionInput = {
@@ -563,11 +604,13 @@ export type ModelCartConditionInput = {
   not?: ModelCartConditionInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  cartCustomerId?: ModelIDInput | null,
 };
 
 export type UpdateCartInput = {
   total?: number | null,
   id: string,
+  cartCustomerId?: string | null,
 };
 
 export type DeleteCartInput = {
@@ -603,13 +646,9 @@ export type ModelOrderFilterInput = {
   and?: Array< ModelOrderFilterInput | null > | null,
   or?: Array< ModelOrderFilterInput | null > | null,
   not?: ModelOrderFilterInput | null,
+  restaurantOrdersId?: ModelIDInput | null,
+  customerOrdersId?: ModelIDInput | null,
   orderPaymentId?: ModelIDInput | null,
-};
-
-export type ModelOrderConnection = {
-  __typename: "ModelOrderConnection",
-  items:  Array<Order | null >,
-  nextToken?: string | null,
 };
 
 export type ModelCustomerFilterInput = {
@@ -666,12 +705,8 @@ export type ModelReviewFilterInput = {
   and?: Array< ModelReviewFilterInput | null > | null,
   or?: Array< ModelReviewFilterInput | null > | null,
   not?: ModelReviewFilterInput | null,
-};
-
-export type ModelReviewConnection = {
-  __typename: "ModelReviewConnection",
-  items:  Array<Review | null >,
-  nextToken?: string | null,
+  restaurantReviewsId?: ModelIDInput | null,
+  customerReviewsId?: ModelIDInput | null,
 };
 
 export type ModelMenuItemFilterInput = {
@@ -687,6 +722,7 @@ export type ModelMenuItemFilterInput = {
   and?: Array< ModelMenuItemFilterInput | null > | null,
   or?: Array< ModelMenuItemFilterInput | null > | null,
   not?: ModelMenuItemFilterInput | null,
+  restaurantMenuId?: ModelIDInput | null,
   orderItemsId?: ModelIDInput | null,
   cartItemsId?: ModelIDInput | null,
 };
@@ -718,6 +754,7 @@ export type ModelCartFilterInput = {
   and?: Array< ModelCartFilterInput | null > | null,
   or?: Array< ModelCartFilterInput | null > | null,
   not?: ModelCartFilterInput | null,
+  cartCustomerId?: ModelIDInput | null,
 };
 
 export type ModelCartConnection = {
@@ -739,6 +776,9 @@ export type ModelSubscriptionRestaurantFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionRestaurantFilterInput | null > | null,
   or?: Array< ModelSubscriptionRestaurantFilterInput | null > | null,
+  restaurantMenuId?: ModelSubscriptionIDInput | null,
+  restaurantOrdersId?: ModelSubscriptionIDInput | null,
+  restaurantReviewsId?: ModelSubscriptionIDInput | null,
 };
 
 export type ModelSubscriptionStringInput = {
@@ -811,6 +851,8 @@ export type ModelSubscriptionCustomerFilterInput = {
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionCustomerFilterInput | null > | null,
   or?: Array< ModelSubscriptionCustomerFilterInput | null > | null,
+  customerOrdersId?: ModelSubscriptionIDInput | null,
+  customerReviewsId?: ModelSubscriptionIDInput | null,
   customerCartId?: ModelSubscriptionIDInput | null,
 };
 
@@ -891,6 +933,7 @@ export type ModelSubscriptionCartFilterInput = {
   and?: Array< ModelSubscriptionCartFilterInput | null > | null,
   or?: Array< ModelSubscriptionCartFilterInput | null > | null,
   cartItemsId?: ModelSubscriptionIDInput | null,
+  cartCustomerId?: ModelSubscriptionIDInput | null,
 };
 
 export type CreateRestaurantMutationVariables = {
@@ -908,6 +951,31 @@ export type CreateRestaurantMutation = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -930,6 +998,31 @@ export type UpdateRestaurantMutation = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -952,6 +1045,31 @@ export type DeleteRestaurantMutation = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -1017,6 +1135,8 @@ export type CreateOrderMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -1079,6 +1199,8 @@ export type UpdateOrderMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -1141,6 +1263,8 @@ export type DeleteOrderMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -1166,6 +1290,15 @@ export type CreateCustomerMutation = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -1195,6 +1328,15 @@ export type UpdateCustomerMutation = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -1224,6 +1366,15 @@ export type DeleteCustomerMutation = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -1348,6 +1499,8 @@ export type CreateReviewMutation = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -1392,6 +1545,8 @@ export type UpdateReviewMutation = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -1436,6 +1591,8 @@ export type DeleteReviewMutation = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -1470,6 +1627,7 @@ export type CreateMenuItemMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -1506,6 +1664,7 @@ export type UpdateMenuItemMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -1542,6 +1701,7 @@ export type DeleteMenuItemMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -1609,6 +1769,20 @@ export type CreateCartMutationVariables = {
 export type CreateCartMutation = {
   createCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -1617,6 +1791,7 @@ export type CreateCartMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };
 
@@ -1628,6 +1803,20 @@ export type UpdateCartMutationVariables = {
 export type UpdateCartMutation = {
   updateCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -1636,6 +1825,7 @@ export type UpdateCartMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };
 
@@ -1647,6 +1837,20 @@ export type DeleteCartMutationVariables = {
 export type DeleteCartMutation = {
   deleteCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -1655,6 +1859,7 @@ export type DeleteCartMutation = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };
 
@@ -1672,6 +1877,31 @@ export type GetRestaurantQuery = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -1763,6 +1993,8 @@ export type GetOrderQuery = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -1786,6 +2018,8 @@ export type ListOrdersQuery = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      restaurantOrdersId?: string | null,
+      customerOrdersId?: string | null,
       orderPaymentId?: string | null,
     } | null >,
     nextToken?: string | null,
@@ -1812,6 +2046,15 @@ export type GetCustomerQuery = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -1937,6 +2180,8 @@ export type GetReviewQuery = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -1956,6 +2201,8 @@ export type ListReviewsQuery = {
       createdAt?: string | null,
       id: string,
       updatedAt: string,
+      restaurantReviewsId?: string | null,
+      customerReviewsId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1991,6 +2238,7 @@ export type GetMenuItemQuery = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -2016,6 +2264,7 @@ export type ListMenuItemsQuery = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      restaurantMenuId?: string | null,
       orderItemsId?: string | null,
       cartItemsId?: string | null,
     } | null >,
@@ -2070,6 +2319,20 @@ export type GetCartQueryVariables = {
 export type GetCartQuery = {
   getCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -2078,6 +2341,7 @@ export type GetCartQuery = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };
 
@@ -2096,6 +2360,7 @@ export type ListCartsQuery = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -2115,6 +2380,31 @@ export type OnCreateRestaurantSubscription = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -2136,6 +2426,31 @@ export type OnUpdateRestaurantSubscription = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -2157,6 +2472,31 @@ export type OnDeleteRestaurantSubscription = {
     averageRating?: number | null,
     averageWaitTime?: number | null,
     description: string,
+    owner?:  {
+      __typename: "RestaurantOwner",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    menu?:  {
+      __typename: "ModelMenuItemConnection",
+      nextToken?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
+    } | null,
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -2221,6 +2561,8 @@ export type OnCreateOrderSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -2282,6 +2624,8 @@ export type OnUpdateOrderSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -2343,6 +2687,8 @@ export type OnDeleteOrderSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantOrdersId?: string | null,
+    customerOrdersId?: string | null,
     orderPaymentId?: string | null,
   } | null,
 };
@@ -2367,6 +2713,15 @@ export type OnCreateCustomerSubscription = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -2395,6 +2750,15 @@ export type OnUpdateCustomerSubscription = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -2423,6 +2787,15 @@ export type OnDeleteCustomerSubscription = {
       id: string,
       createdAt: string,
       updatedAt: string,
+      cartCustomerId?: string | null,
+    } | null,
+    orders?:  {
+      __typename: "ModelOrderConnection",
+      nextToken?: string | null,
+    } | null,
+    reviews?:  {
+      __typename: "ModelReviewConnection",
+      nextToken?: string | null,
     } | null,
     id: string,
     createdAt: string,
@@ -2543,6 +2916,8 @@ export type OnCreateReviewSubscription = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -2586,6 +2961,8 @@ export type OnUpdateReviewSubscription = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -2629,6 +3006,8 @@ export type OnDeleteReviewSubscription = {
     createdAt?: string | null,
     id: string,
     updatedAt: string,
+    restaurantReviewsId?: string | null,
+    customerReviewsId?: string | null,
   } | null,
 };
 
@@ -2662,6 +3041,7 @@ export type OnCreateMenuItemSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -2697,6 +3077,7 @@ export type OnUpdateMenuItemSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -2732,6 +3113,7 @@ export type OnDeleteMenuItemSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    restaurantMenuId?: string | null,
     orderItemsId?: string | null,
     cartItemsId?: string | null,
   } | null,
@@ -2795,6 +3177,20 @@ export type OnCreateCartSubscriptionVariables = {
 export type OnCreateCartSubscription = {
   onCreateCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -2803,6 +3199,7 @@ export type OnCreateCartSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };
 
@@ -2813,6 +3210,20 @@ export type OnUpdateCartSubscriptionVariables = {
 export type OnUpdateCartSubscription = {
   onUpdateCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -2821,6 +3232,7 @@ export type OnUpdateCartSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };
 
@@ -2831,6 +3243,20 @@ export type OnDeleteCartSubscriptionVariables = {
 export type OnDeleteCartSubscription = {
   onDeleteCart?:  {
     __typename: "Cart",
+    customer?:  {
+      __typename: "Customer",
+      firstName: string,
+      lastName: string,
+      email: string,
+      phone: string,
+      address: string,
+      password: string,
+      isMember: boolean,
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      customerCartId?: string | null,
+    } | null,
     items?:  {
       __typename: "ModelMenuItemConnection",
       nextToken?: string | null,
@@ -2839,5 +3265,6 @@ export type OnDeleteCartSubscription = {
     id: string,
     createdAt: string,
     updatedAt: string,
+    cartCustomerId?: string | null,
   } | null,
 };

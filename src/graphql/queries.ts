@@ -17,6 +17,31 @@ export const getRestaurant = /* GraphQL */ `query GetRestaurant($id: ID!) {
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -108,6 +133,8 @@ export const getOrder = /* GraphQL */ `query GetOrder($id: ID!) {
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -128,6 +155,8 @@ export const listOrders = /* GraphQL */ `query ListOrders(
       id
       createdAt
       updatedAt
+      restaurantOrdersId
+      customerOrdersId
       orderPaymentId
       __typename
     }
@@ -153,6 +182,15 @@ export const getCustomer = /* GraphQL */ `query GetCustomer($id: ID!) {
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -279,6 +317,8 @@ export const getReview = /* GraphQL */ `query GetReview($id: ID!) {
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -295,6 +335,8 @@ export const listReviews = /* GraphQL */ `query ListReviews(
       createdAt
       id
       updatedAt
+      restaurantReviewsId
+      customerReviewsId
       __typename
     }
     nextToken
@@ -330,6 +372,7 @@ export const getMenuItem = /* GraphQL */ `query GetMenuItem($id: ID!) {
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -355,6 +398,7 @@ export const listMenuItems = /* GraphQL */ `query ListMenuItems(
       id
       createdAt
       updatedAt
+      restaurantMenuId
       orderItemsId
       cartItemsId
       __typename
@@ -409,6 +453,20 @@ export const listPayments = /* GraphQL */ `query ListPayments(
 >;
 export const getCart = /* GraphQL */ `query GetCart($id: ID!) {
   getCart(id: $id) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -417,6 +475,7 @@ export const getCart = /* GraphQL */ `query GetCart($id: ID!) {
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }
@@ -432,6 +491,7 @@ export const listCarts = /* GraphQL */ `query ListCarts(
       id
       createdAt
       updatedAt
+      cartCustomerId
       __typename
     }
     nextToken

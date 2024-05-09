@@ -38,11 +38,15 @@ type Restaurant @model {
   averageRating: Float
   averageWaitTime: Float
   description: String!
+  owner: RestaurantOwner @belongsTo
+  menu: [MenuItem] @hasMany
+  orders: [Order] @hasMany
+  reviews: [Review] @hasMany
 }
 
 type Order @model {
-  customer: Customer  
-  restaurant: Restaurant  
+  customer: Customer @belongsTo
+  restaurant: Restaurant @belongsTo
   items: [MenuItem] @hasMany
   status: Status
   total: Float
@@ -61,6 +65,8 @@ type Customer @model {
   password: String!
   isMember: Boolean!
   cart: Cart @hasOne
+  orders: [Order] @hasMany
+  reviews: [Review] @hasMany
 }
 
 type RestaurantOwner @model {
@@ -75,8 +81,8 @@ type RestaurantOwner @model {
 }
 
 type Review @model {
-  author: Customer
-  restaurant: Restaurant
+  author: Customer @belongsTo
+  restaurant: Restaurant @belongsTo
   rating: Int!
   comment: String!
   createdAt: AWSDateTime
@@ -98,7 +104,7 @@ type MenuItem @model{
   description: String
   imagePath: String
   isAvailable: Boolean!
-  restuarant: Restaurant  
+  restuarant: Restaurant @belongsTo
 }
 
 enum CardType {
@@ -117,6 +123,7 @@ type Payment @model {
 }
 
 type Cart @model {
+  customer: Customer @belongsTo
   items: [MenuItem] @hasMany
   total: Float
 }

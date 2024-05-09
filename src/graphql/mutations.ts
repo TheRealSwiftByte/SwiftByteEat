@@ -20,6 +20,31 @@ export const createRestaurant = /* GraphQL */ `mutation CreateRestaurant(
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -43,6 +68,31 @@ export const updateRestaurant = /* GraphQL */ `mutation UpdateRestaurant(
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -66,6 +116,31 @@ export const deleteRestaurant = /* GraphQL */ `mutation DeleteRestaurant(
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -132,6 +207,8 @@ export const createOrder = /* GraphQL */ `mutation CreateOrder(
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -195,6 +272,8 @@ export const updateOrder = /* GraphQL */ `mutation UpdateOrder(
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -258,6 +337,8 @@ export const deleteOrder = /* GraphQL */ `mutation DeleteOrder(
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -283,6 +364,15 @@ export const createCustomer = /* GraphQL */ `mutation CreateCustomer(
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -313,6 +403,15 @@ export const updateCustomer = /* GraphQL */ `mutation UpdateCustomer(
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -343,6 +442,15 @@ export const deleteCustomer = /* GraphQL */ `mutation DeleteCustomer(
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -472,6 +580,8 @@ export const createReview = /* GraphQL */ `mutation CreateReview(
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -517,6 +627,8 @@ export const updateReview = /* GraphQL */ `mutation UpdateReview(
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -562,6 +674,8 @@ export const deleteReview = /* GraphQL */ `mutation DeleteReview(
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -597,6 +711,7 @@ export const createMenuItem = /* GraphQL */ `mutation CreateMenuItem(
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -634,6 +749,7 @@ export const updateMenuItem = /* GraphQL */ `mutation UpdateMenuItem(
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -671,6 +787,7 @@ export const deleteMenuItem = /* GraphQL */ `mutation DeleteMenuItem(
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -742,6 +859,20 @@ export const createCart = /* GraphQL */ `mutation CreateCart(
   $condition: ModelCartConditionInput
 ) {
   createCart(input: $input, condition: $condition) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -750,6 +881,7 @@ export const createCart = /* GraphQL */ `mutation CreateCart(
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }
@@ -762,6 +894,20 @@ export const updateCart = /* GraphQL */ `mutation UpdateCart(
   $condition: ModelCartConditionInput
 ) {
   updateCart(input: $input, condition: $condition) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -770,6 +916,7 @@ export const updateCart = /* GraphQL */ `mutation UpdateCart(
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }
@@ -782,6 +929,20 @@ export const deleteCart = /* GraphQL */ `mutation DeleteCart(
   $condition: ModelCartConditionInput
 ) {
   deleteCart(input: $input, condition: $condition) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -790,6 +951,7 @@ export const deleteCart = /* GraphQL */ `mutation DeleteCart(
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }

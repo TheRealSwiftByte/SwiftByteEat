@@ -19,6 +19,31 @@ export const onCreateRestaurant = /* GraphQL */ `subscription OnCreateRestaurant
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -41,6 +66,31 @@ export const onUpdateRestaurant = /* GraphQL */ `subscription OnUpdateRestaurant
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -63,6 +113,31 @@ export const onDeleteRestaurant = /* GraphQL */ `subscription OnDeleteRestaurant
     averageRating
     averageWaitTime
     description
+    owner {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      __typename
+    }
+    menu {
+      nextToken
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
+      __typename
+    }
     id
     createdAt
     updatedAt
@@ -126,6 +201,8 @@ export const onCreateOrder = /* GraphQL */ `subscription OnCreateOrder($filter: 
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -186,6 +263,8 @@ export const onUpdateOrder = /* GraphQL */ `subscription OnUpdateOrder($filter: 
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -246,6 +325,8 @@ export const onDeleteOrder = /* GraphQL */ `subscription OnDeleteOrder($filter: 
     id
     createdAt
     updatedAt
+    restaurantOrdersId
+    customerOrdersId
     orderPaymentId
     __typename
   }
@@ -268,6 +349,15 @@ export const onCreateCustomer = /* GraphQL */ `subscription OnCreateCustomer($fi
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -295,6 +385,15 @@ export const onUpdateCustomer = /* GraphQL */ `subscription OnUpdateCustomer($fi
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -322,6 +421,15 @@ export const onDeleteCustomer = /* GraphQL */ `subscription OnDeleteCustomer($fi
       id
       createdAt
       updatedAt
+      cartCustomerId
+      __typename
+    }
+    orders {
+      nextToken
+      __typename
+    }
+    reviews {
+      nextToken
       __typename
     }
     id
@@ -445,6 +553,8 @@ export const onCreateReview = /* GraphQL */ `subscription OnCreateReview($filter
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -487,6 +597,8 @@ export const onUpdateReview = /* GraphQL */ `subscription OnUpdateReview($filter
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -529,6 +641,8 @@ export const onDeleteReview = /* GraphQL */ `subscription OnDeleteReview($filter
     createdAt
     id
     updatedAt
+    restaurantReviewsId
+    customerReviewsId
     __typename
   }
 }
@@ -561,6 +675,7 @@ export const onCreateMenuItem = /* GraphQL */ `subscription OnCreateMenuItem($fi
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -595,6 +710,7 @@ export const onUpdateMenuItem = /* GraphQL */ `subscription OnUpdateMenuItem($fi
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -629,6 +745,7 @@ export const onDeleteMenuItem = /* GraphQL */ `subscription OnDeleteMenuItem($fi
     id
     createdAt
     updatedAt
+    restaurantMenuId
     orderItemsId
     cartItemsId
     __typename
@@ -688,6 +805,20 @@ export const onDeletePayment = /* GraphQL */ `subscription OnDeletePayment($filt
 >;
 export const onCreateCart = /* GraphQL */ `subscription OnCreateCart($filter: ModelSubscriptionCartFilterInput) {
   onCreateCart(filter: $filter) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -696,6 +827,7 @@ export const onCreateCart = /* GraphQL */ `subscription OnCreateCart($filter: Mo
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }
@@ -705,6 +837,20 @@ export const onCreateCart = /* GraphQL */ `subscription OnCreateCart($filter: Mo
 >;
 export const onUpdateCart = /* GraphQL */ `subscription OnUpdateCart($filter: ModelSubscriptionCartFilterInput) {
   onUpdateCart(filter: $filter) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -713,6 +859,7 @@ export const onUpdateCart = /* GraphQL */ `subscription OnUpdateCart($filter: Mo
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }
@@ -722,6 +869,20 @@ export const onUpdateCart = /* GraphQL */ `subscription OnUpdateCart($filter: Mo
 >;
 export const onDeleteCart = /* GraphQL */ `subscription OnDeleteCart($filter: ModelSubscriptionCartFilterInput) {
   onDeleteCart(filter: $filter) {
+    customer {
+      firstName
+      lastName
+      email
+      phone
+      address
+      password
+      isMember
+      id
+      createdAt
+      updatedAt
+      customerCartId
+      __typename
+    }
     items {
       nextToken
       __typename
@@ -730,6 +891,7 @@ export const onDeleteCart = /* GraphQL */ `subscription OnDeleteCart($filter: Mo
     id
     createdAt
     updatedAt
+    cartCustomerId
     __typename
   }
 }
