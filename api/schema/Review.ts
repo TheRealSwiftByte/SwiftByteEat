@@ -3,9 +3,16 @@ import { Restaurant } from './Restaurant';
 
 export type Review = {
     id: string;
-    author: Customer;
-    restaurant: Restaurant;
+    customerId: string;
+    restaurantId: string;
     rating: number;
     comment: string;
-    createdAt: Date;
+    createdAt: number;
+}
+
+export type CreateReviewInput = {
+    customerId: string;
+    restaurantId: string;
+    rating: number;
+    comment: string;
 }

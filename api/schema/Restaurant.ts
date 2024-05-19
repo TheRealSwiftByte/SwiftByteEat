@@ -1,3 +1,4 @@
+import { MenuItem } from "./SwiftByteTypes";
 
 enum FoodCategory {
     KOREAN = "korean",
@@ -24,8 +25,19 @@ export type Restaurant = {
     name: string;
     address: string;
     phone: string;
-    averageRating: number;
-    averageWaitTime: number;
+    averageRating?: number;
+    averageWaitTime?: number;
     description: string;
+    menu: MenuItem[];
+}
 
+export type CreateRestaurantInput = {
+    name: string;
+    address: string;
+    phone: string;
+    description: string;
+    menu: MenuItem[];
+    categories?: FoodCategory[];
+    averageRating?: number;
+    averageWaitTime?: number;
 }

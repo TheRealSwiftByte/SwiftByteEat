@@ -6,6 +6,16 @@ const API_BASE_URL = "https://hffwzvbzod.execute-api.ap-southeast-2.amazonaws.co
 
 export class ApiProdFactory implements ApiImplementationFactory {
 
+    currentCustomer: Customer = {
+        id: "1",
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@swiftbyte.com",
+        password: "password",
+        phone: "0412345678",
+        address: "123 Fake St",
+    }
+
     //Restaurants
     async getRestaurant(id: string): Promise<Restaurant | undefined>{
         try {
@@ -40,7 +50,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return undefined;
         }
     };
-    async getOrders(customer: Customer): Promise<Order[] | undefined>{ 
+    async getOrders(customerid: number): Promise<Order[] | undefined>{ 
         try {
             throw new Error("Method not implemented.");
         } catch (e) {
@@ -64,8 +74,20 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return false;
         }
     }
-
+    
+    async signInCustomer(email: string, password: string): Promise<Customer> {
+            const customer = fetch(API_BASE_URL + "customer/SignIn?email=" + email + "&password=" + password)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data returned in request to signInCustomer: " + JSON.stringify(data));
+                    return data as Customer;
+                });
+            return customer;
+    }
     //customers
+    getCurrentCustomer(): Customer {
+        return this.currentCustomer;
+    }
     async getCustomer(id: string): Promise<Customer | undefined>{
         try {
             throw new Error("Method not implemented.")

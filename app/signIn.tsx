@@ -1,14 +1,17 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { Button, TextInput } from "@swift-byte/switftbytecomponents";
 import { Link, router } from "expo-router";
 import Logo from "../assets/images/logo-green.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Api } from "@/api/api";
 
 export default function signIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const api: Api = new Api();
+
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>
       <KeyboardAwareScrollView style={styles.scrollView}>
@@ -96,9 +99,16 @@ export default function signIn() {
           <Button
             text={"Sign In"}
             type={"secondary"}
-            onPress={function (): void {
-              email && password ? router.navigate("/(tabs)") : null;
-            }}
+            onPress={() => {
+              api.signInCustomer(email, password)
+                .then((isSuccess) => {
+                  if (isSuccess) {
+                    router.navigate("/(tabs)")
+                  }
+                })
+                .catch((e) => console.error('Failed to sign in customer: ', e));
+              }
+            }
           ></Button>
 
           <View style={[styles.dFlex, { justifyContent: "center", gap: 4 }]}>

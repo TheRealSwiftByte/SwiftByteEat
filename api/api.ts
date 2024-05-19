@@ -44,6 +44,9 @@ export class Api implements ApiImplementationFactory {
     }
 
     //customers
+    async signInCustomer(email: string, password: string): Promise<Customer>{
+        return this.factory.signInCustomer(email, password);
+    }
     public getCustomer(id: string) {
         return this.factory.getCustomer(id);
     }

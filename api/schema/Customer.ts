@@ -7,7 +7,17 @@ export type Customer = {
     lastName: string;
     email: string;
     phone: string;
-    address?: string;
     password: string;
+    address?: string;
+    cart?: Cart;
+}
+
+export type CreateCustomerInput = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    password: string;
+    address?: string;
     cart?: Cart;
 }

@@ -14,6 +14,7 @@ export interface ApiImplementationFactory {
     updateOrder(order: Order): Promise<boolean>;
 
     //customers
+    signInCustomer(email: string, password: string): Promise<Customer>;
     getCustomer(id: string): Promise<Customer | undefined>;
     getCustomers(): Promise<Customer[] | undefined>; //possibly unnecessary
     createCustomer(customer: Customer): Promise<boolean>;
