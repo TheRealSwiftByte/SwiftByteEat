@@ -1,4 +1,7 @@
 import { ApiImplementationFactory } from "./ApiImplementationFactory";
+import { Api } from "./api.ts";
+import { CreateCustomerInput } from "./schema/Customer.ts";
+import { UpdateOrderInput } from "./schema/Order.ts";
 import {Restaurant, Order, Customer, Review} from "./schema/SwiftByteTypes.ts";
 
 
@@ -6,25 +9,19 @@ const API_BASE_URL = "https://hffwzvbzod.execute-api.ap-southeast-2.amazonaws.co
 
 export class ApiProdFactory implements ApiImplementationFactory {
 
-    currentCustomer: Customer = {
-        id: "1",
-        firstName: "John",
-        lastName: "Doe",
-        email: "john@swiftbyte.com",
-        password: "password",
-        phone: "0412345678",
-        address: "123 Fake St",
+    getActiveCustomer(): Customer | undefined {
+        throw new Error("Method not implemented. (you shouldnt be here tho, getActiveCustomer in ApiProdFactory)");
     }
 
     //Restaurants
     async getRestaurant(id: string): Promise<Restaurant | undefined>{
         try {
-            fetch(API_BASE_URL + "restaurants/?id=" + id)
-            .then(response => response.json())
-            .then(data => {
-                console.log("Data returned in request to getRestaurant: " + data);
-                return data as Restaurant;
-            });
+            return fetch(API_BASE_URL + "restaurant/?id=" + id)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data returned in request to getRestaurant: " + JSON.stringify(data));
+                    return data as Restaurant;
+                });
         } catch (e){
             console.error("Failed to get restaurant");
             return undefined;
@@ -50,9 +47,15 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return undefined;
         }
     };
-    async getOrders(customerid: number): Promise<Order[] | undefined>{ 
+    async getOrders(customerId: string): Promise<Order[] | undefined>{ 
         try {
-            throw new Error("Method not implemented.");
+            const response = await fetch(API_BASE_URL + "order/fetch/?id=" + customerId);
+            const data = await response.json();
+            console.log("Data returned in request to getOrders: " + JSON.stringify(data));
+            for (const order of data) {
+                order.restaurant = await this.getRestaurant(order.restaurantId);
+            }
+            return data as Order[];
         } catch (e) {
             console.error("Failed to get orders: " + e);
             return undefined;
@@ -66,9 +69,17 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return false;
         }
     };
-    async updateOrder(order: Order): Promise<boolean>{
+    async updateOrder(order: UpdateOrderInput): Promise<boolean>{
         try {
-            throw new Error("Method not implemented.")
+            const result = await fetch(API_BASE_URL + "order/id?=" + order.id, {
+                method: 'PUT',
+                body: JSON.stringify(order),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log("Result of request to update order: " + JSON.stringify(result));
+            return true
         } catch (error) {
             console.error("Failed to update order: " + error);
             return false;
@@ -76,18 +87,16 @@ export class ApiProdFactory implements ApiImplementationFactory {
     }
     
     async signInCustomer(email: string, password: string): Promise<Customer> {
-            const customer = fetch(API_BASE_URL + "customer/SignIn?email=" + email + "&password=" + password)
+            const customer = await fetch(API_BASE_URL + "customer/SignIn?email=" + email + "&password=" + password)
                 .then(response => response.json())
                 .then(data => {
                     console.log("Data returned in request to signInCustomer: " + JSON.stringify(data));
+                    Api.getApi().setActiveCustomer(data as Customer);
                     return data as Customer;
                 });
             return customer;
     }
     //customers
-    getCurrentCustomer(): Customer {
-        return this.currentCustomer;
-    }
     async getCustomer(id: string): Promise<Customer | undefined>{
         try {
             throw new Error("Method not implemented.")
@@ -100,13 +109,20 @@ export class ApiProdFactory implements ApiImplementationFactory {
         throw new Error("Method not implemented.");
     }; //possibly unnecessary
 
-    async createCustomer(customer: Customer): Promise<boolean>{
-        try {
-            throw new Error("Method not implemented.")
-        } catch (error) {
-            console.error("Failed to create customer: " + error);
-            return false;
-        }
+    async createCustomer(customerInput: CreateCustomerInput): Promise<Customer>{
+        const response = fetch(API_BASE_URL + "customer/", {
+            method: 'POST',
+            body: JSON.stringify(customerInput),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+        .then(data => {
+            console.log("Data returned in request to createCustomer: " + JSON.stringify(data));
+            Api.getApi().setActiveCustomer(data as Customer);
+            return data as Customer;
+        });
+        return response;
     }
 
 

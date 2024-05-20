@@ -10,7 +10,7 @@ import { Api } from "@/api/api";
 export default function signIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const api: Api = new Api();
+  const api: Api = Api.getApi();
 
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>

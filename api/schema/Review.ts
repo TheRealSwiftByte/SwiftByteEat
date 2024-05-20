@@ -16,3 +16,10 @@ export type CreateReviewInput = {
     rating: number;
     comment: string;
 }
+
+export type UpdateReviewInput = {
+    customerId?: string;
+    restaurantId?: string;
+    rating?: number;
+    comment?: string;
+}

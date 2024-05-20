@@ -41,3 +41,14 @@ export type CreateRestaurantInput = {
     averageRating?: number;
     averageWaitTime?: number;
 }
+
+export type UpdateRestaurantInput = {
+    name?: string;
+    address?: string;
+    phone?: string;
+    description?: string;
+    menu?: MenuItem[];
+    categories?: FoodCategory[];
+    averageRating?: number;
+    averageWaitTime?: number;
+}

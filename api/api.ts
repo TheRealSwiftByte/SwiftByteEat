@@ -2,10 +2,22 @@ import { ApiImplementationFactory } from './ApiImplementationFactory';
 import { ApiStubFactory } from './ApiStubFactory';
 import { ApiProdFactory } from './ApiProdFactory';
 import { Customer, Order, Review, Restaurant } from './schema/SwiftByteTypes';
+import { CreateCustomerInput } from './schema/Customer';
+import { UpdateOrderInput } from './schema/Order';
 
 export class Api implements ApiImplementationFactory {
     private static _api: Api;
     private factory: ApiImplementationFactory;
+
+    private activeCustomer: Customer | undefined;
+
+    getActiveCustomer(): Customer {
+        if (Api.getApi().activeCustomer === undefined) throw new Error("No active customer");
+        return Api.getApi().activeCustomer || {} as Customer;
+    }
+    setActiveCustomer(customer: Customer): void {
+        Api.getApi().activeCustomer = customer;
+    }
 
     constructor() {
         this.factory = new ApiProdFactory();
@@ -33,13 +45,13 @@ export class Api implements ApiImplementationFactory {
     public getOrder(id: string) {
         return this.factory.getOrder(id);
     }
-    public getOrders(customer: Customer) {
-        return this.factory.getOrders(customer);
+    public getOrders(customerId: string): Promise<Order[] | undefined>{
+        return this.factory.getOrders(customerId);
     }
     public createOrder(order: Order) {
         return this.factory.createOrder(order);
     }
-    public updateOrder(order: Order) {
+    public updateOrder(order: UpdateOrderInput) {
         return this.factory.updateOrder(order);
     }
 
@@ -53,7 +65,7 @@ export class Api implements ApiImplementationFactory {
     public getCustomers() {
         return this.factory.getCustomers();
     }
-    public createCustomer(customer: Customer) {
+    public createCustomer(customer: CreateCustomerInput): Promise<Customer> {
         return this.factory.createCustomer(customer);
     }
     public updateCustomer(customer: Customer) {

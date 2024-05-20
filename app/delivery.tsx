@@ -9,6 +9,8 @@ import { MenuItem, cart, promoCode, restaurants } from "@/mock_data";
 import { Link, router } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
 import ChatIcon from "../assets/icons/icon-chat.svg";
+import { Api } from "@/api/api";
+import { UpdateOrderInput } from "@/api/schema/Order";
 
 enum Status {
   PREPARE = "Preparing",
@@ -345,11 +347,18 @@ export default function delivery() {
                 : { display: "none" }
             }
           >
-            <Link href="/checkout" asChild onPress={() => router.back()}>
               <Button
                 text={"Cancel order"}
                 type={"primary"}
-                onPress={function (): void {}}
+                onPress={function (): void {
+                  console.log('cancel order pressed')
+                  Api.getApi().updateOrder({
+                    id: "47nsca",
+                    status: "cancelled",
+                  } as UpdateOrderInput).then(() => {
+                    router.back();
+                  })
+                }}
                 textStyle={{ color: SB_COLOR_SCHEME.SB_ERROR }}
                 buttonStyle={{
                   width: "100%",
@@ -360,7 +369,6 @@ export default function delivery() {
                   marginBottom: -8,
                 }}
               ></Button>
-            </Link>
           </View>
         </View>
       </ScrollView>

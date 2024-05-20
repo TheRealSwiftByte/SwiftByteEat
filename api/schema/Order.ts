@@ -12,8 +12,9 @@ export type Order = {
     id: string
     customerId: string
     restaurantId: string
+    restaurant?: Restaurant
     items: MenuItem[]
-    status: "pending" | "accepted" | "declined" | "completed" | "cancelled" | "new" | "default" //default is for an errored state, should be deprecated
+    orderStatus: "pending" | "accepted" | "declined" | "completed" | "cancelled" | "new" | "default" //default is for an errored state, should be deprecated
     total: number
     orderDate: number
     payment?: Payment
@@ -25,9 +26,21 @@ export type CreateOrderInput = {
     customerId: string
     restaurantId: string
     items: MenuItem[]
-    status: "pending" | "accepted" | "declined" | "completed" | "cancelled" | "new" | "default" //default is for an errored state, should be deprecated
+    orderStatus: "pending" | "accepted" | "declined" | "completed" | "cancelled" | "new" | "default" //default is for an errored state, should be deprecated
     total: number
     deliveryInstruction: string
     deliveryAddress: string
+    payment?: Payment
+}
+
+export type UpdateOrderInput = {
+    id: string
+    customerId?: string
+    restaurantId?: string
+    items?: MenuItem[]
+    orderStatus?: "pending" | "accepted" | "declined" | "completed" | "cancelled" | "new" | "default" //default is for an errored state, should be deprecated
+    total?: number
+    deliveryInstruction?: string
+    deliveryAddress?: string
     payment?: Payment
 }
