@@ -182,7 +182,7 @@ export default function signUp() {
                   lastName: nameParts[1],
                   email: email,
                   phone: phone,
-                  password: password
+                  password: password,
                 }
                 api.createCustomer(createCustomerInput)
                   .then((isSuccess) => {

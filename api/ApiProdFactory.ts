@@ -114,6 +114,10 @@ export class ApiProdFactory implements ApiImplementationFactory {
     }; //possibly unnecessary
 
     async createCustomer(customerInput: CreateCustomerInput): Promise<Customer>{
+        customerInput.cart = {
+            foodItems: [],
+            totalPrice: 0
+        };
         const response = fetch(API_BASE_URL + "customer/", {
             method: 'POST',
             body: JSON.stringify(customerInput),

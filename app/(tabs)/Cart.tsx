@@ -11,9 +11,11 @@ import MinusIcon from "../../assets/icons/icon-minus-yellow.svg";
 import AddIcon from "../../assets/icons/icon-add-yellow.svg";
 
 import { SB_COLOR_SCHEME } from "@/constants";
-import { MenuItem, cart } from "@/mock_data";
+import { MenuItem, Cart, Customer } from "@/api/schema/SwiftByteTypes";
+import { Api } from "@/api/api";
 import { Button } from "@swift-byte/switftbytecomponents";
-import { Link } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { NavigationProp, ParamListBase, RouteProp } from "@react-navigation/native";
 
 interface CartProps {
@@ -23,19 +25,29 @@ interface CartProps {
 
 export default function CartScreen({route, navigation}: CartProps) {
   const itemIdCounts: { [itemId: string]: number } = {};
+  const [activeCustomer, setActiveCustomer] = useState<Customer | undefined>(undefined);
+  const [displayCart, setDisplayCart] = useState<any>(undefined);
+  useFocusEffect(useCallback( () => {
+    setActiveCustomer(Api.getApi().getActiveCustomer())
+    console.log("Active Customer: ", activeCustomer)
+  }, []))
+  
+  useEffect(() => {
+    if (activeCustomer) {
+      const cart = activeCustomer.cart;
+      console.log("Cart: ", cart)
+      cart.foodItems.forEach((item) => {
+        itemIdCounts[item.name] = (itemIdCounts[item.name] || 0) + 1;
+      });
+      setDisplayCart(Object.keys(itemIdCounts).map((itemName) => ({
+        item: activeCustomer.cart.foodItems.find((i) => i.name == itemName),
+        count: itemIdCounts[itemName],
+      })));
+    }
+  }, [activeCustomer]);
 
-  cart.foodItems.forEach((item) => {
-    const itemId = item.id.toString();
-    itemIdCounts[itemId] = (itemIdCounts[itemId] || 0) + 1;
-  });
 
-  const myItems: {
-    item: MenuItem | undefined;
-    count: number;
-  }[] = Object.keys(itemIdCounts).map((itemId) => ({
-    item: cart.foodItems.find((i) => i.id == itemId),
-    count: itemIdCounts[itemId],
-  }));
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,13 +63,13 @@ export default function CartScreen({route, navigation}: CartProps) {
               <Text
                 style={[styles.subtitle, { marginBottom: 16, fontSize: 16 }]}
               >
-                {cart.restaurant.name}
+                {/* {cart.restaurant.name} */}
               </Text>
               <View>
-                {myItems.map((item) => {
+                {displayCart && displayCart.map((item: any) => {
                   return (
                     <View
-                      key={item.item?.id}
+                      key={item.id}
                       style={[styles.dFlex, { marginBottom: 16, flex: 1 }]}
                     >
                       <View
@@ -68,7 +80,7 @@ export default function CartScreen({route, navigation}: CartProps) {
                       >
                         <View style={{ marginRight: 16 }}>
                           <Image
-                            source={{ uri: item.item?.imageUrl }}
+                            source={{ uri: item.imageUrl }}
                             width={64}
                             height={64}
                             style={{ borderRadius: 16 }}
@@ -80,7 +92,7 @@ export default function CartScreen({route, navigation}: CartProps) {
                           </Text>
                           <Text style={{ fontWeight: "500" }}>
                             $
-                            {item.item?.price
+                            {item.item?.totalPrice
                               ? item.item?.price * item.count
                               : item.item?.price}
                           </Text>

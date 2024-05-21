@@ -9,7 +9,7 @@ export type Customer = {
     phone: string;
     password: string;
     address?: string;
-    cart?: Cart;
+    cart: Cart;
 }
 
 export type CreateCustomerInput = {
