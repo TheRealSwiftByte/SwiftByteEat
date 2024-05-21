@@ -1,16 +1,22 @@
-import { StyleSheet, Image, SafeAreaView, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 
 import { Text, View } from "@/components/Themed";
-import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 import LocationIcon from "../../assets/icons/icon-location.svg";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 import SearchIcon from "../../assets/icons/icon-search.svg";
-import FilterIcon from "../../assets/icons/icon-filter.svg";
-
+import GoSearchIcon from "../../assets/icons/icon-arrow-right.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { categories, restaurants } from "@/mock_data";
 import { TextInput } from "@swift-byte/switftbytecomponents";
 import { useEffect, useState } from "react";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   const [search, setSearch] = useState<string>("");
@@ -23,17 +29,17 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-          <View style={styles.dFlex}>
+          {/* <View style={styles.dFlex}>
             <Text style={styles.title}>Home</Text>
             <NotificationBadge />
-          </View>
+          </View> */}
           <View
             style={[
               styles.dFlex,
               {
                 justifyContent: "flex-start",
                 gap: 8,
-                marginTop: 20,
+
                 marginBottom: 20,
               },
             ]}
@@ -67,7 +73,7 @@ export default function HomeScreen() {
                 },
               ]}
             >
-              <View style={[styles.dFlex, {backgroundColor: 'transparent'}]}>
+              <View style={[styles.dFlex, { backgroundColor: "transparent" }]}>
                 <SearchIcon style={{ marginLeft: 20 }} />
                 <TextInput
                   value={search}
@@ -77,7 +83,23 @@ export default function HomeScreen() {
                 ></TextInput>
               </View>
 
-              <FilterIcon style={{ marginRight: 20 }}/>
+              {search ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    router.navigate({
+                      pathname: "/Explore",
+                      params: { searchValue: search },
+                    });
+                    setSearch("");
+                  }}
+                >
+                  <GoSearchIcon
+                    style={{ marginRight: 20 }}
+                    width={13}
+                    height={13}
+                  />
+                </TouchableOpacity>
+              ) : null}
             </View>
           </View>
           <View style={styles.banner}>
@@ -93,19 +115,17 @@ export default function HomeScreen() {
               <Text style={[styles.title, { fontSize: 18 }]}>
                 Top Categories
               </Text>
-              <Text
-                style={{
-                  color: SB_COLOR_SCHEME.SB_DISABLED,
-                  fontWeight: "bold",
-                }}
-              >
-                See all
-              </Text>
             </View>
             <View style={[styles.dFlex, { marginTop: 20, marginBottom: 10 }]}>
               {categories.slice(0, 4).map((item) => {
                 return (
-                  <View
+                  <TouchableOpacity
+                    onPress={() => {
+                      router.navigate({
+                        pathname: "/Explore",
+                        params: { searchValue: item.name.toLowerCase() },
+                      });
+                    }}
                     key={item.id}
                     style={[
                       styles.dFlex,
@@ -130,7 +150,7 @@ export default function HomeScreen() {
                     >
                       {item.name}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 );
               })}
             </View>
@@ -141,20 +161,18 @@ export default function HomeScreen() {
               <Text style={[styles.title, { fontSize: 18 }]}>
                 Popular Restaurants Nearby
               </Text>
-              <Text
-                style={{
-                  color: SB_COLOR_SCHEME.SB_DISABLED,
-                  fontWeight: "bold",
-                }}
-              >
-                See all
-              </Text>
             </View>
             <ScrollView horizontal={true} style={styles.scrollContainer}>
               <View style={[styles.dFlex, { marginTop: 16 }]}>
                 {restaurants.map((item) => {
                   return (
-                    <View
+                    <TouchableOpacity
+                      onPress={() => {
+                        router.navigate({
+                          pathname: "/RestaurantScreen",
+                          params: { restaurantId: item.id},
+                        });
+                      }}
                       key={item.id}
                       style={[
                         styles.card,
@@ -195,7 +213,7 @@ export default function HomeScreen() {
                               height={16}
                               style={{ marginRight: 4 }}
                             />
-                            <Text>4.5</Text>
+                            <Text>{item.averageRating}</Text>
                           </View>
                         </View>
 
@@ -205,7 +223,7 @@ export default function HomeScreen() {
                           </Text>
                         </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>

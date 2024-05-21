@@ -54,7 +54,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack initialRouteName="welcome">
+        <Stack.Screen name="Reviews"/>
+        <Stack.Screen name="welcome" options={{ headerShown: false }} />
+        <Stack.Screen name="signIn" options={{ headerShown: false }} />
+        <Stack.Screen name="signUp" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen
           name="UserSavedPayments"
           options={{
@@ -115,22 +120,59 @@ function RootLayoutNav() {
             },
           }}
         />
+
         <Stack.Screen
           name="delivery"
           options={{
             title: "Delivery",
             headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
-            headerBackVisible: false,
+            headerBackTitle: "Back",
             gestureEnabled: false,
             contentStyle: {
               backgroundColor: "white",
             },
           }}
         />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="orderHistory"
+          options={{
+            title: "Order History",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="AddCard"
+          options={{
+            title: "Add Card",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="notifications"
+          options={{ presentation: "modal", headerTitle: "Notifications" }}
+        />
         <Stack.Screen
           name="success"
           options={{ presentation: "modal", headerShown: false }}
+        />
+        <Stack.Screen
+          name="RestaurantScreen"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MenuItemModal"
+          options={{ headerShown: false, presentation: "modal"}}
+        />
+        <Stack.Screen
+          name="Cart"
         />
       </Stack>
     </ThemeProvider>
