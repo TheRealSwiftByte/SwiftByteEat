@@ -54,19 +54,50 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack initialRouteName="welcome">
+        <Stack.Screen name="Reviews"/>
         <Stack.Screen name="welcome" options={{ headerShown: false }} />
-        <Stack.Screen name="Reviews" />
+        <Stack.Screen name="signIn" options={{ headerShown: false }} />
+        <Stack.Screen name="signUp" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen
-          name="signIn"
-          options={{ headerShown: false }}
+          name="UserSavedPayments"
+          options={{
+            title: "Paymnent",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
         />
         <Stack.Screen
-          name="signUp"
-          options={{ headerShown: false }}
+          name="editProfile"
+          options={{
+            title: "Edit Profile",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: true,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
         />
-        {/* <Stack.Screen name="onboarding" options={{ headerShown: false }} /> */}
+        <Stack.Screen
+          name="ProfileScreen"
+          options={{ contentStyle: { backgroundColor: "white" } }}
+        />
+
+        <Stack.Screen
+          name="ChangePassword"
+          options={{
+            title: "Change Password",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: true,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="checkout"
           options={{
@@ -89,6 +120,7 @@ function RootLayoutNav() {
             },
           }}
         />
+
         <Stack.Screen
           name="delivery"
           options={{
@@ -112,7 +144,21 @@ function RootLayoutNav() {
             },
           }}
         />
-        <Stack.Screen name="notifications" options={{ presentation: "modal", headerTitle: 'Notifications' }} />
+        <Stack.Screen
+          name="AddCard"
+          options={{
+            title: "Add Card",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="notifications"
+          options={{ presentation: "modal", headerTitle: "Notifications" }}
+        />
         <Stack.Screen
           name="success"
           options={{ presentation: "modal", headerShown: false }}
