@@ -166,7 +166,13 @@ export default function HomeScreen() {
               <View style={[styles.dFlex, { marginTop: 16 }]}>
                 {restaurants.map((item) => {
                   return (
-                    <View
+                    <TouchableOpacity
+                      onPress={() => {
+                        router.navigate({
+                          pathname: "/RestaurantScreen",
+                          params: { restaurantId: item.id},
+                        });
+                      }}
                       key={item.id}
                       style={[
                         styles.card,
@@ -217,7 +223,7 @@ export default function HomeScreen() {
                           </Text>
                         </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>

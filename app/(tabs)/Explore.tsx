@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import SearchIcon from "../../assets/icons/icon-search.svg";
 import CloseIcon from "../../assets/icons/icon-close.svg";
@@ -13,7 +14,7 @@ import { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { Restaurant, categories, promoCode, restaurants } from "@/mock_data";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 
 export default function ExploreScreen() {
   const { searchValue } = useLocalSearchParams<{ searchValue: string }>();
@@ -53,9 +54,9 @@ export default function ExploreScreen() {
       console.log(
         restaurant.name,
         matchCategoryName ||
-          matchLocation ||
-          matchMenuName ||
-          matchRestaurantName
+        matchLocation ||
+        matchMenuName ||
+        matchRestaurantName
       );
       return (
         matchCategoryName ||
@@ -113,7 +114,13 @@ export default function ExploreScreen() {
               {
                 // listing the restaurants
                 filteredResults?.map((item) => (
-                  <View key={item.id} style={{ marginBottom: 20 }}>
+                  <Pressable onPress={() => router.navigate({
+                    pathname: "/RestaurantScreen",
+                    params: { restaurantId: item.id },
+                  })}
+                    key={item.id}
+                    style={{ marginBottom: 20 }}
+                  >
                     <View
                       style={[
                         styles.dFlex,
@@ -162,7 +169,7 @@ export default function ExploreScreen() {
                         <Text numberOfLines={1}>{item.description}</Text>
                       </View>
                     </View>
-                  </View>
+                  </Pressable>
                 ))
               }
             </View>

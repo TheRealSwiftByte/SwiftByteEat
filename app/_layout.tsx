@@ -126,6 +126,17 @@ function RootLayoutNav() {
           name="success"
           options={{ presentation: "modal", headerShown: false }}
         />
+        <Stack.Screen
+          name="RestaurantScreen"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MenuItemModal"
+          options={{ headerShown: false, presentation: "modal"}}
+        />
+        <Stack.Screen
+          name="Cart"
+        />
       </Stack>
     </ThemeProvider>
   );

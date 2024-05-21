@@ -189,8 +189,8 @@ export const restaurants: Restaurant[] = [
       averageRating: 4,
       imageUrl: 'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       menu: [
-          { id: '304', name: 'Margherita Pizza', description: 'Classic tomato sauce, mozzarella, basil', price: 10.99, imageUrl: 'margherita.jpg' },
-          { id: '304', name: 'Pepperoni Pizza', description: 'Tomato sauce, mozzarella, pepperoni slices', price: 12.99, imageUrl: 'pepperoni.jpg' },
+          { id: '304', name: 'Margherita Pizza', description: 'Classic tomato sauce, mozzarella, basil', price: 10.99, imageUrl: 'https://cdn.loveandlemons.com/wp-content/uploads/2023/07/margherita-pizza.jpg' },
+          { id: '305', name: 'Pepperoni Pizza', description: 'Tomato sauce, mozzarella, pepperoni slices', price: 12.99, imageUrl: "https://www.simplyrecipes.com/thmb/KE6iMblr3R2Db6oE8HdyVsFSj2A=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/__opt__aboutcom__coeus__resources__content_migration__simply_recipes__uploads__2019__09__easy-pepperoni-pizza-lead-3-1024x682-583b275444104ef189d693a64df625da.jpg" },
           // More menu items...
       ],
       address: {
@@ -208,8 +208,8 @@ export const restaurants: Restaurant[] = [
       description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
       imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSuSukk8gKjQvpguurAbU340D8Qw7U7jINgdKWpZXsZA&s',
       menu: [
-          { id: '201', name: 'California Roll', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
-          { id: '202', name: 'Spicy Tuna Roll', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
+          { id: '201', name: 'California Roll', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'https://norecipes.com/wp-content/uploads/2019/12/best-california-roll-004.jpg' },
+          { id: '202', name: 'Spicy Tuna Roll', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'https://tastesbetterfromscratch.com/wp-content/uploads/2023/01/Spicy-Tuna-Roll-15.jpg' },
           // More menu items...
       ],
       address: {
@@ -227,8 +227,8 @@ export const restaurants: Restaurant[] = [
     description: 'Free delivery on order above $20. Free Ice Cream during public holiday',
     imageUrl: 'https://media-cdn.tripadvisor.com/media/photo-s/14/29/52/54/hong-teh-chinese-restaurant.jpg',
     menu: [
-        { id: '208', name: 'Crispy Tofu', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'california-roll.jpg' },
-        { id: '209', name: 'Spicy Beef Rice', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'spicy-tuna.jpg' },
+        { id: '208', name: 'Crispy Tofu', description: 'Crab, avocado, cucumber, and sesame seeds', price: 8.99, imageUrl: 'https://norecipes.com/wp-content/uploads/2019/12/best-california-roll-004.jpg' },
+        { id: '209', name: 'Spicy Beef Rice', description: 'Tuna, spicy mayo, cucumber, and tobiko', price: 9.99, imageUrl: 'https://tastesbetterfromscratch.com/wp-content/uploads/2023/01/Spicy-Tuna-Roll-15.jpg' },
         // More menu items...
     ],
     address: {
