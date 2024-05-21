@@ -60,6 +60,43 @@ function RootLayoutNav() {
         <Stack.Screen name="signIn" options={{ headerShown: false }} />
         <Stack.Screen name="signUp" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="UserSavedPayments"
+          options={{
+            title: "Paymnent",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="editProfile"
+          options={{
+            title: "Edit Profile",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: true,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ProfileScreen"
+          options={{ contentStyle: { backgroundColor: "white" } }}
+        />
+
+        <Stack.Screen
+          name="ChangePassword"
+          options={{
+            title: "Change Password",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackVisible: true,
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
+        />
+
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="checkout"
