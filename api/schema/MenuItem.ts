@@ -11,8 +11,7 @@ enum MenuItemType {
 }
 
 export type MenuItem = {
-    id: string;
-    type: MenuItemType;
+    category: MenuItemType;
     name: string;
     price: number;
     description: string;

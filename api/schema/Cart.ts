@@ -1,6 +1,6 @@
 import { MenuItem } from './MenuItem'
 
 export type Cart = {
-    items?: MenuItem[]
+    foodItems?: MenuItem[]
     total?: number
 }

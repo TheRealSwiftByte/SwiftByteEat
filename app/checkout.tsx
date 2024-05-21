@@ -25,7 +25,7 @@ export default function Checkout({ route, navigation }: CartProps) {
 
   const itemIdCounts: { [itemId: string]: number } = {};
 
-  cart.items.forEach((item) => {
+  cart.foodItems.forEach((item) => {
     const itemId = item.id.toString();
     itemIdCounts[itemId] = (itemIdCounts[itemId] || 0) + 1;
   });
@@ -34,7 +34,7 @@ export default function Checkout({ route, navigation }: CartProps) {
     item: MenuItem | undefined;
     count: number;
   }[] = Object.keys(itemIdCounts).map((itemId) => ({
-    item: cart.items.find((i) => i.id == itemId),
+    item: cart.foodItems.find((i) => i.id == itemId),
     count: itemIdCounts[itemId],
   }));
 
@@ -75,7 +75,7 @@ export default function Checkout({ route, navigation }: CartProps) {
     total += getVAT();
     total += getDeliveryFee();
 
-    myItems.forEach((food) => {
+    myfoodItems.forEach((food) => {
       if (food.item?.price) {
         total += food.count * food.item?.price;
       }

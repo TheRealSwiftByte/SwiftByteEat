@@ -54,7 +54,7 @@ export default function OrdersScreen() {
                 .filter((order) => order.orderStatus == "accepted")
                 .map((item) => {
                   return (
-                    <Link href={"/delivery"} key={item.id} asChild>
+                    <Link href={{pathname: "/delivery/[id]", params: { id: item.id }}} key={item.id} asChild>
                       <TouchableOpacity
                         style={styles.item}
                       >

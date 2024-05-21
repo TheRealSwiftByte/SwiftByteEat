@@ -39,11 +39,15 @@ export class ApiProdFactory implements ApiImplementationFactory {
 
     //orders
     async getOrder(id: string): Promise<Order | undefined>{
-        //stub
         try {
-            throw new Error("Method not implemented.");
-        } catch (e) {
-            console.error("Failed to get order: " + e);
+            return fetch(API_BASE_URL + "order/?id=" + id)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data returned in request to getOrder: " + JSON.stringify(data));
+                    return data as Order;
+                });
+        } catch (e){
+            console.error("Failed to get order");
             return undefined;
         }
     };

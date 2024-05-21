@@ -117,9 +117,9 @@ export class ApiStubFactory implements ApiImplementationFactory {
     addToCart(cartId: string, itemId: string): Promise<Cart> {
         const cart = this.carts.find(c => c.id === cartId);
         if (cart) {
-            const item = cart.items.find(i => i.id === itemId);
+            const item = cart.foodItems.find(i => i.id === itemId);
             if (item) {
-                cart.items.push(item);
+                cart.foodItems.push(item);
                 return Promise.resolve(cart);
             }
             return Promise.reject("Item not found");
@@ -129,9 +129,9 @@ export class ApiStubFactory implements ApiImplementationFactory {
     removeFromCart(cartId: string, itemId: string): Promise<Cart> {
         const cart = this.carts.find(c => c.id === cartId);
         if (cart) {
-            const item = cart.items.find(i => i.id === itemId);
+            const item = cart.foodItems.find(i => i.id === itemId);
             if (item) {
-                cart.items = cart.items.filter(i => i.id !== itemId);
+                cart.foodItems = cart.foodItems.filter(i => i.id !== itemId);
                 return Promise.resolve(cart);
             }
             return Promise.reject("Item not found");
