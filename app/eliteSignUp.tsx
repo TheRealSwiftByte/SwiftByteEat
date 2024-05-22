@@ -1,8 +1,7 @@
-import { Image, StyleSheet } from "react-native";
-import SearchIcon from "../assets/icons/icon-search.svg";
+import { Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "@/components/Themed";
-import React, { useEffect, useState } from "react";
-import { Button, TextInput } from "@swift-byte/switftbytecomponents";
+import React from "react";
+import { Button } from "@swift-byte/switftbytecomponents";
 
 export default function eliteSignUp() {
   return (
@@ -13,17 +12,22 @@ export default function eliteSignUp() {
         enjoy digital experience like never before
       </Text>
       <Image source={require('../assets/images/premiumBox.png')}></Image>
+      
       <View style={styles.pricingContainer}>
-        <View style={{alignItems: 'center', backgroundColor: '#1D3D30', padding: 10, borderRadius: 10, width: "90%"}}>
-            <Text style={styles.price}>Annual: %10 off</Text>
-            <Text style={styles.priceDetails}>
-            First 30 days free Then $25/Year
-            </Text>
-        </View>
-        <View style={{alignItems: 'center', backgroundColor: '#EBEDF0', padding: 10, borderRadius: 10, width: "90%", marginTop: '10%', marginBottom: '10%'}}>
-            <Text style={{fontSize: 20,fontWeight: 'bold',color: "#1D3D30"}}>Monthly:</Text>
-            <Text style={{fontSize: 14,marginTop: 5,color: "#1D3D30"}}>First 7 days free Then $5.96/Month</Text>
-        </View>
+        <TouchableOpacity style={{width: '100%', alignItems: "center"}}>
+            <View style={{alignItems: 'center', backgroundColor: '#1D3D30', padding: 10, borderRadius: 10, width: "90%"}}>
+                <Text style={styles.price}>Annual: %10 off</Text>
+                <Text style={styles.priceDetails}>
+                First 30 days free Then $25/Year
+                </Text>
+            </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={{width: '100%', alignItems: "center"}}>
+            <View style={{alignItems: 'center', backgroundColor: '#EBEDF0', padding: 10, borderRadius: 10, width: "90%", marginTop: '10%', marginBottom: '10%'}}>
+                <Text style={{fontSize: 20,fontWeight: 'bold',color: "#1D3D30"}}>Monthly:</Text>
+                <Text style={{fontSize: 14,marginTop: 5,color: "#1D3D30"}}>First 7 days free Then $5.96/Month</Text>
+            </View>
+        </TouchableOpacity>
         
       </View>
       <Button type="primary" text="Join Us" onPress={() => console.log('Join Us button pressed')} />
