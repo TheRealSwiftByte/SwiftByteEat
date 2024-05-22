@@ -8,8 +8,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Api } from "@/api/api";
 
 export default function signIn() {
-  const [email, setEmail] = useState<string>("bazzy@login.com");
-  const [password, setPassword] = useState<string>("secure");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const api: Api = Api.getApi();
 
   return (

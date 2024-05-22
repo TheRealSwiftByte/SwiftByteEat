@@ -59,10 +59,16 @@ function RootLayoutNav() {
         <Stack.Screen name="signIn" options={{ headerShown: false }} />
         <Stack.Screen name="signUp" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        <Stack.Screen name="Reviews" options={{headerShown: false}}/>
-        <Stack.Screen name="eliteSignUp"/>
 
         
+        <Stack.Screen name="Reviews" options={{
+          title: "Reviews",
+          headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+          headerBackTitle: "Back",
+          contentStyle: {
+            backgroundColor: "white",
+          },
+        }}/>
 
         <Stack.Screen
           name="UserSavedPayments"
@@ -79,6 +85,7 @@ function RootLayoutNav() {
             title: "Edit Profile",
             headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
             headerBackVisible: true,
+            headerBackTitle: "Back",
             contentStyle: {
               backgroundColor: "white",
             },
@@ -95,6 +102,7 @@ function RootLayoutNav() {
             title: "Change Password",
             headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
             headerBackVisible: true,
+            headerBackTitle: "Back",
             contentStyle: {
               backgroundColor: "white",
             },
@@ -177,6 +185,17 @@ function RootLayoutNav() {
         />
         <Stack.Screen
           name="Cart"
+        />
+        <Stack.Screen
+          name="eliteSignUp"
+          options={{ 
+            title: "Byte Elite",
+            headerTintColor: SB_COLOR_SCHEME.SB_PRIMARY,
+            headerBackTitle: "Back",
+            contentStyle: {
+              backgroundColor: "white",
+            },
+          }}
         />
       </Stack>
     </ThemeProvider>

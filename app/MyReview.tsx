@@ -1,11 +1,7 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
-import StarIcon from  "../../assets/icons/icon-star-yellow.svg";
-import Author1 from "../../assets/images/user1.svg";
-import Author2 from "../../assets/images/user2.svg";
-import Author3 from "../../assets/images/user3.svg";
-import { Button, TextInput } from "@swift-byte/switftbytecomponents";
+import { Button } from "@swift-byte/switftbytecomponents";
 import { Link } from "expo-router";
 import { AirbnbRating } from "react-native-ratings";
 import {
@@ -21,11 +17,14 @@ interface ReviewsProps {
 
 export default function reviews({ navigation, route }: ReviewsProps) {
   const [authorReview, setAuthorReview] = useState<string>("");
+
+  const [rating, setRating] = useState<number>(5);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-        <View
+          <View
             style={[styles.dFlex, { marginBottom: 10, alignItems: "flex-end" }]}
           >
             <View
@@ -36,59 +35,47 @@ export default function reviews({ navigation, route }: ReviewsProps) {
             >
               <Text style={styles.subtitle}>Rating</Text>
               <View style={[styles.star]}>
-                <AirbnbRating
-                  count={5}
-                  defaultRating={3}
-                  size={26}
-                  showRating={false}
-                  isDisabled
-                  selectedColor='yellow'
-                />
+                  <AirbnbRating
+                    count={5}
+                    defaultRating={rating}
+                    onFinishRating={(rating) => setRating(rating)}
+                    size={26}
+                    showRating={false}
+                    selectedColor='yellow'
+                  />
               </View>
 
               <Text style={styles.subtitle}>Review</Text>
-              <View
-              style={[
-                styles.dFlex,
-                {
-                  borderRadius: 10,
-                  borderWidth: 1,
-                  borderColor: "#BBC5C1",
-                  justifyContent: "space-between",
-                  marginTop: 10,
-                },
-              ]}
-              >
-                <View style={[styles.dFlex, { backgroundColor: "transparent" }]}>
-                  <TextInput
-                    value={authorReview}
-                    style={styles.textInput}
-                    placeholder="Enter your review here"
-                    onChangeText={setAuthorReview}
-                  ></TextInput>
-                </View>
-              </View>
+                <TextInput
+                  value={authorReview}
+                  style={styles.textInput}
+                  placeholder="Enter your review here"
+                  onChangeText={setAuthorReview}
+                  multiline={true}
+                  
+                ></TextInput>
               <View style={[
                 styles.dFlex,
                 { flexDirection: "column", alignItems: "flex-start", marginTop: 120, width: "100%" },
               ]}>
-                <Link href="/MyReview" asChild>
-                <Button
-                  text={"Submit"}
-                  type={"primary"}
-                  onPress={function (): void {
-                    console.log("pressed");
-                  }}
-                ></Button>
-              </Link>
+                <Link href="/Reviews" asChild>
+                  <Button
+                    text={"Submit"}
+                    type={"primary"}
+                    buttonStyle={{ width: "100%" }}
+                    onPress={function (): void {
+                      setAuthorReview("");
+                    }}
+                  ></Button>
+                </Link>
               </View>
             </View>
-        </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   )
-} 
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -108,24 +95,25 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-   //alignItems: "center",
+    //alignItems: "center",
     width: "100%",
   },
-  subtitle:{
+  subtitle: {
     fontSize: 14,
     fontWeight: "bold",
   },
-  star:{
-    alignItems:'stretch',
+  star: {
+    alignItems: 'stretch',
   },
   textInput: {
-    borderRadius: 40,
-    borderWidth: 20,
-    marginHorizontal: 0,
-    marginBottom: 60,
-    borderColor: "transparent",
-    paddingLeft: 10,
-    //paddingBottom: 60,
+    borderRadius: 20,
+    borderWidth: 1,
+    padding:20,
+    paddingTop:20,
+    height:200,
+    borderColor:SB_COLOR_SCHEME.SB_DISABLED,
+    width:"100%",
+
   }
-  
+
 })

@@ -9,6 +9,8 @@ import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 export default function ProfileScreen() {
   const [activeCustomer, setActiveCustomer] = useState<Customer | undefined>(undefined);
 
+  console.log(Api.getApi().getActiveCustomer().id)
+  
   useFocusEffect(useCallback(() => {
     setActiveCustomer(Api.getApi().getActiveCustomer())
     console.log("Active Customer: ", activeCustomer)
@@ -25,7 +27,7 @@ export default function ProfileScreen() {
         <View style={styles.painName}>
           <Text style={styles.username}>{activeCustomer?.firstName} {activeCustomer?.lastName}</Text>
           <View>
-            <Text style={styles.status}>Standard</Text>
+            <Text style={styles.status}>{activeCustomer?.membership}</Text>
           </View>
         </View>
 
@@ -84,12 +86,14 @@ export default function ProfileScreen() {
         </Link>
 
         {/* SwiftByte Elite */}
-        <TouchableOpacity>
-          <View style={styles.setting}>
-            <Text style={styles.settingText}>ByteElite</Text>
-            <Text style={styles.chevron}>›</Text>
-          </View>
-        </TouchableOpacity>
+        <Link href="/eliteSignUp" asChild>
+          <TouchableOpacity>
+            <View style={styles.setting}>
+              <Text style={styles.settingText}>ByteElite</Text>
+              <Text style={styles.chevron}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );
