@@ -60,6 +60,9 @@ function RootLayoutNav() {
         <Stack.Screen name="signUp" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
         <Stack.Screen name="Reviews" options={{headerShown: false}}/>
+        <Stack.Screen name="eliteSignUp"/>
+
+        
 
         <Stack.Screen
           name="UserSavedPayments"
