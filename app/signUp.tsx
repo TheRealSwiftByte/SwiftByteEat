@@ -5,12 +5,17 @@ import { Button, TextInput } from "@swift-byte/switftbytecomponents";
 import { Link, router } from "expo-router";
 import Logo from "../assets/images/logo-green.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Api } from "@/api/api";
+import { CreateCustomerInput } from "@/api/schema/Customer";
+
 
 export default function signUp() {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const api: Api = Api.getApi();
+
 
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>
@@ -170,7 +175,24 @@ export default function signUp() {
             <Button
               text={"Sign Up"}
               type={"secondary"}
-              onPress={function (): void {}}
+              onPress={() => {
+                const nameParts = name.split(" ");
+                const createCustomerInput: CreateCustomerInput = {
+                  firstName: nameParts[0],
+                  lastName: nameParts[1],
+                  email: email,
+                  phone: phone,
+                  password: password,
+                }
+                api.createCustomer(createCustomerInput)
+                  .then((isSuccess) => {
+                    if (isSuccess) {
+                      console.log("newactive customer: ", api.getActiveCustomer());
+                      router.navigate("/(tabs)")
+                    }
+                  })
+                  .catch((e) => console.error('Failed to sign in customer: ', e));
+                }}
             ></Button>
           </Link>
           <View style={[styles.dFlex, { justifyContent: "center", gap: 4 }]}>

@@ -1,16 +1,23 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Text, View } from "@/components/Themed";
-import { Button } from "@swift-byte/switftbytecomponents";
-import UserCircle from "../../assets/icons/UserCircle.svg"
-import { Circle } from "react-native-svg";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { Api } from "@/api/api";
+import { Customer } from "@/api/schema/SwiftByteTypes";
 
 export default function ProfileScreen() {
+  const [activeCustomer, setActiveCustomer] = useState<Customer | undefined>(undefined);
+  useFocusEffect(useCallback( () => {
+    setActiveCustomer(Api.getApi().getActiveCustomer())
+    console.log("Active Customer: ", activeCustomer)
+  }, []))
+
   return (
     <View style={styles.container}>
       <View style={styles.containerProfile}>
         <View style={styles.profilePic} />
         <View style={styles.painName}>
-          <Text style={styles.username}>John Smith</Text>
+          <Text style={styles.username}>{activeCustomer?.firstName} {activeCustomer?.lastName}</Text>
           <View>
             <Text style={styles.status}>Standard</Text>
           </View>

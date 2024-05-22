@@ -28,7 +28,7 @@ export default function orderHistory() {
       setOrder(ord);
       const itemIdCounts: { [itemId: string]: number } = {};
 
-      ord?.items.forEach((item) => {
+      ord?.foodItems.forEach((item) => {
         const itemId = item.id.toString();
         itemIdCounts[itemId] = (itemIdCounts[itemId] || 0) + 1;
       });
@@ -37,7 +37,7 @@ export default function orderHistory() {
         item: MenuItem | undefined;
         count: number;
       }[] = Object.keys(itemIdCounts).map((itemId) => ({
-        item: ord?.items.find((i) => i.id == itemId),
+        item: ord?.foodItems.find((i) => i.id == itemId),
         count: itemIdCounts[itemId],
       }));
 

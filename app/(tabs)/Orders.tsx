@@ -8,13 +8,26 @@ import {
 
 import { Text, View } from "@/components/Themed";
 import { SB_COLOR_SCHEME } from "@/constants";
-import { orders } from "@/mock_data";
-import { router } from "expo-router";
+import { Link, router, useFocusEffect } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { Api } from "@/api/api";
+import { Order } from "@/api/schema/SwiftByteTypes";
 
 export default function OrdersScreen() {
+  const [orders, setOrders]: [Order[], any] = useState([]);
+  const api: Api =  Api.getApi();
+  useFocusEffect(useCallback(() => {
+    console.log('triggered focus effect')
+    const customerId = api.getActiveCustomer()?.id;
+    if (!customerId) return;
+    api.getOrders(customerId).then((orders):any => {
+      console.log("WIthin screen orders = ", orders);
+      setOrders(orders);
+    });
+  }, []))
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} >
         <View style={styles.container}>
           {/* current order */}
           <View>
@@ -38,20 +51,16 @@ export default function OrdersScreen() {
             </View>
             <View style={{ marginTop: 20 }}>
               {orders
-                .filter((order) => order.status == "accepted")
+                .filter((order) => order.orderStatus == "accepted")
                 .map((item) => {
                   return (
-                    <TouchableOpacity
-                      key={item.id}
-                      style={styles.item}
-                      onPress={() => router.navigate("/delivery")}
-                    >
-                      <Text>{item.restaurant.name}</Text>
-                      <Text>
-                        {item.eta.toLocaleTimeString()} |{"  "}
-                        {item.deliveryPerson.name}
-                      </Text>
-                    </TouchableOpacity>
+                    <Link href={{pathname: "/delivery/[id]", params: { id: item.id }}} key={item.id} asChild>
+                      <TouchableOpacity
+                        style={styles.item}
+                      >
+                        <Text>{item.restaurant.name}</Text>
+                      </TouchableOpacity>
+                    </Link>
                   );
                 })}
             </View>
@@ -78,26 +87,21 @@ export default function OrdersScreen() {
             </View>
             <View style={{ marginTop: 20 }}>
               {orders
-                .filter((order) => order.status == "completed")
+                .filter((order) => order.orderStatus == "completed")
                 .map((item) => {
                   return (
-                    <TouchableOpacity
-                      key={item.id}
-                      style={styles.item}
-                      onPress={() =>
-                        router.navigate({
-                          pathname: "/orderHistory",
-                          params: { id: item.id },
-                        })
-                      }
-                    >
-                      <Text>{item.restaurant.name}</Text>
-                      <Text>
-                        {item.eta.toLocaleDateString()}{" "}
-                        {item.eta.toLocaleTimeString()} |{"  "}
-                        {item.deliveryPerson.name}
-                      </Text>
-                    </TouchableOpacity>
+                    <Link href={"/orderHistory"} key={item.id}  asChild>
+                      <TouchableOpacity
+                        style={styles.item}
+                      >
+                        <Text>{item.restaurant.name}</Text>
+                        <Text>
+                          {item.orderDate && (new Date(item.orderDate).toLocaleDateString()) + " - " + (new Date(item.orderDate).toLocaleTimeString()) + "\n"}
+                          
+                          {item.deliveryAddress}
+                        </Text>
+                      </TouchableOpacity>
+                    </Link>
                   );
                 })}
             </View>

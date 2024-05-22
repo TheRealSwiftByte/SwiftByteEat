@@ -1,14 +1,16 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import PrepareFood from "../assets/images/prepare-food.svg";
-import FindDriver from "../assets/images/find-driver.svg";
-import OrderDelivery from "../assets/images/order-delivery.svg";
-import OrderArrive from "../assets/images/order-arrive.svg";
+import React, { useCallback, useEffect, useState } from "react";
+import PrepareFood from "../../assets/images/prepare-food.svg";
+import FindDriver from "../../assets/images/find-driver.svg";
+import OrderDelivery from "../../assets/images/order-delivery.svg";
+import OrderArrive from "../../assets/images/order-arrive.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
-import { MenuItem, cart, promoCode, restaurants } from "@/mock_data";
-import { Link, router } from "expo-router";
+import { Link, router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
-import ChatIcon from "../assets/icons/icon-chat.svg";
+import ChatIcon from "../../assets/icons/icon-chat.svg";
+import { Api } from "@/api/api";
+import { UpdateOrderInput } from "@/api/schema/Order";
+import { Order, MenuItem } from "@/api/schema/SwiftByteTypes";
 
 enum Status {
   PREPARE = "Preparing",
@@ -39,89 +41,137 @@ export default function delivery() {
   const [description, setDescription] = useState<string>("");
   const [currentProcess, setCurrentProcess] = useState<Status>(Status.PREPARE);
   const [driver, setDriver] = useState<Driver>();
+  const [order, setOrder] = useState<Order>();
+  const [myItems, setMyItems] = useState<{ item: MenuItem | undefined; count: number }[]>([]);
 
-  const itemIdCounts: { [itemId: string]: number } = {};
+  const local = useLocalSearchParams();
 
   useEffect(() => {
-    setTimeout(() => {
-      setCurrentProcess(Status.PREPARE);
-      setHeading(headings[0]);
-      setDescription("");
-    }, 500);
+    // setTimeout(() => {
+    //   setCurrentProcess(Status.PREPARE);
+    //   setHeading(headings[0]);
+    //   setDescription("");
+    // }, 500);
 
-    setTimeout(() => {
-      setCurrentProcess(Status.FIND_DRIVER);
-      setHeading(headings[1]);
-      setDescription("Looking for your driver");
-    }, 10000);
+    // setTimeout(() => {
+    //   setCurrentProcess(Status.FIND_DRIVER);
+    //   setHeading(headings[1]);
+    //   setDescription("Looking for your driver");
+    // }, 10000);
 
-    setTimeout(() => {
-      setCurrentProcess(Status.DELIVERY);
-      setHeading(headings[2]);
-      setDescription("");
-      setDriver(driver_tmp);
-    }, 20000);
+    // setTimeout(() => {
+    //   setCurrentProcess(Status.DELIVERY);
+    //   setHeading(headings[2]);
+    //   setDescription("");
+    //   setDriver(driver_tmp);
+    // }, 20000);
 
-    setTimeout(() => {
-      setCurrentProcess(Status.RECEIVE);
-      setHeading(headings[3]);
-      setDescription("");
-    }, 30000);
+    // setTimeout(() => {
+    //   setCurrentProcess(Status.RECEIVE);
+    //   setHeading(headings[3]);
+    //   setDescription("");
+    // }, 30000);
 
-    setTimeout(() => {
-      router.navigate({ pathname: "/success", params: { type: "delivery" } });
-    }, 40000);
+    // setTimeout(() => {
+    //   router.navigate({ pathname: "/success", params: { type: "delivery" } });
+    // }, 40000);
   }, []);
 
-  cart.items.forEach((item) => {
-    const itemId = item.id.toString();
-    itemIdCounts[itemId] = (itemIdCounts[itemId] || 0) + 1;
-  });
-
-  const myItems: {
-    item: MenuItem | undefined;
-    count: number;
-  }[] = Object.keys(itemIdCounts).map((itemId) => ({
-    item: cart.items.find((i) => i.id == itemId),
-    count: itemIdCounts[itemId],
-  }));
-
-  const getDeliveryFee = () => {
-    let total = 0;
-    myItems.forEach((food) => {
-      if (food.item?.price) {
-        total += food.count * food.item?.price;
+  useFocusEffect(useCallback(() => {
+    console.log("order id is: ", local.id)
+    if (!local.id) {
+        console.error("Order id undefined in delivery flow");
+      router.back();
+      return;
+    } else if (Array.isArray(local.id)) {
+        console.error("Invalid order id, it's an array");
+        router.back();
+        return;
+    }
+    Api.getApi().getOrder(local.id).then((order) => {
+      if (order) {
+        setOrder(order);
+        if (order.orderStatus == "cancelled") {
+          router.back();
+        } else if (order.orderStatus == "accepted") {
+          setCurrentProcess(Status.PREPARE);
+          setHeading(headings[0]);
+          setDescription("");
+        } else if (order.orderStatus == "pendingDriver") {
+          setCurrentProcess(Status.FIND_DRIVER);
+          setHeading(headings[1]);
+          setDescription("Looking for your driver");
+        } else if (order.orderStatus == "delivering") {
+          setCurrentProcess(Status.DELIVERY);
+          setHeading(headings[2]);
+          setDescription("");
+          setDriver(driver_tmp);
+        } else if (order.orderStatus == "completed") {
+          setCurrentProcess(Status.RECEIVE);
+          setHeading(headings[3]);
+          setDescription("");
+        }
       }
     });
-    return total * 0.04;
-  };
+  }, [local.id]));
 
-  const getVAT = () => {
-    let total = 0;
-    myItems.forEach((food) => {
-      if (food.item?.price) {
-        total += food.count * food.item?.price;
-      }
+  useEffect(() => {
+    if (!order) return;
+    const itemNameCounts: { [itemId: string]: number } = {};
+    const total = 0;
+
+    order.foodItems.forEach((item) => {
+        const itemName = item.name;
+        itemNameCounts[itemName] = (itemNameCounts[itemName] || 0) + 1;
     });
-    return total * 0.05;
-  };
+
+    setMyItems(Object.keys(itemNameCounts).map((itemName) => ({
+        item: order.foodItems.find((i) => i.name == itemName),
+        count: itemNameCounts[itemName],
+    })));
+
+  }, [order]);
+
+
+// don't like this, move it into use effect
+// ignoring for assignment
+// TODO
+  // const getDeliveryFee = () => {
+  //   let total = 0;
+  //   myItems.forEach((food) => {
+  //     if (food.item?.price) {
+  //       total += food.count * food.item?.price;
+  //     }
+  //   });
+  //   return total * 0.04;
+  // };
+
+  // const getVAT = () => {
+  //   let total = 0;
+  //   myItems.forEach((food) => {
+  //     if (food.item?.price) {
+  //       total += food.count * food.item?.price;
+  //     }
+  //   });
+  //   return total * 0.05;
+  // };
 
   const getTotal = () => {
-    let total = 0;
+    // let total = 0;
 
-    total += getVAT();
-    total += getDeliveryFee();
+    // total += getVAT();
+    // total += getDeliveryFee();
 
-    myItems.forEach((food) => {
-      if (food.item?.price) {
-        total += food.count * food.item?.price;
-      }
-    });
+    // myItems.forEach((food) => {
+    //   if (food.item?.price) {
+    //     total += food.count * food.item?.price;
+    //   }
+    // });
 
-    return total;
+    return order?.totalPrice || 14.99;
   };
 
-  return (
+  return order && (
     <SafeAreaView>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
@@ -253,22 +303,21 @@ export default function delivery() {
           </View>
           <View style={{ width: "100%", marginBottom: 8 }}>
             <Text style={styles.subtitle}>Restaurant</Text>
-            <Text style={{ marginTop: 8 }}>{restaurants[0].name}</Text>
+            <Text style={{ marginTop: 8 }}>{order.restaurant.name}</Text>
             <Text style={{ lineHeight: 25 }}>
-              {restaurants[0].address.street}, {restaurants[0].address.city},{" "}
-              {restaurants[0].address.state}, {restaurants[0].address.zipCode}
+              {order.restaurant.address}
             </Text>
           </View>
           <View style={{ width: "100%", marginBottom: 8 }}>
             <Text style={styles.subtitle}>Delivery Address</Text>
             <Text style={{ lineHeight: 25, marginTop: 8 }}>
-              3 Crown Street, Wollongong
+              {order.deliveryAddress}
             </Text>
           </View>
           <View style={{ width: "100%", marginBottom: 8 }}>
             <Text style={styles.subtitle}>Delivery Instruction</Text>
             <Text style={{ lineHeight: 25, marginTop: 8 }}>
-              Leave at the door
+              {order.deliveryInstruction}
             </Text>
           </View>
           <View style={{ width: "100%" }}>
@@ -276,7 +325,7 @@ export default function delivery() {
             <View>
               {myItems.map((item) => {
                 return (
-                  <View key={item.item?.id} style={styles.summaryItem}>
+                  <View key={item.item?.name} style={styles.summaryItem}>
                     <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
                       {item.count}x {item.item?.name}
                     </Text>
@@ -289,7 +338,7 @@ export default function delivery() {
                   </View>
                 );
               })}
-              <View style={styles.summaryItem}>
+              {/* <View style={styles.summaryItem}>
                 <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
                   Delivery Fee
                 </Text>
@@ -302,7 +351,7 @@ export default function delivery() {
                 <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
                   ${getVAT().toFixed(2)}
                 </Text>
-              </View>
+              </View> */}
               {/* <View
                 style={validPromo ? styles.summaryItem : { display: "none" }}
               >
@@ -345,11 +394,18 @@ export default function delivery() {
                 : { display: "none" }
             }
           >
-            <Link href="/checkout" asChild onPress={() => router.back()}>
               <Button
                 text={"Cancel order"}
                 type={"primary"}
-                onPress={function (): void {}}
+                onPress={function (): void {
+                  console.log('cancel order pressed')
+                  Api.getApi().updateOrder({
+                    id: "47nsca",
+                    status: "cancelled",
+                  } as UpdateOrderInput).then(() => {
+                    router.back();
+                  })
+                }}
                 textStyle={{ color: SB_COLOR_SCHEME.SB_ERROR }}
                 buttonStyle={{
                   width: "100%",
@@ -360,7 +416,6 @@ export default function delivery() {
                   marginBottom: -8,
                 }}
               ></Button>
-            </Link>
           </View>
         </View>
       </ScrollView>
