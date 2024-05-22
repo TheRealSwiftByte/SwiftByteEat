@@ -1,8 +1,8 @@
 import { ApiImplementationFactory } from "./ApiImplementationFactory";
 import { Api } from "./api.ts";
-import { CreateCustomerInput } from "./schema/Customer.ts";
+import { CreateCustomerInput, UpdateCustomerInput } from "./schema/Customer.ts";
 import { UpdateOrderInput } from "./schema/Order.ts";
-import {Restaurant, Order, Customer, Review} from "./schema/SwiftByteTypes.ts";
+import { Restaurant, Order, Customer, Review } from "./schema/SwiftByteTypes.ts";
 
 
 const API_BASE_URL = "https://hffwzvbzod.execute-api.ap-southeast-2.amazonaws.com/prod/"
@@ -14,7 +14,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
     }
 
     //Restaurants
-    async getRestaurant(id: string): Promise<Restaurant | undefined>{
+    async getRestaurant(id: string): Promise<Restaurant | undefined> {
         try {
             return fetch(API_BASE_URL + "restaurant/?id=" + id)
                 .then(response => response.json())
@@ -22,23 +22,23 @@ export class ApiProdFactory implements ApiImplementationFactory {
                     console.log("Data returned in request to getRestaurant: " + JSON.stringify(data));
                     return data as Restaurant;
                 });
-        } catch (e){
+        } catch (e) {
             console.error("Failed to get restaurant");
             return undefined;
         }
     };
 
-    async getRestaurants(): Promise<Restaurant[] | undefined>{
+    async getRestaurants(): Promise<Restaurant[] | undefined> {
         //stub
         return undefined;
     }
-    async createRestaurant(Restaurant: Restaurant): Promise<boolean>{
+    async createRestaurant(Restaurant: Restaurant): Promise<boolean> {
         //stub
         return false;
     };
 
     //orders
-    async getOrder(id: string): Promise<Order | undefined>{
+    async getOrder(id: string): Promise<Order | undefined> {
         try {
             return fetch(API_BASE_URL + "order/?id=" + id)
                 .then(response => response.json())
@@ -46,12 +46,12 @@ export class ApiProdFactory implements ApiImplementationFactory {
                     console.log("Data returned in request to getOrder: " + JSON.stringify(data));
                     return data as Order;
                 });
-        } catch (e){
+        } catch (e) {
             console.error("Failed to get order");
             return undefined;
         }
     };
-    async getOrders(customerId: string): Promise<Order[] | undefined>{ 
+    async getOrders(customerId: string): Promise<Order[] | undefined> {
         try {
             const response = await fetch(API_BASE_URL + "order/fetch/?id=" + customerId);
             const data = await response.json();
@@ -65,7 +65,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return undefined;
         }
     };
-    async createOrder(order: Order): Promise<boolean>{
+    async createOrder(order: Order): Promise<boolean> {
         try {
             throw new Error("Method not implemented.")
         } catch (error) {
@@ -73,7 +73,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return false;
         }
     };
-    async updateOrder(order: UpdateOrderInput): Promise<boolean>{
+    async updateOrder(order: UpdateOrderInput): Promise<boolean> {
         try {
             const result = await fetch(API_BASE_URL + "order/id?=" + order.id, {
                 method: 'PUT',
@@ -89,19 +89,19 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return false;
         }
     }
-    
+
     async signInCustomer(email: string, password: string): Promise<Customer> {
-            const customer = await fetch(API_BASE_URL + "customer/SignIn?email=" + email + "&password=" + password)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Data returned in request to signInCustomer: " + JSON.stringify(data));
-                    Api.getApi().setActiveCustomer(data as Customer);
-                    return data as Customer;
-                });
-            return customer;
+        const customer = await fetch(API_BASE_URL + "customer/SignIn?email=" + email + "&password=" + password)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Data returned in request to signInCustomer: " + JSON.stringify(data));
+                Api.getApi().setActiveCustomer(data as Customer);
+                return data as Customer;
+            });
+        return customer;
     }
     //customers
-    async getCustomer(id: string): Promise<Customer | undefined>{
+    async getCustomer(id: string): Promise<Customer | undefined> {
         try {
             throw new Error("Method not implemented.")
         } catch (error) {
@@ -109,11 +109,11 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return undefined;
         }
     };
-    getCustomers(): Promise<Customer[]>{
+    getCustomers(): Promise<Customer[]> {
         throw new Error("Method not implemented.");
     }; //possibly unnecessary
 
-    async createCustomer(customerInput: CreateCustomerInput): Promise<Customer>{
+    async createCustomer(customerInput: CreateCustomerInput): Promise<Customer> {
         customerInput.cart = {
             foodItems: [],
             totalPrice: 0
@@ -125,26 +125,39 @@ export class ApiProdFactory implements ApiImplementationFactory {
                 'Content-Type': 'application/json'
             }
         }).then(response => response.json())
-        .then(data => {
-            console.log("Data returned in request to createCustomer: " + JSON.stringify(data));
-            Api.getApi().setActiveCustomer(data as Customer);
-            return data as Customer;
-        });
+            .then(data => {
+                console.log("Data returned in request to createCustomer: " + JSON.stringify(data));
+                Api.getApi().setActiveCustomer(data as Customer);
+                return data as Customer;
+            });
         return response;
     }
 
 
-    async updateCustomer(customer: Customer): Promise<boolean>{
+    async updateCustomer(customer: UpdateCustomerInput): Promise<Customer | undefined> {
+
         try {
-            throw new Error("Method not implemented.")
+            const response = fetch(API_BASE_URL + "customer?id=" + Api.getApi().getActiveCustomer()?.id, {
+                method: 'PUT',
+                body: JSON.stringify(customer),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(() =>{
+                Api.getApi().setActiveCustomer({
+                    ...Api.getApi().getActiveCustomer(),
+                    ...customer
+                })
+            })
         } catch (error) {
+            console.log(typeof error)
             console.error("Failed to update customer: " + error);
-            return false;
+            return undefined;
         }
     }
 
     //reviews
-    async getReview(id: string): Promise<Review | undefined>{
+    async getReview(id: string): Promise<Review | undefined> {
         try {
             throw new Error("Method not implemented.")
         } catch (error) {
@@ -153,7 +166,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
         }
     };
 
-    async getReviews(): Promise<Review[] | undefined>{
+    async getReviews(): Promise<Review[] | undefined> {
         try {
             throw new Error("Method not implemented.")
         } catch (error) {
@@ -162,7 +175,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
         }
     }
 
-    async createReview(review: Review): Promise<boolean>{
+    async createReview(review: Review): Promise<boolean> {
         try {
             throw new Error("Method not implemented.")
 
@@ -172,7 +185,7 @@ export class ApiProdFactory implements ApiImplementationFactory {
         }
     }
 
-    async updateReview(review: Review): Promise<boolean>{
+    async updateReview(review: Review): Promise<boolean> {
         try {
             throw new Error("Method not implemented.")
         } catch (error) {

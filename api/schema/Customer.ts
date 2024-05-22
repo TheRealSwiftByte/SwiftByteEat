@@ -3,6 +3,7 @@ import { Cart } from "./SwiftByteTypes";
 
 export type Customer = {
     id: string;
+    membership: "ByteElite" | "Standard";
     firstName: string;
     lastName: string;
     email: string;
@@ -13,6 +14,7 @@ export type Customer = {
 }
 
 export type CreateCustomerInput = {
+    membership: "ByteElite" | "Standard";
     firstName: string;
     lastName: string;
     email: string;
@@ -23,6 +25,7 @@ export type CreateCustomerInput = {
 }
 
 export type UpdateCustomerInput = {
+    membership?: "ByteElite" | "Standard";
     firstName?: string;
     lastName?: string;
     email?: string;

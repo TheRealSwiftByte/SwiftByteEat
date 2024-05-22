@@ -13,6 +13,7 @@ import {
   ParamListBase,
   RouteProp,
 } from "@react-navigation/native";
+import { Api } from "@/api/api";
 
 
 interface ReviewsProps {
@@ -94,7 +95,7 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                     <View style={styles.div}>
                       <Author1/>
                       <View style={styles.author}>
-                        <Text style={[styles.name, styles.nameFlexBox]}>Courtney Henry</Text>
+                        <Text style={[styles.name, styles.nameFlexBox]}>{Api.getApi().getActiveCustomer().firstName} {Api.getApi().getActiveCustomer().lastName}</Text>
                         <View style={[styles.userRate, styles.rowFlexBox]}>
                           <View style={[styles.stars1]}>
                             <AirbnbRating
@@ -111,7 +112,7 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                       </View>
                     </View>
                 </View>
-                <Text style={[styles.content, styles.authorFlexBox]}>Consequat velit qui adipisicing sunt do rependerit ad laborum tempor ullamco exercitation. Ullamco tempor adipisicing et voluptate duis sit esse aliqua </Text>
+                <Text style={[styles.content, styles.authorFlexBox]}>Kinn Thai is a delightful experience for anyone who loves Thai cuisine. The Pad Thai was perfectly balanced, with just the right amount of tangy and sweet flavors. The Tom Yum soup had a wonderful depth of flavor, with a good kick of spice. The decor is vibrant and modern, making it a great spot for both casual dining and special occasions. The staff was attentive, though the wait time for the food was a bit longer than expected. Overall, a fantastic place to satisfy your Thai food cravings!</Text>
               </View>
 
               <View style={styles.space5}/>
@@ -124,7 +125,7 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                     <View style={styles.div}>
                       <Author2/>
                       <View style={styles.author}>
-                        <Text style={[styles.name, styles.nameFlexBox]}> Cameron Williamson</Text>
+                        <Text style={[styles.name, styles.nameFlexBox]}> {Api.getApi().getActiveCustomer().firstName} {Api.getApi().getActiveCustomer().lastName}</Text>
                         <View style={[styles.userRate, styles.rowFlexBox]}>
                           <View style={[styles.stars1]}>
                             <AirbnbRating
@@ -141,7 +142,7 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                       </View>
                     </View>
                 </View>
-                <Text style={[styles.content, styles.authorFlexBox]}>Consequat velit qui adipisicing sunt do rependerit ad laborum tempor ullamco.</Text>
+                <Text style={[styles.content, styles.authorFlexBox]}>Diggies is a hidden gem for those who love a good burger. The Classic Kiggie Burger is a must-try – juicy, flavorful, and cooked to perfection. The sweet potato fries are crispy and delicious, making a great side. The atmosphere is laid-back and cozy, perfect for a casual meal with friends or family. The service was quick and friendly, adding to the overall positive experience. Kiggies definitely knows how to make a great burger!</Text>
               </View>
 
               <View style={styles.space5}/>
@@ -154,7 +155,7 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                     <View style={styles.div}>
                       <Author3/>
                       <View style={styles.author}>
-                        <Text style={[styles.name, styles.nameFlexBox]}> Jane Cooper</Text>
+                        <Text style={[styles.name, styles.nameFlexBox]}> {Api.getApi().getActiveCustomer().firstName} {Api.getApi().getActiveCustomer().lastName}</Text>
                         <View style={[styles.userRate, styles.rowFlexBox]}>
                           <View style={[styles.stars1]}>
                             <AirbnbRating
@@ -171,7 +172,7 @@ export default function reviews({ navigation, route }: ReviewsProps) {
                       </View>
                     </View>
                 </View>
-                <Text style={[styles.content, styles.authorFlexBox]}>Ullamco tempor adipisicing et voluptate duis sit esse aliqua esse ex.</Text>
+                <Text style={[styles.content, styles.authorFlexBox]}>Hong Kong Chef offers an authentic taste of Hong Kong in every dish. The dim sum selection is extensive and each item is fresh and tasty. I especially loved the BBQ pork buns and the shrimp dumplings. The Peking duck was also a highlight – crispy skin and succulent meat. The restaurant has a traditional and elegant ambiance, perfect for family gatherings or special occasions. The service was generally good, though it can get a bit hectic during peak hours. A great spot for authentic Chinese cuisine!</Text>
               </View>
 
             </View>
