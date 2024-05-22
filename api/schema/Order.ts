@@ -10,6 +10,7 @@ export interface OrderDetails {
 
 export type Order = {
     id: string
+    customer: Customer
     customerId: string
     restaurant: Restaurant
     foodItems: MenuItem[]
@@ -22,6 +23,7 @@ export type Order = {
 }
 
 export type CreateOrderInput = {
+    customer: Customer
     customerId: string
     restaurant: Restaurant
     foodItems: MenuItem[]
@@ -34,6 +36,7 @@ export type CreateOrderInput = {
 
 export type UpdateOrderInput = {
     id?: string
+    customer?: Customer
     customerId?: string
     restaurant?: Restaurant
     foodItems?: MenuItem[]

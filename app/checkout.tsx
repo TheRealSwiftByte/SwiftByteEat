@@ -1,12 +1,13 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
 import IconPromo from "../assets/icons/icon-promo.svg";
 import IconSuccess from "../assets/icons/icon-success-green.svg";
 import IconEdit from "../assets/icons/icon-edit.svg";
 import { Button, TextInput } from "@swift-byte/switftbytecomponents";
-import { MenuItem, cart, promoCode } from "@/mock_data";
-import { Link } from "expo-router";
+import { MenuItem, Cart, Customer } from "@/api/schema/SwiftByteTypes";
+import { Api } from "@/api/api";
+import { Link, useFocusEffect } from "expo-router";
 import {
   NavigationProp,
   ParamListBase,
@@ -19,79 +20,75 @@ interface CartProps {
 }
 
 export default function Checkout({ route, navigation }: CartProps) {
-  const [promo, setPromo] = useState<string>("");
   const [deliveryInstruction, setDeliveryInstruction] = useState<string>("");
-  const [validPromo, setValidPromo] = useState<boolean>(false);
+  const [activeCustomer, setActiveCustomer] = useState<Customer | undefined>(undefined);
+  const [activeCart, setActiveCart] = useState<Cart | undefined>(undefined);
 
-  const itemIdCounts: { [itemId: string]: number } = {};
+  const [total, setTotal] = useState(0);
+  const [deliveryFee, setDeliveryFee] = useState(0);
+  const [premiumDiscount, setPremiumDiscount] = useState<number | undefined>(undefined);
 
-  cart.foodItems.forEach((item) => {
-    const itemId = item.id.toString();
-    itemIdCounts[itemId] = (itemIdCounts[itemId] || 0) + 1;
-  });
+  const [itemNameCounts, setItemNameCounts] = useState<{[itemName: string]: number }>({});
 
-  const myItems: {
-    item: MenuItem | undefined;
-    count: number;
-  }[] = Object.keys(itemIdCounts).map((itemId) => ({
-    item: cart.foodItems.find((i) => i.id == itemId),
-    count: itemIdCounts[itemId],
-  }));
-
-  const validatePromo = () => {
-    const valid = promoCode.find(
-      (item) => item.code.toLowerCase() == promo.toLowerCase()
-    );
-    if (valid) {
-      setValidPromo(true);
-    } else {
-      setValidPromo(false);
-    }
-  };
-
-  const getDeliveryFee = () => {
-    let total = 0;
-    myItems.forEach((food) => {
-      if (food.item?.price) {
-        total += food.count * food.item?.price;
-      }
-    });
-    return total * 0.04;
-  };
-
-  const getVAT = () => {
-    let total = 0;
-    myItems.forEach((food) => {
-      if (food.item?.price) {
-        total += food.count * food.item?.price;
-      }
-    });
-    return total * 0.05;
-  };
-
-  const getTotal = () => {
-    let total = 0;
-
-    total += getVAT();
-    total += getDeliveryFee();
-
-    myfoodItems.forEach((food) => {
-      if (food.item?.price) {
-        total += food.count * food.item?.price;
-      }
-    });
-
-    const coupon = promoCode.find((item) => item.code == promo)?.value?? 0;
-    if(validPromo){
-      total -= coupon
-    }
-    
-    return total;
-  };
+  useFocusEffect(useCallback( () => {
+    setActiveCustomer(Api.getApi().getActiveCustomer())
+    setActiveCart(Api.getApi().getActiveCustomer()?.cart)
+  }, []))
 
   useEffect(() => {
-    validatePromo();
-  });
+    console.log('ran use effect, here is cart:', activeCart)
+    if (activeCart) {
+      activeCart.foodItems.forEach((item) => {
+        itemNameCounts[item.name] = (itemNameCounts[item.name] || 0) + 1;
+      });
+    }
+    console.log('itemNameCounts:', itemNameCounts)
+    getTotal();
+  }, [activeCart]);
+
+  // const myItems: {
+  //   item: MenuItem | undefined;
+  //   count: number;
+  // }[] = Object.keys(itemIdCounts).map((itemId) => ({
+  //   item: cart.foodItems.find((i) => i.id == itemId),
+  //   count: itemIdCounts[itemId],
+  // }));
+
+  // const getVAT = () => {
+  //   let total = 0;
+  //   myItems.forEach((food) => {
+  //     if (food.item?.price) {
+  //       total += food.count * food.item?.price;
+  //     }
+  //   });
+  //   return total * 0.05;
+  // };
+
+  const getTotal = () => {
+    let localTotal = 0;
+    for(let [food, quantity] of Object.entries(itemNameCounts)){
+      const cartItem = activeCart?.foodItems.find((i) => i.name == food);
+      if (cartItem) {
+        localTotal += quantity * cartItem.price;
+      }
+    }
+
+    // total += getVAT();
+    const localDeliveryFee = localTotal * 0.04;
+    setDeliveryFee(localTotal * 0.04);
+    setTotal(localTotal + deliveryFee); //delivery fee
+
+    let localPremiumDiscount = 0;
+    if (activeCustomer && activeCustomer.membership == "ByteElite"){
+      localPremiumDiscount = localTotal * 0.1;
+      setPremiumDiscount(localPremiumDiscount);
+    }
+
+    localTotal -= localPremiumDiscount;
+    localTotal += deliveryFee;
+    setTotal(localTotal);
+
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -159,7 +156,7 @@ export default function Checkout({ route, navigation }: CartProps) {
                 { marginVertical: 16, alignItems: "flex-end" },
               ]}
             >
-              <View
+              {/* <View
                 style={[
                   styles.dFlex,
                   { flexDirection: "column", alignItems: "flex-start", gap: 8 },
@@ -169,7 +166,7 @@ export default function Checkout({ route, navigation }: CartProps) {
                 <Text style={{ color: SB_COLOR_SCHEME.SB_DISABLED }}>
                   Use your promo code and enjoy the benefits!
                 </Text>
-              </View>
+              </View> */}
             </View>
             <View
               style={[
@@ -184,7 +181,7 @@ export default function Checkout({ route, navigation }: CartProps) {
                 },
               ]}
             >
-              <View
+              {/* <View
                 style={[
                   styles.dFlex,
                   {
@@ -195,34 +192,34 @@ export default function Checkout({ route, navigation }: CartProps) {
                   },
                 ]}
               >
-                <IconPromo />
+                {/* <IconPromo />
                 <TextInput
                   value={promo}
                   style={[styles.textInput]}
                   placeholder="e.g. SPRING20"
                   onChangeText={setPromo}
                 ></TextInput>
-              </View>
-              <IconSuccess
+              </View> */}
+              {/* <IconSuccess
                 style={validPromo ? { flex: 1 } : { display: "none" }}
-              />
+              /> */}
             </View>
           </View>
           {/* order summary */}
           <View>
             <Text style={styles.subtitle}>Order Summary</Text>
             <View>
-              {myItems.map((item) => {
+              {activeCart?.foodItems && activeCart.foodItems.map((item) => {
                 return (
-                  <View key={item.item?.id} style={styles.summaryItem}>
+                  <View key={item.name} style={styles.summaryItem}>
                     <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
-                      {item.count}x {item.item?.name}
+                      {itemNameCounts[item.name]}x {item.name}
                     </Text>
                     <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
                       $
-                      {item.item?.price
-                        ? item.item?.price * item.count
-                        : item.item?.price}
+                      {item.price
+                        ? item.price * itemNameCounts[item.name]
+                        : item.price}
                     </Text>
                   </View>
                 );
@@ -232,16 +229,16 @@ export default function Checkout({ route, navigation }: CartProps) {
                   Delivery Fee
                 </Text>
                 <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
-                  ${getDeliveryFee().toFixed(2)}
+                  ${deliveryFee.toFixed(2)}
                 </Text>
               </View>
               <View style={styles.summaryItem}>
-                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>VAT</Text>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>Premium Discount</Text>
                 <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
-                  ${getVAT().toFixed(2)}
+                  - ${premiumDiscount && premiumDiscount.toFixed(2)}
                 </Text>
               </View>
-              <View
+              {/* <View
                 style={validPromo ? styles.summaryItem : { display: "none" }}
               >
                 <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
@@ -250,7 +247,7 @@ export default function Checkout({ route, navigation }: CartProps) {
                 <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY }}>
                   -${promoCode.find((item) => item.code == promo)?.value}
                 </Text>
-              </View>
+              </View> */}
               <View
                 style={[
                   styles.summaryItem,
@@ -273,7 +270,7 @@ export default function Checkout({ route, navigation }: CartProps) {
                     fontSize: 16,
                   }}
                 >
-                  ${getTotal().toFixed(2)}
+                  ${total.toFixed(2)}
                 </Text>
               </View>
             </View>

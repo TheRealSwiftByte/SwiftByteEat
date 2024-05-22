@@ -24,27 +24,22 @@ interface CartProps {
 }
 
 export default function CartScreen({route, navigation}: CartProps) {
-  const itemIdCounts: { [itemId: string]: number } = {};
   const [activeCustomer, setActiveCustomer] = useState<Customer | undefined>(undefined);
-  const [displayCart, setDisplayCart] = useState<any>(undefined);
+  const [displayCart, setDisplayCart] = useState<Cart | undefined>();
+
   useFocusEffect(useCallback( () => {
     setActiveCustomer(Api.getApi().getActiveCustomer())
-    console.log("Active Customer: ", activeCustomer)
+    setDisplayCart(Api.getApi().getActiveCustomer()?.cart)
   }, []))
   
   useEffect(() => {
-    if (activeCustomer) {
-      const cart = activeCustomer.cart;
-      console.log("Cart: ", cart)
-      cart.foodItems.forEach((item) => {
-        itemIdCounts[item.name] = (itemIdCounts[item.name] || 0) + 1;
+    //TODO: double check this logic, I don't thiiiink its working
+    if (displayCart) {
+      displayCart.foodItems.forEach((item) => {
+        item.quantity = item.quantity || 1
       });
-      setDisplayCart(Object.keys(itemIdCounts).map((itemName) => ({
-        item: activeCustomer.cart.foodItems.find((i) => i.name == itemName),
-        count: itemIdCounts[itemName],
-      })));
     }
-  }, [activeCustomer]);
+  }, [displayCart]);
 
 
   
@@ -66,7 +61,7 @@ export default function CartScreen({route, navigation}: CartProps) {
                 {/* {cart.restaurant.name} */}
               </Text>
               <View>
-                {displayCart && displayCart.map((item: any) => {
+                {displayCart && displayCart.foodItems.map((item: any) => {
                   return (
                     <View
                       key={item.id}
@@ -80,7 +75,7 @@ export default function CartScreen({route, navigation}: CartProps) {
                       >
                         <View style={{ marginRight: 16 }}>
                           <Image
-                            source={{ uri: item.imageUrl }}
+                            source={{ uri: item.imagePath }}
                             width={64}
                             height={64}
                             style={{ borderRadius: 16 }}
@@ -88,13 +83,13 @@ export default function CartScreen({route, navigation}: CartProps) {
                         </View>
                         <View style={{ width: "60%" }}>
                           <Text style={{ marginBottom: 8, fontSize: 15 }}>
-                            {item.item?.name}
+                            {item.name}
                           </Text>
                           <Text style={{ fontWeight: "500" }}>
                             $
-                            {item.item?.totalPrice
-                              ? item.item?.price * item.count
-                              : item.item?.price}
+                            {item.totalPrice
+                              ? item.price * item.quantity
+                              : item.price}
                           </Text>
                         </View>
                       </View>
@@ -107,7 +102,7 @@ export default function CartScreen({route, navigation}: CartProps) {
                             fontWeight: "500",
                           }}
                         >
-                          {item.count}
+                          {item.quantity}
                         </Text>
                         <AddIcon />
                       </View>

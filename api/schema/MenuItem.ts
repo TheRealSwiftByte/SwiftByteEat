@@ -17,4 +17,5 @@ export type MenuItem = {
     description: string;
     imagePath: string;
     isAvailable: boolean;
+    quantity?: number;
 }

@@ -13,17 +13,24 @@ import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 import SearchIcon from "../../assets/icons/icon-search.svg";
 import GoSearchIcon from "../../assets/icons/icon-arrow-right.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
-import { categories, restaurants } from "@/mock_data";
+import { categories } from "@/mock_data";
 import { TextInput } from "@swift-byte/switftbytecomponents";
-import { useEffect, useState } from "react";
-import { router } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { Api } from "@/api/api";
 
 export default function HomeScreen() {
   const [search, setSearch] = useState<string>("");
+  const [restaurants, setRestaurants] = useState<any[]>([]);
 
-  useEffect(() => {
-    console.log("search: ", search);
-  });
+  useFocusEffect(useCallback(() => {
+    Api.getApi().getRestaurants().then((liveRestaurants) => {
+      if (liveRestaurants) {
+        console.log("liveRestaurants: ", liveRestaurants);
+        setRestaurants(liveRestaurants);
+      }
+    });
+  }, []))
 
   return (
     <SafeAreaView style={styles.container}>
@@ -181,7 +188,7 @@ export default function HomeScreen() {
                       ]}
                     >
                       <Image
-                        source={{ uri: item.imageUrl }}
+                        source={{ uri: item.imageURI }}
                         width={200}
                         height={120}
                         style={[

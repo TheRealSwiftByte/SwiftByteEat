@@ -1,8 +1,9 @@
 import { Alert, Image, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Link, router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState, useCallback } from 'react'
+import { Link, router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { MenuItem, restaurants } from '@/mock_data';
+import { MenuItem, Restaurant } from '@/api/schema/SwiftByteTypes';
+import {Api} from '@/api/api';
 import { SB_COLOR_SCHEME } from '@/constants';
 import { Stepper } from '@swift-byte/switftbytecomponents/src/components/Buttons/Stepper';
 import { SWIFT_BYTE_COLOURS } from '@swift-byte/switftbytecomponents/constants';
@@ -15,7 +16,7 @@ interface Topping {
 
 export default function MenuItemModal() {
 
-  const { menuItemId, restaurantId } = useLocalSearchParams<{ menuItemId: string, restaurantId: string }>();
+  const { menuItemName, restaurantId } = useLocalSearchParams<{ menuItemName: string, restaurantId: string }>();
   const [selectedMenuItem, setSelectedMenuItem] = React.useState<MenuItem | undefined>(undefined);
   const [quantity, setQuantity] = useState(1)
   const [notes, setNotes] = useState("")
@@ -33,24 +34,46 @@ export default function MenuItemModal() {
 
   const [selectedToppings, setSelectedToppings] = useState<Topping[]>([])
 
-  useEffect(() => {
-    const menuItem = restaurants.find((r) => r.id.toString() === restaurantId)?.menu.find((m) => m.id.toString() === menuItemId);
-    if (menuItem) {
-      setSelectedMenuItem(menuItem);
-    }
-  }, [])
+  useFocusEffect(useCallback(() => {
+    Api.getApi().getRestaurants().then((liveRestaurants) => {
+        if (liveRestaurants) {
+            console.log("liveRestaurants: ", JSON.stringify(liveRestaurants));
+            if (liveRestaurants) {
+                setSelectedMenuItem(liveRestaurants.find((r) => r.id.toString() === restaurantId)?.menu.find((m) => m.name === menuItemName));
+            }
+        }
+    })
+}, [restaurantId]))
 
   const handlePress = () => {
     if (quantity < 1) {
       Alert.alert("Please add at least one item")
       return
     }
+    const activeCart = Api.getApi().getActiveCustomer()?.cart
+    if (!activeCart.restaurant){
+      Api.getApi().getRestaurant(restaurantId).then((restaurant) => {
+        Api.getApi().getActiveCustomer().cart.restaurant = restaurant as Restaurant
+      })
+    }
+
+    //please forgive me for this monstrocity. Blame typescript for being so good?
+    let activeItemIndex = Api.getApi().getActiveCustomer()?.cart.foodItems.findIndex((item) => item.name === selectedMenuItem?.name);
+    console.log("activeItemIndex: ", activeItemIndex)
+    const prevQuantity = activeItemIndex !== -1 ? Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number].quantity || 0 : 0
+    if (!(activeItemIndex == -1)){
+      Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number]["quantity"] = quantity
+
+    } else if (Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number].quantity !== undefined) {
+      Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number].quantity = prevQuantity + quantity
+    }
+
     router.navigate("Cart")
   }
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: selectedMenuItem?.imageUrl }} style={styles.noImage} />
+      <Image source={{ uri: selectedMenuItem?.imagePath }} style={styles.noImage} />
       <View style={{flex:1, justifyContent:"space-between"}}>
         <View style={{ marginTop: 20, flexDirection: "row" }}>
           <View style={{ width: "50%" }}>
@@ -58,7 +81,9 @@ export default function MenuItemModal() {
             <Text style={styles.foodDescription}>{selectedMenuItem?.description}</Text>
           </View>
           <View style={{ width: "50%" }}>
-            <Stepper value={quantity} onPress={(e) => setQuantity(e < 0 ? 0 : e)} />
+            <Stepper value={quantity} onPress={(e) => {
+              console.log("e from stepper:", e)
+              setQuantity(e < 0 ? 0 : e)}} />
           </View>
         </View>
         <View>

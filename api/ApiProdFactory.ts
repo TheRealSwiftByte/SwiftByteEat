@@ -1,7 +1,7 @@
 import { ApiImplementationFactory } from "./ApiImplementationFactory";
 import { Api } from "./api.ts";
 import { CreateCustomerInput, UpdateCustomerInput } from "./schema/Customer.ts";
-import { UpdateOrderInput } from "./schema/Order.ts";
+import { CreateOrderInput, UpdateOrderInput } from "./schema/Order.ts";
 import { Restaurant, Order, Customer, Review } from "./schema/SwiftByteTypes.ts";
 
 
@@ -29,8 +29,17 @@ export class ApiProdFactory implements ApiImplementationFactory {
     };
 
     async getRestaurants(): Promise<Restaurant[] | undefined> {
-        //stub
-        return undefined;
+        try {
+            return fetch(API_BASE_URL + "restaurant/all")
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Data returned in request to getRestaurants: " + JSON.stringify(data));
+                    return data as Restaurant[];
+                });
+        } catch (e) {
+            console.error("Failed to get all restaurants: ", e);
+            return undefined;
+        }
     }
     async createRestaurant(Restaurant: Restaurant): Promise<boolean> {
         //stub
@@ -65,12 +74,32 @@ export class ApiProdFactory implements ApiImplementationFactory {
             return undefined;
         }
     };
-    async createOrder(order: Order): Promise<boolean> {
+    async createOrder(): Promise<Order | undefined> {
         try {
-            throw new Error("Method not implemented.")
+            const createOrderInput: CreateOrderInput = {
+                customerId: Api.getApi().getActiveCustomer()?.id,
+                foodItems: Api.getApi().getActiveCustomer()?.cart.foodItems,
+                totalPrice: Api.getApi().getActiveCustomer()?.cart.totalPrice || -1,
+                orderStatus: "pending",
+                deliveryInstruction: "Leave at the door", //TODO: make this a user input
+                deliveryAddress: Api.getApi().getActiveCustomer()?.address || "3 Crown St",
+                restaurant: Api.getApi().getActiveCustomer()?.cart.restaurant || {} as Restaurant,
+                customer: Api.getApi().getActiveCustomer(),
+            }
+            const result = await fetch(API_BASE_URL + "order/", {
+                method: 'POST',
+                body: JSON.stringify(createOrderInput),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                console.log("Data returned in request to createOrder: " + JSON.stringify(data));
+                return data as Order;
+            });
+            return result;
         } catch (error) {
             console.error("Failed to create order: " + error);
-            return false;
+            return undefined;
         }
     };
     async updateOrder(order: UpdateOrderInput): Promise<boolean> {
