@@ -1,14 +1,24 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import SuccessIcon from "../assets/icons/icon-success.svg";
-import { Link, router, useLocalSearchParams } from "expo-router";
+import { Link, router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
 import { SB_COLOR_SCHEME } from "@/constants";
 import ChatIcon from "../assets/icons/icon-chat.svg";
 import { Rating } from "react-native-ratings";
+import { Api } from "@/api/api";
+import { Order } from "@/api/schema/SwiftByteTypes";
 
 export default function success() {
   const { type } = useLocalSearchParams<{ type: string }>();
+  const [activeOrder, setActiveOrder] = useState<Order | undefined>(undefined);
+
+  useFocusEffect(useCallback(()=>{
+    //create order on server
+    Api.getApi().createOrder().then((order) => {
+      setActiveOrder(order);
+    });
+  }, []))
 
   function ratingCompleted(rating: any) {
     console.log("Rating is: " + rating);
@@ -97,7 +107,7 @@ export default function success() {
           </View>
         </View>
         <View style={[styles.container, { borderBottomWidth: 0 }]}>
-          <Link href="/delivery" asChild onPress={() => router.back()}>
+          <Link href={{ pathname: "/delivery/[id]", params: { id: activeOrder?.id || "-1"} }} asChild onPress={() => router.back()}>
             <Button
               text={"OK"}
               type={"primary"}

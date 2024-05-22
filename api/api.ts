@@ -10,6 +10,14 @@ export class Api implements ApiImplementationFactory {
     private factory: ApiImplementationFactory;
 
     private activeCustomer: Customer | undefined;
+    private activeRestaurants: Restaurant[] | undefined;
+
+    async getActiveRestaurants(): Promise<Restaurant[]> {
+        if (Api.getApi().activeRestaurants === undefined) {
+            Api.getApi().activeRestaurants = await this.getRestaurants();
+        }
+        return Api.getApi().activeRestaurants || [];
+    }
 
     getActiveCustomer(): Customer {
         if (Api.getApi().activeCustomer === undefined) throw new Error("No active customer");
@@ -48,8 +56,8 @@ export class Api implements ApiImplementationFactory {
     public getOrders(customerId: string): Promise<Order[] | undefined>{
         return this.factory.getOrders(customerId);
     }
-    public createOrder(order: Order) {
-        return this.factory.createOrder(order);
+    public createOrder() {
+        return this.factory.createOrder();
     }
     public updateOrder(order: UpdateOrderInput) {
         return this.factory.updateOrder(order);

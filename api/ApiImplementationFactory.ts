@@ -1,6 +1,6 @@
 
 import { CreateCustomerInput, UpdateCustomerInput } from "./schema/Customer.ts";
-import { UpdateOrderInput } from "./schema/Order.ts";
+import { CreateOrderInput, UpdateOrderInput } from "./schema/Order.ts";
 import { UpdateRestaurantInput } from "./schema/Restaurant.ts";
 import { UpdateReviewInput } from "./schema/Review.ts";
 import {Customer, Order, Review, Restaurant} from "./schema/SwiftByteTypes.ts";
@@ -14,7 +14,7 @@ export interface ApiImplementationFactory {
     //orders
     getOrder(id: string): Promise<Order | undefined>;
     getOrders(customerId: string): Promise<Order[] | undefined>;
-    createOrder(order: Order): Promise<boolean>;
+    createOrder(): Promise<Order | undefined>;
     updateOrder(order: UpdateOrderInput): Promise<boolean>;
 
     //customers

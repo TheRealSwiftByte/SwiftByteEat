@@ -28,6 +28,7 @@ export type Restaurant = {
     averageRating?: number;
     averageWaitTime?: number;
     description: string;
+    imageURI?: string;
     menu: MenuItem[];
 }
 
@@ -37,6 +38,7 @@ export type CreateRestaurantInput = {
     phone: string;
     description: string;
     menu: MenuItem[];
+    imageURI?: string;
     categories?: FoodCategory[];
     averageRating?: number;
     averageWaitTime?: number;
@@ -46,6 +48,7 @@ export type UpdateRestaurantInput = {
     name?: string;
     address?: string;
     phone?: string;
+    imageURI?: string;
     description?: string;
     menu?: MenuItem[];
     categories?: FoodCategory[];

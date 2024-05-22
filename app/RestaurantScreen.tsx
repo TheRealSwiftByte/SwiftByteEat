@@ -1,13 +1,14 @@
 import { ScrollView, StyleSheet, Text, View, Image, ImageBackground, FlatList, TouchableOpacity } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SB_COLOR_SCHEME } from '@/constants';
 import { NavigationProp, ParamListBase, RouteProp } from '@react-navigation/native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { MenuItem, Restaurant, restaurants } from '@/mock_data';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { MenuItem, Restaurant } from '@/api/schema/SwiftByteTypes';
 import { StatusBar } from 'expo-status-bar';
 import { AntDesign } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Api } from '@/api/api';
 
 interface RestaurantProps {
     route: RouteProp<ParamListBase, string>;
@@ -32,12 +33,16 @@ export default function RestaurantScreen({ route, navigation }: RestaurantProps)
 
     const safeareaInset = useSafeAreaInsets()
 
-    useEffect(() => {
-        const restaurant = restaurants.find((r) => r.id.toString() === restaurantId);
-        if (restaurant) {
-            setSelectedRestaurant(restaurant);
-        }
-    }, [])
+    useFocusEffect(useCallback(() => {
+        Api.getApi().getRestaurants().then((liveRestaurants) => {
+            if (liveRestaurants) {
+                console.log("liveRestaurants: ", JSON.stringify(liveRestaurants));
+                if (liveRestaurants) {
+                    setSelectedRestaurant(liveRestaurants.find((r) => r.id.toString() === restaurantId));
+                }
+            }
+        })
+    }, [restaurantId]))
 
     if (!selectedRestaurant) {
         return (<></>)
@@ -46,18 +51,18 @@ export default function RestaurantScreen({ route, navigation }: RestaurantProps)
     const renderItem = (item: MenuItem) => {
         return (
             <TouchableOpacity 
-                key={item.id} 
+                key={item.name} 
                 style={[styles.dFlex, { marginBottom: 16 }]}
                 onPress={() => router.navigate({
                     pathname: "MenuItemModal",
                     params: { 
-                        menuItemId: item.id.toString(),
-                        restaurantId: selectedRestaurant.id.toString()
+                        menuItemName: item.name,
+                        restaurantId: selectedRestaurant.id
                     },
                 })}
                 >
                 <View style={{ flex: 2 }}>
-                    <Image source={{ uri: item.imageUrl }} style={{ width: 70, height: 70, backgroundColor: "grey", borderRadius: 25 }} />
+                    <Image source={{ uri: item.imagePath }} style={{ width: 70, height: 70, backgroundColor: "grey", borderRadius: 25 }} />
                 </View>
                 <View style={{ flex: 4 }}>
                     <Text style={{ fontSize: 16, fontWeight: "bold" }}>{item.name}</Text>
@@ -69,11 +74,11 @@ export default function RestaurantScreen({ route, navigation }: RestaurantProps)
     }
     return (
         <View>
-            <ImageBackground source={{ uri: selectedRestaurant?.imageUrl }} style={styles.header}>
+            <ImageBackground source={{ uri: selectedRestaurant?.imageURI }} style={styles.header}>
                 <AntDesign onPress={() => router.dismiss()} name='arrowleft' color={"white"} size={40} style={{position:"absolute", top:safeareaInset.top}}/>
                 <View style={{ padding: 20 }}>
                     <Text style={{ fontWeight: "bold", fontSize: 17, color: "white" }}>{selectedRestaurant.name}</Text>
-                    <Text style={{ color: "white", fontSize: 12 }}>{selectedRestaurant.address.street}, {selectedRestaurant.address.city}</Text>
+                    <Text style={{ color: "white", fontSize: 12 }}>{selectedRestaurant.address}</Text>
                 </View>
             </ImageBackground>
             <View style={styles.container}>
@@ -85,7 +90,7 @@ export default function RestaurantScreen({ route, navigation }: RestaurantProps)
                 <FlatList
                     data={selectedRestaurant.menu}
                     renderItem={({ item }) => renderItem(item)}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.name}
                     ItemSeparatorComponent={() => <View style={{ borderBottomWidth: 1, borderBottomColor: "#d1d1d1", marginBottom: 16, marginLeft:50 }}></View>}
                 />
             </View>
