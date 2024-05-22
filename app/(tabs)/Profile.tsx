@@ -1,13 +1,15 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { Pressable, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { Text, View } from "@/components/Themed";
-import { useFocusEffect } from "expo-router";
+import { Link, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { Api } from "@/api/api";
 import { Customer } from "@/api/schema/SwiftByteTypes";
+import NotificationBadge from "../../assets/icons/icon-notification-badge.svg";
 
 export default function ProfileScreen() {
   const [activeCustomer, setActiveCustomer] = useState<Customer | undefined>(undefined);
-  useFocusEffect(useCallback( () => {
+
+  useFocusEffect(useCallback(() => {
     setActiveCustomer(Api.getApi().getActiveCustomer())
     console.log("Active Customer: ", activeCustomer)
   }, []))
@@ -15,7 +17,11 @@ export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.containerProfile}>
-        <View style={styles.profilePic} />
+        <Image 
+          source={require("../../assets/images/profilePic.webp")} 
+          resizeMode="contain" 
+          style={styles.avatar}
+        />
         <View style={styles.painName}>
           <Text style={styles.username}>{activeCustomer?.firstName} {activeCustomer?.lastName}</Text>
           <View>
@@ -23,44 +29,59 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.notificationButton}>
-          <View
-            style={{ width: 20, height: 20, backgroundColor: "black" }}
-          ></View>
-        </TouchableOpacity>
+        <Link href="/notifications" asChild style={styles.notificationButton}>
+          <TouchableOpacity>
+            <NotificationBadge />
+          </TouchableOpacity>
+        </Link>
       </View>
       <View>
         {/* Edit Account Section */}
-        <TouchableOpacity>
-          <View style={styles.setting}>
-            <Text style={styles.settingText}>Edit Account</Text>
-            <Text style={styles.chevron}>›</Text>
-          </View>
-        </TouchableOpacity>
+        <Link href="/editProfile" asChild>
+          <TouchableOpacity>
+            <View style={styles.setting}>
+              <Text style={styles.settingText}>Edit Account</Text>
+              <Text style={styles.chevron}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
+
+        <Link href="/ChangePassword" asChild>
+          <TouchableOpacity>
+            <View style={styles.setting}>
+              <Text style={styles.settingText}>Change Password</Text>
+              <Text style={styles.chevron}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
 
         {/* My Locations Section */}
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <View style={styles.setting}>
             <Text style={styles.settingText}>My Locations</Text>
             <Text style={styles.chevron}>›</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* Payment Methods Section */}
-        <TouchableOpacity>
-          <View style={styles.setting}>
-            <Text style={styles.settingText}>Payment Methods</Text>
-            <Text style={styles.chevron}>›</Text>
-          </View>
-        </TouchableOpacity>
+        <Link href="/PaymentMethod" asChild>
+          <TouchableOpacity>
+            <View style={styles.setting}>
+              <Text style={styles.settingText}>Payment Methods</Text>
+              <Text style={styles.chevron}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
 
         {/* My Reviews Section */}
-        <TouchableOpacity>
-          <View style={styles.setting}>
-            <Text style={styles.settingText}>My Reviews</Text>
-            <Text style={styles.chevron}>›</Text>
-          </View>
-        </TouchableOpacity>
+        <Link href="/Reviews" asChild>
+          <TouchableOpacity>
+            <View style={styles.setting}>
+              <Text style={styles.settingText}>My Reviews</Text>
+              <Text style={styles.chevron}>›</Text>
+            </View>
+          </TouchableOpacity>
+        </Link>
 
         {/* SwiftByte Elite */}
         <TouchableOpacity>

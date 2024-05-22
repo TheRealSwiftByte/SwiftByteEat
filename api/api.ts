@@ -2,7 +2,7 @@ import { ApiImplementationFactory } from './ApiImplementationFactory';
 import { ApiStubFactory } from './ApiStubFactory';
 import { ApiProdFactory } from './ApiProdFactory';
 import { Customer, Order, Review, Restaurant } from './schema/SwiftByteTypes';
-import { CreateCustomerInput } from './schema/Customer';
+import { CreateCustomerInput, UpdateCustomerInput } from './schema/Customer';
 import { UpdateOrderInput } from './schema/Order';
 
 export class Api implements ApiImplementationFactory {
@@ -68,7 +68,7 @@ export class Api implements ApiImplementationFactory {
     public createCustomer(customer: CreateCustomerInput): Promise<Customer> {
         return this.factory.createCustomer(customer);
     }
-    public updateCustomer(customer: Customer) {
+    public updateCustomer(customer: UpdateCustomerInput) {
         return this.factory.updateCustomer(customer);
     
     }

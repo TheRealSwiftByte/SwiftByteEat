@@ -54,12 +54,12 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack initialRouteName="welcome">
-        <Stack.Screen name="welcome" options={{ headerShown: false }} />
+      <Stack initialRouteName="index">
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="signIn" options={{ headerShown: false }} />
         <Stack.Screen name="signUp" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        <Stack.Screen name="Reviews"/>
+        <Stack.Screen name="Reviews" options={{headerShown: false}}/>
 
         <Stack.Screen
           name="UserSavedPayments"

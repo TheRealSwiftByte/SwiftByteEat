@@ -1,69 +1,106 @@
 import { TextInput } from "@swift-byte/switftbytecomponents";
 import { useState } from "react";
-import { View } from "react-native";
+import { SafeAreaView, ScrollView, View, Image } from "react-native";
 import { Text } from "@/components/Themed";
 import { Button } from "@swift-byte/switftbytecomponents";
 import { StyleSheet } from "react-native";
+import { Customer, UpdateCustomerInput } from "@/api/schema/Customer";
+import { Api } from "@/api/api";
 
 export default function editProfile({ route, navigation }: any) {
-  const [name, setName] = useState<string>("");
-  const [phone, setPhone] = useState<string>("0431969312");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("ILovePasswords<3");
 
-  const handleSubmit = () => {
-    console.log("User signing up...", name, phone, email, password);
+  const [customer, setCustomer] = useState<Customer | undefined>(Api.getApi().getActiveCustomer());
+
+  const [firstName, setFirstName] = useState<string>(Api.getApi().getActiveCustomer()?.firstName || "");
+  const [lastName, setLastName] = useState<string>(Api.getApi().getActiveCustomer()?.lastName || "");
+
+  const [phone, setPhone] = useState<string>(Api.getApi().getActiveCustomer()?.phone || "");
+  const [email, setEmail] = useState<string>(Api.getApi().getActiveCustomer()?.email || "");
+  const [address, setAddress] = useState(Api.getApi().getActiveCustomer()?.address || "")
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSubmit = async () => {
+
+    setIsLoading(true)
+
+    const data: UpdateCustomerInput = {
+      firstName: firstName,
+      lastName: lastName,
+      phone: phone,
+      email: email,
+      address: address
+    }
+
+    
+    await Api.getApi().updateCustomer(data)
+    setCustomer(Api.getApi().getActiveCustomer())
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.containerProfile}>
-        <View style={styles.profilePic} />
-        <View style={styles.painName}>
-          <Text style={styles.username}>John Smith</Text>
-          <View>
-            <Text style={styles.status}>Standard</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView} >
+        <View style={styles.containerProfile}>
+          <Image
+            source={require("../assets/images/profilePic.webp")}
+            resizeMode="contain"
+            style={styles.avatar}
+          />
+          <View style={styles.painName}>
+            <Text style={styles.username}>{customer?.firstName} {customer?.lastName}</Text>
+            <View>
+              <Text style={styles.status}>Standard</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.passwordCell}>
-        <Text style={{ fontSize: 16, left: 0 }}>Name</Text>
-        <TextInput
-          value={name}
-          onChangeText={setName}
-          style={styles.textInput}
-          placeholder="Current Password"
-        ></TextInput>
-      </View>
-      <View style={styles.passwordCell}>
-        <Text style={{ fontSize: 16, left: 0 }}>Phone</Text>
-        <TextInput
-          value={phone}
-          onChangeText={setPhone}
-          style={styles.textInput}
-          placeholder={phone}
-        ></TextInput>
-      </View>
-      <View style={[styles.passwordCell, {}]}>
-        <Text style={{ fontSize: 16, left: 0 }}>Email Address</Text>
-        <TextInput
-          value={email}
-          onChangeText={setEmail}
-          style={styles.textInput}
-          placeholder="Current Password"
-        ></TextInput>
-      </View>
-      <View style={[styles.passwordCell, {}]}>
-        <Text style={{ fontSize: 16, left: 0 }}>Password</Text>
-        <TextInput
-          value={password}
-          onChangeText={setPassword}
-          style={styles.textInput}
-          placeholder={password}
-        ></TextInput>
-      </View>
-      <Button onPress={handleSubmit} type="primary" text="Save Changes" />
-    </View>
+        <View style={styles.passwordCell}>
+          <Text style={{ fontSize: 16, left: 0 }}>First Name</Text>
+          <TextInput
+            value={firstName}
+            onChangeText={setFirstName}
+            style={styles.textInput}
+            placeholder="First Name"
+          ></TextInput>
+        </View>
+        <View style={styles.passwordCell}>
+          <Text style={{ fontSize: 16, left: 0 }}>Last Name</Text>
+          <TextInput
+            value={lastName}
+            onChangeText={setLastName}
+            style={styles.textInput}
+            placeholder="Last Name"
+          ></TextInput>
+        </View>
+        <View style={styles.passwordCell}>
+          <Text style={{ fontSize: 16, left: 0 }}>Phone</Text>
+          <TextInput
+            value={phone}
+            onChangeText={setPhone}
+            style={styles.textInput}
+            placeholder={phone}
+          ></TextInput>
+        </View>
+        <View style={[styles.passwordCell, {}]}>
+          <Text style={{ fontSize: 16, left: 0 }}>Email Address</Text>
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            style={styles.textInput}
+            placeholder="Current Password"
+          ></TextInput>
+        </View>
+        <View style={[styles.passwordCell, {}]}>
+          <Text style={{ fontSize: 16, left: 0 }}>Address</Text>
+          <TextInput
+            value={address}
+            onChangeText={setAddress}
+            style={styles.textInput}
+            placeholder="Current Password"
+          ></TextInput>
+        </View>
+        <Button onPress={handleSubmit} type="primary" text="Save Changes" />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -115,5 +152,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginBottom: 30,
+  },
+  scrollView: {
+    backgroundColor: "white",
+    height: "100%"
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "yellow",
   },
 });

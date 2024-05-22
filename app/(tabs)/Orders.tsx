@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  Image
 } from "react-native";
 
 import { Text, View } from "@/components/Themed";
@@ -15,16 +16,30 @@ import { Order } from "@/api/schema/SwiftByteTypes";
 
 export default function OrdersScreen() {
   const [orders, setOrders]: [Order[], any] = useState([]);
-  const api: Api =  Api.getApi();
+  const api: Api = Api.getApi();
+
+  const [isLoading, setIsLoading] = useState(true);
+
   useFocusEffect(useCallback(() => {
     console.log('triggered focus effect')
+    setIsLoading(true)
     const customerId = api.getActiveCustomer()?.id;
     if (!customerId) return;
     api.getOrders(customerId).then((orders):any => {
+      setIsLoading(false)
       console.log("WIthin screen orders = ", orders);
       setOrders(orders);
     });
   }, []))
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Image source={require("../../assets/images/loading.gif")} resizeMode="contain" style={{width:"100%", height:"100%"}}/>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} >
@@ -54,7 +69,7 @@ export default function OrdersScreen() {
                 .filter((order) => order.orderStatus == "accepted")
                 .map((item) => {
                   return (
-                    <Link href={{pathname: "/delivery/[id]", params: { id: item.id }}} key={item.id} asChild>
+                    <Link href={{ pathname: "/delivery/[id]", params: { id: item.id } }} key={item.id} asChild>
                       <TouchableOpacity
                         style={styles.item}
                       >
@@ -90,14 +105,14 @@ export default function OrdersScreen() {
                 .filter((order) => order.orderStatus == "completed")
                 .map((item) => {
                   return (
-                    <Link href={"/orderHistory"} key={item.id}  asChild>
+                    <Link href={"/orderHistory"} key={item.id} asChild>
                       <TouchableOpacity
                         style={styles.item}
                       >
                         <Text>{item.restaurant.name}</Text>
                         <Text>
                           {item.orderDate && (new Date(item.orderDate).toLocaleDateString()) + " - " + (new Date(item.orderDate).toLocaleTimeString()) + "\n"}
-                          
+
                           {item.deliveryAddress}
                         </Text>
                       </TouchableOpacity>

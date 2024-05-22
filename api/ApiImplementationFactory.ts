@@ -23,7 +23,7 @@ export interface ApiImplementationFactory {
     getCustomer(id: string): Promise<Customer | undefined>;
     getCustomers(): Promise<Customer[] | undefined>; //possibly unnecessary
     createCustomer(customerInput: CreateCustomerInput): Promise<Customer>;
-    updateCustomer(customer: UpdateCustomerInput): Promise<boolean>;
+    updateCustomer(customer: UpdateCustomerInput): Promise<Customer | undefined>;
 
     //reviews
     getReview(id: string): Promise<Review | undefined>;
