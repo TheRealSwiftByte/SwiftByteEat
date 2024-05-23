@@ -6,6 +6,7 @@ import {
   Image,
   View,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
@@ -23,6 +24,9 @@ import {
 import VisaLogo from "../assets/icons/logo-visa.svg";
 import MasterLogo from "../assets/icons/logo-master.svg";
 import PaypalLogo from "../assets/icons/logo-paypal.svg";
+import { Api } from "@/api/api";
+import { CreateOrderInput } from "@/api/schema/Order";
+import { Restaurant } from "@/api/schema/Restaurant";
 
 interface PaymentProps {
   route: RouteProp<ParamListBase, string>;
@@ -36,6 +40,23 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
   useEffect(() => {
     setCards(myCards)
   }, [])
+
+  const handlePress = async() =>{
+
+    try{
+
+      const cart = await Api.getApi().getActiveCustomer().cart
+      
+      const result = await Api.getApi().createOrder()
+      console.log(result?.id)
+
+      router.navigate(`/delivery/${result?.id}`)
+    }
+    catch(error){
+      console.log(error)
+      Alert.alert("Error", "Submitted orders is temporarily unavailable")
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -93,15 +114,11 @@ export default function PaymentMethod({ route, navigation }: PaymentProps) {
             </TouchableOpacity>
           </View>
 
-          <Link href="/success" asChild>
             <Button
               text={"Pay Now"}
               type={"primary"}
-              onPress={function (): void {
-                // router.navigate({ pathname: '/success', params: { type: ''}})
-              }}
+              onPress={handlePress}
             ></Button>
-          </Link>
         </View>
       </ScrollView>
     </SafeAreaView>
