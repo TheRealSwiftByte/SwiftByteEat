@@ -20,6 +20,7 @@ export default function MenuItemModal() {
   const [selectedMenuItem, setSelectedMenuItem] = React.useState<MenuItem | undefined>(undefined);
   const [quantity, setQuantity] = useState(1)
   const [notes, setNotes] = useState("")
+  console.log(quantity)
   const [toppings, setToppings] = useState<Topping[]>(
     [
       {
@@ -35,14 +36,19 @@ export default function MenuItemModal() {
   const [selectedToppings, setSelectedToppings] = useState<Topping[]>([])
 
   useFocusEffect(useCallback(() => {
-    Api.getApi().getRestaurants().then((liveRestaurants) => {
+    try{
+      Api.getApi().getRestaurants().then((liveRestaurants) => {
         if (liveRestaurants) {
-            console.log("liveRestaurants: ", JSON.stringify(liveRestaurants));
-            if (liveRestaurants) {
-                setSelectedMenuItem(liveRestaurants.find((r) => r.id.toString() === restaurantId)?.menu.find((m) => m.name === menuItemName));
-            }
+          console.log("liveRestaurants: ", JSON.stringify(liveRestaurants));
+          if (liveRestaurants) {
+            setSelectedMenuItem(liveRestaurants.find((r) => r.id.toString() === restaurantId)?.menu.find((m) => m.name === menuItemName));
+          }
         }
-    })
+      })
+    }
+    catch(error){
+      Alert.alert("Error", "An error occurred while fetching the menu item")
+    }
 }, [restaurantId]))
 
   const handlePress = () => {
@@ -50,25 +56,45 @@ export default function MenuItemModal() {
       Alert.alert("Please add at least one item")
       return
     }
-    const activeCart = Api.getApi().getActiveCustomer()?.cart
-    if (!activeCart.restaurant){
-      Api.getApi().getRestaurant(restaurantId).then((restaurant) => {
-        Api.getApi().getActiveCustomer().cart.restaurant = restaurant as Restaurant
-      })
+
+    try{
+
+      const activeCart = Api.getApi().getActiveCustomer()?.cart
+      if (!activeCart.restaurant){
+        Api.getApi().getRestaurant(restaurantId).then((restaurant) => {
+          Api.getApi().getActiveCustomer().cart.restaurant = restaurant as Restaurant
+        })
+      }
+      
+
+      console.log(Api.getApi().getActiveCustomer()?.cart)
+      //please forgive me for this monstrocity. Blame typescript for being so good?
+      let activeItemIndex = Api.getApi().getActiveCustomer()?.cart.foodItems.findIndex((item) => item.name === selectedMenuItem?.name);
+      console.log("activeItemIndex: ", activeItemIndex)
+      const prevQuantity = activeItemIndex >= 0 ? Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex].quantity : 0
+      
+      if (activeItemIndex === -1){
+        Api.getApi().getActiveCustomer().cart.foodItems.push({
+          ...selectedMenuItem as MenuItem,
+          quantity: quantity,
+        })
+      }
+      else {
+        Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex].quantity = prevQuantity as number + quantity
+      }
+      // if (activeItemIndex >= 0){
+      //   Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex]["quantity"] = quantity
+        
+      // } else if (Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex]?.quantity !== undefined) {
+      //   Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex].quantity = prevQuantity + quantity
+      // }
+      
+      router.navigate("Cart")
     }
-
-    //please forgive me for this monstrocity. Blame typescript for being so good?
-    let activeItemIndex = Api.getApi().getActiveCustomer()?.cart.foodItems.findIndex((item) => item.name === selectedMenuItem?.name);
-    console.log("activeItemIndex: ", activeItemIndex)
-    const prevQuantity = activeItemIndex !== -1 ? Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number].quantity || 0 : 0
-    if (!(activeItemIndex == -1)){
-      Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number]["quantity"] = quantity
-
-    } else if (Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number].quantity !== undefined) {
-      Api.getApi().getActiveCustomer().cart.foodItems[activeItemIndex as number].quantity = prevQuantity + quantity
+    catch(error){
+      console.error(error)
+      Alert.alert("Error", "An error occurred while adding the item to the cart")
     }
-
-    router.navigate("Cart")
   }
 
   return (
@@ -86,7 +112,7 @@ export default function MenuItemModal() {
               setQuantity(e < 0 ? 0 : e)}} />
           </View>
         </View>
-        <View>
+        {/* <View>
           <Text style={[styles.title, { marginTop: 20 }]}>Extras</Text>
           {toppings.map((topping, i) => {
             return (
@@ -104,7 +130,7 @@ export default function MenuItemModal() {
               </View>
             )
           })}
-        </View>
+        </View> */}
         <TextArea style={styles.textArea} value={notes} onChangeText={setNotes} placeholder='Add notes here...'/>
         <Button text={`Add to Cart $${selectedMenuItem?.price as number * quantity}`} type={'primary'} onPress={handlePress} />
         <StatusBar style="light" />

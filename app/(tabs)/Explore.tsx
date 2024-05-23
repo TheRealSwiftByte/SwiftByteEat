@@ -12,15 +12,19 @@ import { View, Text } from "@/components/Themed";
 import { Button, TextInput } from "@swift-byte/switftbytecomponents";
 import { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
-import { Restaurant, categories, promoCode, restaurants } from "@/mock_data";
+import { categories, promoCode } from "@/mock_data";
 import StarYellowIcon from "../../assets/icons/icon-star-yellow.svg";
 import { router, useLocalSearchParams } from "expo-router";
+import { Api } from "@/api/api";
+import { Restaurant } from "@/api/schema/SwiftByteTypes";
 
 export default function ExploreScreen() {
   const { searchValue } = useLocalSearchParams<{ searchValue: string }>();
   const [search, setSearch] = useState<string>("");
   const [filteredResults, setFilteredResults] =
-    useState<Restaurant[]>(restaurants);
+    useState<Restaurant[]>([]);
+
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([])
 
   useEffect(() => {
     console.log("search: ", search, searchValue);
@@ -29,42 +33,54 @@ export default function ExploreScreen() {
     }
   }, [searchValue]);
 
+  useEffect(() => {
+    // fetch restaurants
+    async function onLoad(){
+      const response = await Api.getApi().getRestaurants()
+
+      if (response){
+        setRestaurants(response)
+      }
+    }
+    onLoad()
+  },[])
+
   const handleSearch = (val: string) => {
     setSearch(val.toLowerCase());
-    const result = restaurants.filter((restaurant) => {
-      const matchRestaurantName = restaurant.name
-        .toLowerCase()
-        .includes(val.toLowerCase());
-      const matchCategoryName =
-        restaurant.categories.filter((cat) =>
-          cat.name.toLowerCase().includes(val.toLowerCase())
-        ).length > 0
-          ? true
-          : false;
-      const matchLocation = restaurant.address.street
-        .toLowerCase()
-        .includes(val.toLowerCase());
-      const matchMenuName =
-        restaurant.menu.filter((item) =>
-          item.name.toLowerCase().includes(val.toLowerCase())
-        ).length > 0
-          ? true
-          : false;
 
+    if (restaurants.length === 0) return
+
+    const result = restaurants.filter((restaurant) => {
+      const valLower = val.toLowerCase();
+      
+      const matchRestaurantName = restaurant.name.toLowerCase().includes(valLower);
+  
+      const matchCategoryName = restaurant.categories.some((cat) =>
+          cat.toLowerCase().includes(valLower)
+      );
+  
+      const matchLocation = restaurant.address.toLowerCase().includes(valLower);
+  
+      const matchMenuName = restaurant.menu.some((item) =>
+          item.name.toLowerCase().includes(valLower)
+      );
+  
       console.log(
-        restaurant.name,
-        matchCategoryName ||
-        matchLocation ||
-        matchMenuName ||
-        matchRestaurantName
+          restaurant.name,
+          matchCategoryName ||
+          matchLocation ||
+          matchMenuName ||
+          matchRestaurantName
       );
+  
       return (
-        matchCategoryName ||
-        matchLocation ||
-        matchMenuName ||
-        matchRestaurantName
+          matchCategoryName ||
+          matchLocation ||
+          matchMenuName ||
+          matchRestaurantName
       );
-    });
+  });
+  
 
     console.log("res", search, result);
     setFilteredResults(result);
@@ -128,7 +144,7 @@ export default function ExploreScreen() {
                       ]}
                     >
                       <Image
-                        source={{ uri: item.imageUrl }}
+                        source={{ uri: item.imageURI }}
                         width={64}
                         height={64}
                         style={[

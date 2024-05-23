@@ -44,6 +44,40 @@ export default function OrdersScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} >
         <View style={styles.container}>
+        <View>
+            <View
+              style={{
+                backgroundColor: SB_COLOR_SCHEME.SB_TERTIARY,
+                padding: 10,
+                width: "30%",
+                borderRadius: 40,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "500",
+                  color: SB_COLOR_SCHEME.SB_PRIMARY,
+                }}
+              >
+                Pending
+              </Text>
+            </View>
+            <View style={{ marginTop: 20 }}>
+              {orders?.filter((order) => order.orderStatus == "pending")
+                .map((item) => {
+                  return (
+                    <Link href={{ pathname: "/delivery/[id]", params: { id: item.id } }} key={item.id} asChild>
+                      <TouchableOpacity
+                        style={styles.item}
+                      >
+                        <Text>{item.restaurant.name}</Text>
+                      </TouchableOpacity>
+                    </Link>
+                  );
+                })}
+            </View>
+          </View>
           {/* current order */}
           <View>
             <View
@@ -65,8 +99,7 @@ export default function OrdersScreen() {
               </Text>
             </View>
             <View style={{ marginTop: 20 }}>
-              {orders
-                .filter((order) => order.orderStatus == "accepted")
+              {orders?.filter((order) => order.orderStatus == "accepted")
                 .map((item) => {
                   return (
                     <Link href={{ pathname: "/delivery/[id]", params: { id: item.id } }} key={item.id} asChild>
@@ -101,8 +134,7 @@ export default function OrdersScreen() {
               </Text>
             </View>
             <View style={{ marginTop: 20 }}>
-              {orders
-                .filter((order) => order.orderStatus == "completed")
+              {orders?.filter((order) => order.orderStatus == "completed")
                 .map((item) => {
                   return (
                     <Link href={"/orderHistory"} key={item.id} asChild>

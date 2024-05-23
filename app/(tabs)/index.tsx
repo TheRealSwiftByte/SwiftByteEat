@@ -22,12 +22,19 @@ import { Api } from "@/api/api";
 export default function HomeScreen() {
   const [search, setSearch] = useState<string>("");
   const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true)
+
 
   useFocusEffect(useCallback(() => {
     Api.getApi().getRestaurants().then((liveRestaurants) => {
       if (liveRestaurants) {
         console.log("liveRestaurants: ", liveRestaurants);
         setRestaurants(liveRestaurants);
+        setIsLoading(false);
+      }
+      else{
+        console.error("Failed to get restaurants")
+        setIsLoading(false)
       }
     });
   }, []))
@@ -169,6 +176,11 @@ export default function HomeScreen() {
                 Popular Restaurants Nearby
               </Text>
             </View>
+            {isLoading && (
+              <View style={{width:'100%', justifyContent:"center", alignItems:'center'}}>
+                <Image source={require("../../assets/images/loading.gif")} resizeMode="contain" style={{height:100}}/>
+              </View>
+            )}
             <ScrollView horizontal={true} style={styles.scrollContainer}>
               <View style={[styles.dFlex, { marginTop: 16 }]}>
                 {restaurants.map((item) => {

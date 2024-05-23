@@ -6,6 +6,7 @@ import { Button } from "@swift-byte/switftbytecomponents";
 import { StyleSheet } from "react-native";
 import { Customer, UpdateCustomerInput } from "@/api/schema/Customer";
 import { Api } from "@/api/api";
+import { router } from "expo-router";
 
 export default function editProfile({ route, navigation }: any) {
 
@@ -22,19 +23,29 @@ export default function editProfile({ route, navigation }: any) {
 
   const handleSubmit = async () => {
 
-    setIsLoading(true)
+    try{
 
-    const data: UpdateCustomerInput = {
-      firstName: firstName,
-      lastName: lastName,
-      phone: phone,
-      email: email,
-      address: address
+      setIsLoading(true)
+      
+      const data: UpdateCustomerInput = {
+        firstName: firstName,
+        lastName: lastName,
+        phone: phone,
+        email: email,
+        address: address
+      }
+      
+      
+      await Api.getApi().updateCustomer(data)
+      setCustomer(Api.getApi().getActiveCustomer())
+      router.back()
     }
-
-    
-    await Api.getApi().updateCustomer(data)
-    setCustomer(Api.getApi().getActiveCustomer())
+    catch(e){
+      console.error(e)
+    }
+    finally{
+      setIsLoading(false)
+    }
   };
 
   return (

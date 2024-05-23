@@ -13,7 +13,7 @@ import AddIcon from "../../assets/icons/icon-add-yellow.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { MenuItem, Cart, Customer } from "@/api/schema/SwiftByteTypes";
 import { Api } from "@/api/api";
-import { Button } from "@swift-byte/switftbytecomponents";
+import { Button, Stepper } from "@swift-byte/switftbytecomponents";
 import { Link, useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { NavigationProp, ParamListBase, RouteProp } from "@react-navigation/native";
@@ -42,8 +42,17 @@ export default function CartScreen({route, navigation}: CartProps) {
   }, [displayCart]);
 
 
-  
+  const handleQuantChange = (e:any) =>{
+    console.log(e)
+  }
 
+  if (Api.getApi().getActiveCustomer().cart.foodItems.length === 0) {
+  return (
+    <View style={{width:"100%", height:"100%", justifyContent:'center', alignItems:'center'}}>
+        <Text style={styles.subtitle}>Your cart is empty</Text>
+    </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -93,19 +102,7 @@ export default function CartScreen({route, navigation}: CartProps) {
                           </Text>
                         </View>
                       </View>
-                      <View style={[styles.dFlex, { flex: 1 }]}>
-                        <MinusIcon />
-                        <Text
-                          style={{
-                            marginHorizontal: 10,
-                            fontSize: 16,
-                            fontWeight: "500",
-                          }}
-                        >
-                          {item.quantity}
-                        </Text>
-                        <AddIcon />
-                      </View>
+                     <Stepper value={item.quantity} onPress={handleQuantChange} />
                     </View>
                   );
                 })}

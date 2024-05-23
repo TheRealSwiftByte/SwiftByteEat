@@ -1,11 +1,11 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import PrepareFood from "../../assets/images/prepare-food.svg";
 import FindDriver from "../../assets/images/find-driver.svg";
 import OrderDelivery from "../../assets/images/order-delivery.svg";
 import OrderArrive from "../../assets/images/order-arrive.svg";
 import { SB_COLOR_SCHEME } from "@/constants";
-import { Link, router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { Link, router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import { Button } from "@swift-byte/switftbytecomponents";
 import ChatIcon from "../../assets/icons/icon-chat.svg";
 import { Api } from "@/api/api";
@@ -46,6 +46,15 @@ export default function delivery() {
 
   const local = useLocalSearchParams();
 
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: heading,
+      headerBackTitle: "Back",
+    });
+  }, [navigation, local.id]);
+  
   useEffect(() => {
     // setTimeout(() => {
     //   setCurrentProcess(Status.PREPARE);
@@ -109,6 +118,11 @@ export default function delivery() {
         } else if (order.orderStatus == "completed") {
           setCurrentProcess(Status.RECEIVE);
           setHeading(headings[3]);
+          setDescription("");
+        }
+        else if (order.orderStatus === "pending"){
+          setCurrentProcess(Status.PREPARE);
+          setHeading(headings[0]);
           setDescription("");
         }
       }
@@ -398,13 +412,19 @@ export default function delivery() {
                 text={"Cancel order"}
                 type={"primary"}
                 onPress={function (): void {
-                  console.log('cancel order pressed')
-                  Api.getApi().updateOrder({
-                    id: "47nsca",
-                    status: "cancelled",
-                  } as UpdateOrderInput).then(() => {
-                    router.back();
-                  })
+                  try{
+
+                    console.log('cancel order pressed')
+                    Api.getApi().updateOrder({
+                      id: "47nsca",
+                      status: "cancelled",
+                    } as UpdateOrderInput).then(() => {
+                      router.back();
+                    })
+                  }
+                  catch(error){
+                    console.log(error)
+                  }
                 }}
                 textStyle={{ color: SB_COLOR_SCHEME.SB_ERROR }}
                 buttonStyle={{

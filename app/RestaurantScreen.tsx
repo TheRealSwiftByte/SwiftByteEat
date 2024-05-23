@@ -18,7 +18,7 @@ interface RestaurantProps {
 const RatingsCard = ({ restaurant }: { restaurant: Restaurant }) => {
     console.log(restaurant)
     return (
-        <View style={{ marginBottom: 20, marginTop:20, borderWidth: 1, borderRadius: 10, padding: 20, borderColor: "grey" }}>
+        <View style={{ marginBottom: 20, marginTop: 20, borderWidth: 1, borderRadius: 10, padding: 20, borderColor: "grey" }}>
             <Text>Rating: {restaurant.averageRating}</Text>
             <Text>Delivery: Deliveries in 20-25 mins</Text>
             <Text>Distance: 1km</Text>
@@ -34,69 +34,75 @@ export default function RestaurantScreen({ route, navigation }: RestaurantProps)
     const safeareaInset = useSafeAreaInsets()
 
     useFocusEffect(useCallback(() => {
-        Api.getApi().getRestaurants().then((liveRestaurants) => {
-            if (liveRestaurants) {
-                console.log("liveRestaurants: ", JSON.stringify(liveRestaurants));
+        try {
+
+            Api.getApi().getRestaurants().then((liveRestaurants) => {
                 if (liveRestaurants) {
-                    setSelectedRestaurant(liveRestaurants.find((r) => r.id.toString() === restaurantId));
+                    console.log("liveRestaurants: ", JSON.stringify(liveRestaurants));
+                    if (liveRestaurants) {
+                        setSelectedRestaurant(liveRestaurants.find((r) => r.id.toString() === restaurantId));
+                    }
                 }
-            }
-        })
+            })
+        }
+        catch (error) {
+            console.log(error)
+        }
     }, [restaurantId]))
 
     if (!selectedRestaurant) {
         return (<></>)
     }
 
-    const renderItem = (item: MenuItem) => {
-        return (
-            <TouchableOpacity 
-                key={item.name} 
-                style={[styles.dFlex, { marginBottom: 16 }]}
-                onPress={() => router.navigate({
-                    pathname: "MenuItemModal",
-                    params: { 
-                        menuItemName: item.name,
-                        restaurantId: selectedRestaurant.id
-                    },
-                })}
-                >
-                <View style={{ flex: 2 }}>
-                    <Image source={{ uri: item.imagePath }} style={{ width: 70, height: 70, backgroundColor: "grey", borderRadius: 25 }} />
-                </View>
-                <View style={{ flex: 4 }}>
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>{item.name}</Text>
-                    <Text>{item.description}</Text>
-                    <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY, fontSize: 14, fontWeight: "bold" }}>${item.price}</Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
+const renderItem = (item: MenuItem) => {
     return (
-        <View>
-            <ImageBackground source={{ uri: selectedRestaurant?.imageURI }} style={styles.header}>
-                <AntDesign onPress={() => router.dismiss()} name='arrowleft' color={"white"} size={40} style={{position:"absolute", top:safeareaInset.top}}/>
-                <View style={{ padding: 20 }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 17, color: "white" }}>{selectedRestaurant.name}</Text>
-                    <Text style={{ color: "white", fontSize: 12 }}>{selectedRestaurant.address}</Text>
-                </View>
-            </ImageBackground>
-            <View style={styles.container}>
-                <RatingsCard restaurant={selectedRestaurant} />
-
-                <Text style={styles.title}>Menu</Text>
-            {/* seperator line */}
-                <View style={{ borderBottomWidth: 1, borderBottomColor: "grey", marginBottom: 16, marginTop:16 }}></View>
-                <FlatList
-                    data={selectedRestaurant.menu}
-                    renderItem={({ item }) => renderItem(item)}
-                    keyExtractor={(item) => item.name}
-                    ItemSeparatorComponent={() => <View style={{ borderBottomWidth: 1, borderBottomColor: "#d1d1d1", marginBottom: 16, marginLeft:50 }}></View>}
-                />
+        <TouchableOpacity
+            key={item.name}
+            style={[styles.dFlex, { marginBottom: 16 }]}
+            onPress={() => router.navigate({
+                pathname: "MenuItemModal",
+                params: {
+                    menuItemName: item.name,
+                    restaurantId: selectedRestaurant.id
+                },
+            })}
+        >
+            <View style={{ flex: 2 }}>
+                <Image source={{ uri: item.imagePath }} style={{ width: 70, height: 70, backgroundColor: "grey", borderRadius: 25 }} />
             </View>
-            <StatusBar style="light" />
+            <View style={{ flex: 4 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>{item.name}</Text>
+                <Text>{item.description}</Text>
+                <Text style={{ color: SB_COLOR_SCHEME.SB_PRIMARY, fontSize: 14, fontWeight: "bold" }}>${item.price}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+}
+return (
+    <View>
+        <ImageBackground source={{ uri: selectedRestaurant?.imageURI }} style={styles.header}>
+            <AntDesign onPress={() => router.dismiss()} name='arrowleft' color={"white"} size={40} style={{ position: "absolute", top: safeareaInset.top }} />
+            <View style={{ padding: 20 }}>
+                <Text style={{ fontWeight: "bold", fontSize: 17, color: "white" }}>{selectedRestaurant.name}</Text>
+                <Text style={{ color: "white", fontSize: 12 }}>{selectedRestaurant.address}</Text>
+            </View>
+        </ImageBackground>
+        <View style={styles.container}>
+            <RatingsCard restaurant={selectedRestaurant} />
+
+            <Text style={styles.title}>Menu</Text>
+            {/* seperator line */}
+            <View style={{ borderBottomWidth: 1, borderBottomColor: "grey", marginBottom: 16, marginTop: 16 }}></View>
+            <FlatList
+                data={selectedRestaurant.menu}
+                renderItem={({ item }) => renderItem(item)}
+                keyExtractor={(item) => item.name}
+                ItemSeparatorComponent={() => <View style={{ borderBottomWidth: 1, borderBottomColor: "#d1d1d1", marginBottom: 16, marginLeft: 50 }}></View>}
+            />
         </View>
-    )
+        <StatusBar style="light" />
+    </View>
+)
 }
 
 const styles = StyleSheet.create({

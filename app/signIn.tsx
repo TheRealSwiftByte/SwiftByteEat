@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SB_COLOR_SCHEME } from "@/constants";
 import { Button, TextInput } from "@swift-byte/switftbytecomponents";
@@ -6,11 +6,33 @@ import { Link, router } from "expo-router";
 import Logo from "../assets/images/logo-green.svg";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Api } from "@/api/api";
+import success from "./success";
 
 export default function signIn() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const api: Api = Api.getApi();
+
+  const handleSignin = async () => {
+
+    if (!email || !password) {
+      Alert.alert("Empty fields", "Please fill in all fields")
+      return
+    }
+
+    Api.getApi().signInCustomer(email, password)
+      .then((response) => {
+        if (!Object.keys(response).includes("message")) {
+          router.navigate("/(tabs)")
+        }
+        else {
+          throw Error("Incorrect email or password")
+        }
+      })
+      .catch((e) => {
+        Alert.alert("Incorrect email or password", "There was an error singing in, please ensure your email and password are correct")
+        console.error('Failed to sign in customer: ', e)
+      });
+  }
 
   return (
     <SafeAreaView style={{ height: "100%", backgroundColor: "white" }}>
@@ -56,6 +78,7 @@ export default function signIn() {
               <TextInput
                 value={email}
                 style={styles.textInput}
+                autoCapitalize="none"
                 placeholder="test@swiftbyte.com"
                 onChangeText={setEmail}
               ></TextInput>
@@ -89,6 +112,8 @@ export default function signIn() {
           >
             <View style={[styles.dFlex, { backgroundColor: "transparent" }]}>
               <TextInput
+                autoCapitalize="none"
+                secureTextEntry={true}
                 value={password}
                 style={styles.textInput}
                 placeholder="Enter password"
@@ -99,16 +124,7 @@ export default function signIn() {
           <Button
             text={"Sign In"}
             type={"secondary"}
-            onPress={() => {
-              api.signInCustomer(email, password)
-                .then((isSuccess) => {
-                  if (isSuccess) {
-                    router.navigate("/(tabs)")
-                  }
-                })
-                .catch((e) => console.error('Failed to sign in customer: ', e));
-              }
-            }
+            onPress={handleSignin}
           ></Button>
 
           <View style={[styles.dFlex, { justifyContent: "center", gap: 4 }]}>
