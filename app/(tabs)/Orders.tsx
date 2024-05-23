@@ -23,13 +23,22 @@ export default function OrdersScreen() {
   useFocusEffect(useCallback(() => {
     console.log('triggered focus effect')
     setIsLoading(true)
-    const customerId = api.getActiveCustomer()?.id;
-    if (!customerId) return;
-    api.getOrders(customerId).then((orders):any => {
+    try{
+
+      const customerId = api.getActiveCustomer()?.id;
+      if (!customerId) return;
+      api.getOrders(customerId).then((orders):any => {
+        setIsLoading(false)
+        console.log("WIthin screen orders = ", orders);
+        setOrders(orders);
+      });
+    }
+    catch(error){
+      console.log(error)
+    }
+    finally{
       setIsLoading(false)
-      console.log("WIthin screen orders = ", orders);
-      setOrders(orders);
-    });
+    }
   }, []))
 
   if (isLoading) {
